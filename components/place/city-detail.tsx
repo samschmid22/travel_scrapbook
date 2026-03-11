@@ -82,7 +82,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
       </Card>
 
       <Card className="bg-[var(--card-strong)] text-white">
-        <div className="mb-4 flex items-center gap-2 text-sm font-medium text-white/90">
+        <div className="mb-4 flex items-center gap-2 text-sm font-medium text-white/95">
           <CalendarPlus size={16} />
           Add another memory entry
         </div>
@@ -104,7 +104,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
         </div>
 
         <div className="mt-3 space-y-2">
-          <label className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-white/70">
+          <label className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-white/80">
             <ImagePlus size={14} />
             Description (optional)
           </label>
@@ -144,7 +144,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
           >
             {pending ? "Saving..." : "Save Memory"}
           </Button>
-          <p className="text-xs text-white/70">
+          <p className="text-xs text-white/80">
             {files.length} selected photo{files.length === 1 ? "" : "s"}
           </p>
         </div>

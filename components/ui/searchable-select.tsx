@@ -77,7 +77,7 @@ export function SearchableSelect({
           }}
           placeholder={selectedLabel && query.length === 0 ? selectedLabel : placeholder}
           className={cn(
-            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-white pl-9 pr-10 text-sm shadow-sm outline-none transition",
+            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-white pl-9 pr-10 text-sm text-[var(--text-primary)] shadow-sm outline-none transition",
             "placeholder:text-[var(--text-muted)] focus:border-[var(--accent-300)] focus:ring-2 focus:ring-[var(--accent-100)]",
             disabled ? "cursor-not-allowed opacity-60" : "",
           )}
@@ -94,7 +94,7 @@ export function SearchableSelect({
         {open ? (
           <div className="absolute z-30 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-white p-1 shadow-xl">
             {options.length === 0 ? (
-              <p className="px-3 py-3 text-sm text-[var(--text-muted)]">{emptyMessage}</p>
+              <p className="px-3 py-3 text-sm text-[var(--text-secondary)]">{emptyMessage}</p>
             ) : (
               <ul role="listbox" aria-label={`${label} options`}>
                 {options.map((option) => {
@@ -117,7 +117,7 @@ export function SearchableSelect({
                         <span>
                           <span className="font-medium">{option.label}</span>
                           {option.secondaryLabel ? (
-                            <span className="ml-1 text-[var(--text-muted)]">{option.secondaryLabel}</span>
+                            <span className="ml-1 text-[var(--text-secondary)]">{option.secondaryLabel}</span>
                           ) : null}
                         </span>
                         {selected ? <Check size={16} className="text-[var(--accent-700)]" /> : null}
@@ -130,7 +130,7 @@ export function SearchableSelect({
           </div>
         ) : null}
       </div>
-      {helperText ? <p className="text-xs text-[var(--text-muted)]">{helperText}</p> : null}
+      {helperText ? <p className="text-xs text-[var(--text-secondary)]">{helperText}</p> : null}
     </div>
   );
 }

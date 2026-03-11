@@ -18,12 +18,12 @@ const MAP_WIDTH = 980;
 const MAP_HEIGHT = 560;
 
 const colors = {
-  ocean: "#f7eaf0",
-  unvisited: "#f0dee6",
-  visited: "#2f2733",
-  selected: "#61445b",
-  stroke: "#bca6b2",
-  hoverStroke: "#8e7484",
+  ocean: "#f8ecef",
+  unvisited: "#eedce3",
+  visited: "#6f6873",
+  selected: "#5f5668",
+  stroke: "#bba8b2",
+  hoverStroke: "#7f7485",
 };
 
 interface CountryProperties {
@@ -105,7 +105,7 @@ export function MapExplorer() {
           <p className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">{stats.cities}</p>
         </Card>
         <Card className="bg-[var(--card-strong)] text-white">
-          <p className="text-xs uppercase tracking-[0.18em] text-white/70">Memory Entries</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-white/80">Memory Entries</p>
           <p className="mt-3 text-3xl font-semibold">{stats.memories}</p>
         </Card>
       </div>
@@ -115,7 +115,7 @@ export function MapExplorer() {
           <div className="border-b border-[var(--border-soft)] px-5 py-4">
             <h3 className="text-lg font-semibold text-[var(--text-primary)]">World map</h3>
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Dark countries are visited. Click any country to inspect your saved places.
+              Mauve-gray countries are visited. Click any country to inspect your saved places.
             </p>
           </div>
 

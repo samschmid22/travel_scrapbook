@@ -66,14 +66,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#f8e7ec_0%,#fdf8f9_45%,#f7f0ef_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#f3dce5_0%,#f8e8ee_38%,#f6e8ec_100%)]">
       <div className="mx-auto w-full max-w-[1500px] px-4 pb-28 pt-4 sm:px-6 lg:grid lg:grid-cols-[250px_1fr] lg:gap-6 lg:pb-6 lg:pt-6">
         <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-5 shadow-[0_24px_60px_-42px_rgba(34,22,33,0.55)] lg:block">
           <div className="px-2 pb-6 pt-1">
-            <p className="text-xs uppercase tracking-[0.25em] text-[var(--text-muted)]">Been There.</p>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
-              Done That.
-            </h1>
+            <h1 className="text-[2rem] font-semibold tracking-tight text-[var(--text-primary)]">Been There.</h1>
+            <p className="mt-1 text-base font-medium text-[var(--text-secondary)]">Done That.</p>
           </div>
 
           <nav className="space-y-1">
@@ -100,7 +98,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="mt-8 rounded-3xl bg-[var(--card-strong)] p-4 text-white">
-            <p className="text-xs uppercase tracking-[0.22em] text-white/70">Personal</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-white/80">Personal</p>
             <p className="mt-2 text-sm leading-relaxed text-white/95">
               Your scrapbook data is private to this browser in v1.
             </p>
@@ -138,7 +136,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 href={item.href}
                 className={cn(
                   "flex flex-col items-center rounded-xl px-2 py-1.5 text-[11px] font-medium",
-                  active ? "bg-[var(--accent-100)] text-[var(--text-primary)]" : "text-[var(--text-muted)]",
+                  active ? "bg-[var(--accent-100)] text-[var(--text-primary)]" : "text-[var(--text-secondary)]",
                 )}
               >
                 <Icon size={16} />
