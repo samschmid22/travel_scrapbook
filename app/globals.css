@@ -3,21 +3,21 @@
 @import "@fontsource/sora/index.css";
 
 :root {
-  --app-bg: #f6e7ec;
-  --surface-1: #fcf7f9;
-  --surface-2: #fbf4f7;
-  --surface-3: #f2e3e9;
-  --border-soft: #d9c6cf;
-  --text-primary: #1b1a1f;
-  --text-secondary: #5e5660;
-  --text-muted: #726772;
-  --card-strong: #2f2a33;
-  --accent-100: #f2d9e3;
-  --accent-200: #eac3d3;
-  --accent-300: #d98daa;
-  --accent-600: #b45a7a;
-  --accent-700: #9f4d6b;
-  --accent-800: #8a435d;
+  --app-bg: #17161c;
+  --surface-1: #232129;
+  --surface-2: #2a2731;
+  --surface-3: #35303b;
+  --border-soft: #524b59;
+  --text-primary: #f3eef4;
+  --text-secondary: #c8bec9;
+  --text-muted: #a79ca8;
+  --card-strong: #1d1b22;
+  --accent-100: #3d2e3a;
+  --accent-200: #594154;
+  --accent-300: #8d5270;
+  --accent-600: #c95c8a;
+  --accent-700: #d66a96;
+  --accent-800: #e08ab0;
 }
 
 * {

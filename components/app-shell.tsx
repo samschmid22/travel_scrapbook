@@ -66,12 +66,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#f3dce5_0%,#f8e8ee_38%,#f6e8ec_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#2b2832_0%,#1f1d25_36%,#17161c_100%)]">
       <div className="mx-auto w-full max-w-[1500px] px-4 pb-28 pt-4 sm:px-6 lg:grid lg:grid-cols-[250px_1fr] lg:gap-6 lg:pb-6 lg:pt-6">
-        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-5 shadow-[0_24px_60px_-42px_rgba(34,22,33,0.55)] lg:block">
+        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-5 shadow-[0_28px_64px_-40px_rgba(2,2,5,0.85)] lg:block">
           <div className="px-2 pb-6 pt-1">
-            <h1 className="text-[2rem] font-semibold tracking-tight text-[var(--text-primary)]">Been There.</h1>
-            <p className="mt-1 text-base font-medium text-[var(--text-secondary)]">Done That.</p>
+            <h1 className="text-[2.15rem] font-semibold tracking-tight text-[var(--text-primary)]">Been There.</h1>
+            <p className="mt-1 text-sm font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">Done That.</p>
           </div>
 
           <nav className="space-y-1">
@@ -97,16 +97,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
-          <div className="mt-8 rounded-3xl bg-[var(--card-strong)] p-4 text-white">
-            <p className="text-xs uppercase tracking-[0.22em] text-white/80">Personal</p>
-            <p className="mt-2 text-sm leading-relaxed text-white/95">
+          <div className="mt-8 rounded-3xl bg-[var(--card-strong)] p-4 text-[var(--text-primary)] shadow-[inset_0_0_0_1px_rgba(116,108,128,0.25)]">
+            <p className="text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">Personal</p>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
               Your scrapbook data is private to this browser in v1.
             </p>
           </div>
         </aside>
 
         <section className="min-w-0">
-          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[var(--surface-1)] px-5 py-4 shadow-[0_14px_36px_-30px_rgba(32,22,34,0.46)] sm:px-6 lg:px-7">
+          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[var(--surface-1)] px-5 py-4 shadow-[0_20px_44px_-32px_rgba(4,3,8,0.8)] sm:px-6 lg:px-7">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{pageTitle}</h2>
@@ -124,7 +124,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-[var(--border-soft)] bg-[var(--surface-1)]/95 px-2 py-2 backdrop-blur lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-[var(--border-soft)] bg-[var(--surface-1)]/94 px-2 py-2 backdrop-blur lg:hidden">
         <nav className="mx-auto grid max-w-xl grid-cols-4 gap-1">
           {navItems.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);

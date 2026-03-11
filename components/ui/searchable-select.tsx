@@ -77,7 +77,7 @@ export function SearchableSelect({
           }}
           placeholder={selectedLabel && query.length === 0 ? selectedLabel : placeholder}
           className={cn(
-            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-white pl-9 pr-10 text-sm text-[var(--text-primary)] shadow-sm outline-none transition",
+            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-3)] pl-9 pr-10 text-sm text-[var(--text-primary)] shadow-sm outline-none transition",
             "placeholder:text-[var(--text-muted)] focus:border-[var(--accent-300)] focus:ring-2 focus:ring-[var(--accent-100)]",
             disabled ? "cursor-not-allowed opacity-60" : "",
           )}
@@ -92,7 +92,7 @@ export function SearchableSelect({
         />
 
         {open ? (
-          <div className="absolute z-30 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-white p-1 shadow-xl">
+          <div className="absolute z-30 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-xl">
             {options.length === 0 ? (
               <p className="px-3 py-3 text-sm text-[var(--text-secondary)]">{emptyMessage}</p>
             ) : (
@@ -111,7 +111,7 @@ export function SearchableSelect({
                           "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition",
                           selected
                             ? "bg-[var(--accent-100)] text-[var(--text-primary)]"
-                            : "hover:bg-[var(--surface-2)]",
+                            : "hover:bg-[var(--surface-3)]",
                         )}
                       >
                         <span>

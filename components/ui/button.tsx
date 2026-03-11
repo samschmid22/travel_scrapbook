@@ -13,15 +13,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--accent-600)] text-white hover:bg-[var(--accent-700)] focus-visible:ring-[var(--accent-300)] shadow-[0_8px_22px_-12px_var(--accent-700)]",
+    "bg-[var(--accent-600)] text-[#211a24] hover:bg-[var(--accent-700)] focus-visible:ring-[var(--accent-300)] shadow-[0_10px_24px_-14px_rgba(214,106,150,0.68)]",
   secondary:
     "bg-[var(--surface-2)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--surface-3)] focus-visible:ring-[var(--accent-200)]",
   ghost:
-    "text-[var(--text-primary)] hover:bg-[var(--surface-2)] focus-visible:ring-[var(--accent-200)]",
+    "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-200)]",
   dark:
-    "bg-[var(--card-strong)] text-white hover:bg-[#2f2a33] focus-visible:ring-[#676077]",
+    "bg-[var(--surface-3)] text-[var(--text-primary)] hover:bg-[#413b48] focus-visible:ring-[#6f6778]",
   danger:
-    "bg-[#a23653] text-white hover:bg-[#8d2945] focus-visible:ring-[#d9a0b3]",
+    "bg-[#b24d75] text-[#211a24] hover:bg-[#c55c85] focus-visible:ring-[#b67894]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

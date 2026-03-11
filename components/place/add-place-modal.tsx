@@ -141,8 +141,8 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/25 p-4 backdrop-blur-sm">
-      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] shadow-2xl lg:mt-16">
+    <div className="fixed inset-0 z-50 bg-black/55 p-4 backdrop-blur-sm">
+      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] shadow-[0_36px_90px_-52px_rgba(0,0,0,0.92)] lg:mt-16">
         <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">Add Place</p>
@@ -150,7 +150,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           </div>
           <button
             type="button"
-            className="rounded-full p-2 text-[var(--text-muted)] transition hover:bg-[var(--surface-2)]"
+            className="rounded-full p-2 text-[var(--text-muted)] transition hover:bg-[var(--surface-3)]"
             onClick={() => onOpenChange(false)}
             aria-label="Close add place"
           >
@@ -267,7 +267,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     <MapPin size={14} />
                     Selected place
                   </label>
-                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--text-secondary)]">
+                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-3)] px-3 py-2 text-sm text-[var(--text-secondary)]">
                     {cityName}, {region ? `${region}, ` : ""}
                     {selectedCountryOption?.name ?? selectedCountryName}
                   </div>
@@ -308,7 +308,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           ) : null}
 
           {errorMessage ? (
-            <p className="rounded-xl border border-[#d9a0b3] bg-[#fbe8ef] px-3 py-2 text-sm text-[#7f3049]">{errorMessage}</p>
+            <p className="rounded-xl border border-[#8e4969] bg-[#3a2733] px-3 py-2 text-sm text-[#f0bdd3]">{errorMessage}</p>
           ) : null}
         </div>
 

@@ -14,8 +14,8 @@ export function WelcomeGate({
   const [pending, setPending] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#f2dce4_0%,#f8e8ee_50%,#f6e7ec_100%)] px-5 py-10">
-      <div className="w-full max-w-xl rounded-[2.5rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-8 shadow-[0_30px_80px_-44px_rgba(40,22,31,0.55)] sm:p-10">
+    <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#2f2b36_0%,#1f1d24_45%,#16151b_100%)] px-5 py-10">
+      <div className="w-full max-w-xl rounded-[2.5rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-8 shadow-[0_40px_90px_-50px_rgba(0,0,0,0.92)] sm:p-10">
         <p className="text-xs uppercase tracking-[0.28em] text-[var(--text-muted)]">Welcome</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
           Been There.

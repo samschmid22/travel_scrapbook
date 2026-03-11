@@ -119,8 +119,8 @@ export function CityDetail({ cityId }: { cityId: string }) {
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Button
-            variant="secondary"
-            className="bg-white text-[var(--card-strong)] hover:bg-white/90"
+            variant="primary"
+            className="bg-[var(--accent-700)] text-[#1f1822] hover:bg-[var(--accent-800)]"
             onClick={async () => {
               setPending(true);
               setError(null);
