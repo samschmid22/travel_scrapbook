@@ -2,6 +2,7 @@
 
 import Dexie, { type Table } from "dexie";
 
+import { getUSStateCodeFromRegion, usStates } from "@/data/us-states";
 import { normalizeText, createId } from "@/lib/utils";
 import type {
   AddMemoryEntryInput,
@@ -11,6 +12,7 @@ import type {
   CityRecord,
   MemoryEntryRecord,
   PhotoRecord,
+  USStateVisitRecord,
 } from "@/types/models";
 import type { StorageAdapter, StorageSnapshot } from "@/storage/adapter";
 
@@ -33,6 +35,7 @@ class BeenThereDatabase extends Dexie {
   cities!: Table<CityRecord, string>;
   memoryEntries!: Table<MemoryEntryRecord, string>;
   photos!: Table<PhotoRecord, string>;
+  usStateVisits!: Table<USStateVisitRecord, string>;
 
   constructor() {
     super("been-there-v1");
@@ -44,6 +47,23 @@ class BeenThereDatabase extends Dexie {
       memoryEntries: "&id,cityId,visitedAt,createdAt",
       photos: "&id,cityId,entryId,createdAt",
     });
+
+    this.version(2)
+      .stores({
+        session: "&key",
+        meta: "&key",
+        cities: "&id,countryCode,countryName,cityName,updatedAt",
+        memoryEntries: "&id,cityId,visitedAt,createdAt",
+        photos: "&id,cityId,entryId,createdAt",
+        usStateVisits: "&code,visited,updatedAt",
+      })
+      .upgrade(async (tx) => {
+        const cities = await tx.table<CityRecord, string>("cities").toArray();
+        const stateRows = normalizeUSStateVisits(undefined, cities, nowIso());
+        if (stateRows.length > 0) {
+          await tx.table<USStateVisitRecord, string>("usStateVisits").bulkPut(stateRows);
+        }
+      });
   }
 }
 
@@ -79,16 +99,86 @@ async function dataUrlToBlob(dataUrl: string) {
   return response.blob();
 }
 
+function deriveUSVisitedCodesFromCities(cities: CityRecord[]) {
+  const visited = new Set<string>();
+
+  for (const city of cities) {
+    if (city.countryCode !== "US") {
+      continue;
+    }
+
+    const stateCode = getUSStateCodeFromRegion(city.region);
+    if (stateCode) {
+      visited.add(stateCode);
+    }
+  }
+
+  return visited;
+}
+
+function normalizeUSStateVisits(
+  existingRows: USStateVisitRecord[] | undefined,
+  cities: CityRecord[],
+  timestamp: string,
+) {
+  const existingMap = new Map((existingRows ?? []).map((row) => [row.code.toUpperCase(), row]));
+  const visitedByCities = deriveUSVisitedCodesFromCities(cities);
+
+  return usStates.map((state) => {
+    const existing = existingMap.get(state.code);
+    const visitedFromExisting = existing?.visited ?? false;
+    return {
+      code: state.code,
+      name: state.name,
+      visited: visitedFromExisting || visitedByCities.has(state.code),
+      updatedAt: existing?.updatedAt ?? timestamp,
+    };
+  });
+}
+
 export class LocalDexieAdapter implements StorageAdapter {
+  private async ensureUSStateVisitsRows() {
+    const [cities, existingRows] = await Promise.all([db.cities.toArray(), db.usStateVisits.toArray()]);
+    const normalizedRows = normalizeUSStateVisits(existingRows, cities, nowIso());
+
+    if (normalizedRows.length > 0) {
+      await db.usStateVisits.bulkPut(normalizedRows);
+    }
+  }
+
+  private async maybeMarkUSStateVisited(countryCode: string, region?: string) {
+    if (countryCode !== "US") {
+      return;
+    }
+
+    const stateCode = getUSStateCodeFromRegion(region);
+    if (!stateCode) {
+      return;
+    }
+
+    const state = usStates.find((entry) => entry.code === stateCode);
+    if (!state) {
+      return;
+    }
+
+    await this.setUSStateVisited({
+      code: state.code,
+      name: state.name,
+      visited: true,
+    });
+  }
+
   async initialize() {
     const alreadySeeded = await db.meta.get(META_SEEDED_KEY);
     if (alreadySeeded?.value === "true") {
+      await this.ensureUSStateVisitsRows();
       return;
     }
 
     const cityCount = await db.cities.count();
     if (cityCount > 0) {
       await db.meta.put({ key: META_SEEDED_KEY, value: "true" });
+      await this.ensureUSStateVisitsRows();
       return;
     }
 
@@ -96,7 +186,7 @@ export class LocalDexieAdapter implements StorageAdapter {
     const phoenixCityId = createId();
     const firstEntryId = createId();
 
-    await db.transaction("rw", db.cities, db.memoryEntries, db.meta, async () => {
+    await db.transaction("rw", db.cities, db.memoryEntries, db.meta, db.usStateVisits, async () => {
       await db.cities.put({
         id: phoenixCityId,
         countryCode: "US",
@@ -117,6 +207,25 @@ export class LocalDexieAdapter implements StorageAdapter {
       });
 
       await db.meta.put({ key: META_SEEDED_KEY, value: "true" });
+
+      const stateRows = normalizeUSStateVisits(
+        undefined,
+        [
+          {
+            id: phoenixCityId,
+            countryCode: "US",
+            countryName: "United States",
+            cityName: "Phoenix",
+            region: "Arizona",
+            createdAt: currentDate,
+            updatedAt: currentDate,
+          },
+        ],
+        currentDate,
+      );
+      if (stateRows.length > 0) {
+        await db.usStateVisits.bulkPut(stateRows);
+      }
     });
   }
 
@@ -135,16 +244,18 @@ export class LocalDexieAdapter implements StorageAdapter {
   }
 
   async getSnapshot(): Promise<StorageSnapshot> {
-    const [cities, memoryEntries, photos] = await Promise.all([
+    const [cities, memoryEntries, photos, usStateVisits] = await Promise.all([
       db.cities.toArray(),
       db.memoryEntries.toArray(),
       db.photos.toArray(),
+      db.usStateVisits.toArray(),
     ]);
 
     return {
       cities,
       memoryEntries,
       photos,
+      usStateVisits,
     };
   }
 
@@ -168,6 +279,8 @@ export class LocalDexieAdapter implements StorageAdapter {
         description: input.firstMemory.description,
         files: input.firstMemory.files,
       });
+
+      await this.maybeMarkUSStateVisited(existingCity.countryCode, existingCity.region ?? input.region);
 
       return {
         city: existingCity,
@@ -215,6 +328,8 @@ export class LocalDexieAdapter implements StorageAdapter {
         createdAt: currentDate,
       });
     });
+
+    await this.maybeMarkUSStateVisited(input.countryCode, input.region);
 
     return {
       city: {
@@ -281,6 +396,19 @@ export class LocalDexieAdapter implements StorageAdapter {
     };
   }
 
+  async setUSStateVisited(input: { code: string; name: string; visited: boolean }) {
+    const code = input.code.toUpperCase();
+    const stateName = input.name.trim();
+    const existing = await db.usStateVisits.get(code);
+
+    await db.usStateVisits.put({
+      code,
+      name: stateName || existing?.name || code,
+      visited: input.visited,
+      updatedAt: nowIso(),
+    });
+  }
+
   async exportBackup(): Promise<BackupPayloadV1> {
     const [session, snapshot] = await Promise.all([this.getSession(), this.getSnapshot()]);
 
@@ -297,29 +425,31 @@ export class LocalDexieAdapter implements StorageAdapter {
     );
 
     return {
-      version: 1,
+      version: 2,
       exportedAt: nowIso(),
       session,
       cities: snapshot.cities,
       memoryEntries: snapshot.memoryEntries,
       photos,
+      usStateVisits: snapshot.usStateVisits,
     };
   }
 
   async importBackup(payload: BackupPayloadV1) {
-    if (payload.version !== 1) {
+    if (payload.version !== 1 && payload.version !== 2) {
       throw new Error("Unsupported backup version.");
     }
 
     await db.transaction(
       "rw",
-      [db.session, db.meta, db.cities, db.memoryEntries, db.photos],
+      [db.session, db.meta, db.cities, db.memoryEntries, db.photos, db.usStateVisits],
       async () => {
         await Promise.all([
           db.cities.clear(),
           db.memoryEntries.clear(),
           db.photos.clear(),
           db.session.clear(),
+          db.usStateVisits.clear(),
         ]);
 
         if (payload.cities.length > 0) {
@@ -344,6 +474,11 @@ export class LocalDexieAdapter implements StorageAdapter {
 
         if (payload.session) {
           await db.session.put({ key: SESSION_KEY, value: payload.session });
+        }
+
+        const normalizedRows = normalizeUSStateVisits(payload.usStateVisits, payload.cities, nowIso());
+        if (normalizedRows.length > 0) {
+          await db.usStateVisits.bulkPut(normalizedRows);
         }
 
         await db.meta.put({ key: META_SEEDED_KEY, value: "true" });

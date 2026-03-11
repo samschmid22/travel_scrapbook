@@ -33,6 +33,13 @@ export interface PhotoRecord {
   createdAt: string;
 }
 
+export interface USStateVisitRecord {
+  code: string;
+  name: string;
+  visited: boolean;
+  updatedAt: string;
+}
+
 export interface CitySummary {
   city: CityRecord;
   memoryEntries: MemoryEntryRecord[];
@@ -65,10 +72,11 @@ export interface PhotoBackupRecord {
 }
 
 export interface BackupPayloadV1 {
-  version: 1;
+  version: 1 | 2;
   exportedAt: string;
   session: AppSession | null;
   cities: CityRecord[];
   memoryEntries: MemoryEntryRecord[];
   photos: PhotoBackupRecord[];
+  usStateVisits?: USStateVisitRecord[];
 }

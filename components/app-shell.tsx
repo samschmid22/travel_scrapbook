@@ -66,12 +66,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#2b2832_0%,#1f1d25_36%,#17161c_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#3b3141_0%,#332c39_42%,#2a2530_100%)]">
       <div className="mx-auto w-full max-w-[1500px] px-4 pb-28 pt-4 sm:px-6 lg:grid lg:grid-cols-[250px_1fr] lg:gap-6 lg:pb-6 lg:pt-6">
-        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-5 shadow-[0_28px_64px_-40px_rgba(2,2,5,0.85)] lg:block">
-          <div className="px-2 pb-6 pt-1">
-            <h1 className="text-[2.15rem] font-semibold tracking-tight text-[var(--text-primary)]">Been There.</h1>
-            <p className="mt-1 text-sm font-medium uppercase tracking-[0.16em] text-[var(--text-secondary)]">Done That.</p>
+        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_20%)] p-5 shadow-[0_28px_64px_-40px_rgba(8,5,11,0.72)] lg:block">
+          <div className="px-2 pb-5 pt-1">
+            <p className="text-[0.62rem] font-medium uppercase tracking-[0.34em] text-[var(--accent-800)]">Wordmark</p>
+            <h1 className="mt-2 leading-none text-[var(--text-primary)]">
+              <span className="block text-[2.25rem] font-semibold tracking-[-0.035em]">
+                Been There<span className="text-[var(--accent-700)]">.</span>
+              </span>
+              <span className="mt-1.5 block text-[0.9rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]">
+                Done That.
+              </span>
+            </h1>
           </div>
 
           <nav className="space-y-1">
@@ -96,17 +103,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
-
-          <div className="mt-8 rounded-3xl bg-[var(--card-strong)] p-4 text-[var(--text-primary)] shadow-[inset_0_0_0_1px_rgba(116,108,128,0.25)]">
-            <p className="text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">Personal</p>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-              Your scrapbook data is private to this browser in v1.
-            </p>
-          </div>
         </aside>
 
         <section className="min-w-0">
-          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[var(--surface-1)] px-5 py-4 shadow-[0_20px_44px_-32px_rgba(4,3,8,0.8)] sm:px-6 lg:px-7">
+          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_16%)] px-5 py-4 shadow-[0_20px_44px_-32px_rgba(8,5,12,0.68)] sm:px-6 lg:px-7">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-2xl font-semibold tracking-tight text-[var(--text-primary)]">{pageTitle}</h2>

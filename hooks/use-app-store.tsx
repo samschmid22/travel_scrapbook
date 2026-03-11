@@ -20,6 +20,7 @@ import type {
   CityRecord,
   MemoryEntryRecord,
   PhotoRecord,
+  USStateVisitRecord,
 } from "@/types/models";
 
 interface CountryGroup {
@@ -34,6 +35,7 @@ interface AppStoreContextValue {
   cities: CityRecord[];
   memoryEntries: MemoryEntryRecord[];
   photos: PhotoRecord[];
+  usStateVisits: USStateVisitRecord[];
   photoUrls: Record<string, string>;
   visitedCountryCodes: string[];
   countryGroups: CountryGroup[];
@@ -41,6 +43,7 @@ interface AppStoreContextValue {
   signOut(): Promise<void>;
   addPlace(input: AddPlaceInput): Promise<void>;
   addMemoryEntry(input: AddMemoryEntryInput): Promise<void>;
+  toggleUSStateVisited(input: { code: string; name: string; visited: boolean }): Promise<void>;
   getCityById(cityId: string): CityRecord | undefined;
   getEntriesForCity(cityId: string): MemoryEntryRecord[];
   getPhotosForEntry(entryId: string): PhotoRecord[];
@@ -76,6 +79,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [cities, setCities] = useState<CityRecord[]>([]);
   const [memoryEntries, setMemoryEntries] = useState<MemoryEntryRecord[]>([]);
   const [photos, setPhotos] = useState<PhotoRecord[]>([]);
+  const [usStateVisits, setUSStateVisits] = useState<USStateVisitRecord[]>([]);
 
   const refresh = useCallback(async () => {
     const [sessionData, snapshot] = await Promise.all([
@@ -87,6 +91,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setCities(sortCities(snapshot.cities));
     setMemoryEntries(sortMemoryEntries(snapshot.memoryEntries));
     setPhotos(sortPhotos(snapshot.photos));
+    setUSStateVisits([...snapshot.usStateVisits].sort((a, b) => a.name.localeCompare(b.name)));
   }, []);
 
   useEffect(() => {
@@ -173,6 +178,14 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     [refresh],
   );
 
+  const toggleUSStateVisited = useCallback(
+    async (input: { code: string; name: string; visited: boolean }) => {
+      await storageAdapter.setUSStateVisited(input);
+      await refresh();
+    },
+    [refresh],
+  );
+
   const entriesByCity = useMemo(() => {
     const map = new Map<string, MemoryEntryRecord[]>();
 
@@ -198,8 +211,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }, [photos]);
 
   const visitedCountryCodes = useMemo(() => {
-    return [...new Set(cities.map((city) => city.countryCode))].sort();
-  }, [cities]);
+    const codes = new Set(cities.map((city) => city.countryCode));
+    if (usStateVisits.some((state) => state.visited)) {
+      codes.add("US");
+    }
+
+    return [...codes].sort();
+  }, [cities, usStateVisits]);
 
   const countryGroups = useMemo(() => {
     const grouped = new Map<string, CountryGroup>();
@@ -247,6 +265,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       cities,
       memoryEntries,
       photos,
+      usStateVisits,
       photoUrls,
       visitedCountryCodes,
       countryGroups,
@@ -254,6 +273,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       signOut,
       addPlace,
       addMemoryEntry,
+      toggleUSStateVisited,
       getCityById: (cityId: string) => cities.find((city) => city.id === cityId),
       getEntriesForCity: (cityId: string) => entriesByCity.get(cityId) ?? [],
       getPhotosForEntry: (entryId: string) => photosByEntry.get(entryId) ?? [],
@@ -267,6 +287,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       cities,
       memoryEntries,
       photos,
+      usStateVisits,
       photoUrls,
       visitedCountryCodes,
       countryGroups,
@@ -274,6 +295,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       signOut,
       addPlace,
       addMemoryEntry,
+      toggleUSStateVisited,
       entriesByCity,
       photosByEntry,
       exportBackupJson,

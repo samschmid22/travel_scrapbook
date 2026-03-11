@@ -2,6 +2,7 @@
 
 import type { Feature, FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import Link from "next/link";
+import { Minus, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { geoEqualEarth, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
@@ -14,28 +15,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
 
 const MAP_WIDTH = 980;
 const MAP_HEIGHT = 560;
+const MIN_SCALE = 1;
+const MAX_SCALE = 8;
 
 const colors = {
-  ocean: "#211f27",
-  unvisited: "#3a3640",
+  ocean: "#3a3340",
+  unvisited: "#686172",
   selected: "#f0a3c3",
-  stroke: "#5a5461",
-  hoverStroke: "#e69dbf",
+  stroke: "#8a8092",
+  hoverStroke: "#f3b8d1",
 };
 
-const visitedShades = ["#8E3E63", "#A44770", "#BC5A84", "#D16E97", "#E08AB0", "#F0A3C3"];
-
-const yearBuckets = [
-  { label: "2010 and earlier", min: Number.NEGATIVE_INFINITY, max: 2010, color: visitedShades[0] },
-  { label: "2011-2015", min: 2011, max: 2015, color: visitedShades[1] },
-  { label: "2016-2019", min: 2016, max: 2019, color: visitedShades[2] },
-  { label: "2020-2022", min: 2020, max: 2022, color: visitedShades[3] },
-  { label: "2023-2024", min: 2023, max: 2024, color: visitedShades[4] },
-  { label: "2025+", min: 2025, max: Number.POSITIVE_INFINITY, color: visitedShades[5] },
-];
+const visitedShades = ["#8E3E63", "#A44770", "#BC5A84", "#D16E97", "#E08AB0", "#C95C8A"];
 
 interface CountryProperties {
   name?: string;
@@ -49,11 +44,26 @@ interface WorldTopology {
 
 type CountryFeature = Feature<Polygon | MultiPolygon, CountryProperties>;
 
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function shadeIndexForCountry(countryCode: string | undefined, countryName: string) {
+  const seed = `${countryCode ?? "XX"}-${countryName}`;
+  let hash = 0;
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = (hash * 31 + seed.charCodeAt(index)) >>> 0;
+  }
+
+  return hash % visitedShades.length;
+}
+
 export function MapExplorer() {
-  const { countryGroups, getEntriesForCity } = useAppStore();
+  const { countryGroups, getEntriesForCity, usStateVisits, toggleUSStateVisited, visitedCountryCodes } = useAppStore();
   const [selected, setSelected] = useState<{ code?: string; name: string } | null>(null);
   const [hoveredCountryName, setHoveredCountryName] = useState<string | null>(null);
   const [viewState, setViewState] = useState({ scale: 1, tx: 0, ty: 0 });
+  const [usStateQuery, setUSStateQuery] = useState("");
 
   const worldFeatures = useMemo(() => {
     const topology = worldGeo as unknown as WorldTopology;
@@ -81,7 +91,7 @@ export function MapExplorer() {
     return pathGenerator({ type: "Sphere" });
   }, [pathGenerator]);
 
-  const visitedCodes = useMemo(() => new Set(countryGroups.map((group) => group.countryCode)), [countryGroups]);
+  const visitedCodes = useMemo(() => new Set(visitedCountryCodes), [visitedCountryCodes]);
 
   const selectedCountryGroup = useMemo(() => {
     if (!selected?.code) {
@@ -91,48 +101,17 @@ export function MapExplorer() {
     return countryGroups.find((group) => group.countryCode === selected.code);
   }, [countryGroups, selected]);
 
-  const countryShadeIndex = useMemo(() => {
-    const shadeByCountry = new Map<string, number>();
-
-    function fallbackShadeIndex(countryCode: string) {
-      const hash = countryCode.split("").reduce((sum, char, index) => sum + char.charCodeAt(0) * (index + 1), 0);
-      return hash % visitedShades.length;
+  const usStateRows = useMemo(() => {
+    const sorted = [...usStateVisits].sort((a, b) => a.name.localeCompare(b.name));
+    if (!usStateQuery.trim()) {
+      return sorted;
     }
 
-    for (const group of countryGroups) {
-      let earliestYear: number | null = null;
+    const query = usStateQuery.trim().toLowerCase();
+    return sorted.filter((state) => state.name.toLowerCase().includes(query) || state.code.toLowerCase().includes(query));
+  }, [usStateQuery, usStateVisits]);
 
-      for (const city of group.cities) {
-        const entries = getEntriesForCity(city.id);
-        for (const entry of entries) {
-          const year = Number(entry.visitedAt.slice(0, 4));
-          if (Number.isNaN(year)) {
-            continue;
-          }
-
-          if (earliestYear === null || year < earliestYear) {
-            earliestYear = year;
-          }
-        }
-      }
-
-      if (earliestYear === null) {
-        shadeByCountry.set(group.countryCode, fallbackShadeIndex(group.countryCode));
-        continue;
-      }
-
-      const matchedBucketIndex = yearBuckets.findIndex(
-        (bucket) => earliestYear >= bucket.min && earliestYear <= bucket.max,
-      );
-
-      shadeByCountry.set(
-        group.countryCode,
-        matchedBucketIndex >= 0 ? matchedBucketIndex : fallbackShadeIndex(group.countryCode),
-      );
-    }
-
-    return shadeByCountry;
-  }, [countryGroups, getEntriesForCity]);
+  const visitedUSStateCount = useMemo(() => usStateVisits.filter((state) => state.visited).length, [usStateVisits]);
 
   const stats = useMemo(() => {
     const cityCount = countryGroups.reduce((count, group) => count + group.cities.length, 0);
@@ -152,6 +131,27 @@ export function MapExplorer() {
   function resetView() {
     setSelected(null);
     setViewState({ scale: 1, tx: 0, ty: 0 });
+    setUSStateQuery("");
+  }
+
+  function zoomAt(nextScaleValue: number) {
+    setViewState((current) => {
+      const nextScale = clamp(nextScaleValue, MIN_SCALE, MAX_SCALE);
+      if (nextScale === current.scale) {
+        return current;
+      }
+
+      const anchorX = MAP_WIDTH / 2;
+      const anchorY = MAP_HEIGHT / 2;
+      const worldX = (anchorX - current.tx) / current.scale;
+      const worldY = (anchorY - current.ty) / current.scale;
+
+      return {
+        scale: nextScale,
+        tx: anchorX - nextScale * worldX,
+        ty: anchorY - nextScale * worldY,
+      };
+    });
   }
 
   function zoomToCountry(country: CountryFeature, nextSelection: { code?: string; name: string }) {
@@ -169,26 +169,29 @@ export function MapExplorer() {
     const centerY = (y0 + y1) / 2;
     const padding = 68;
     const rawScale = Math.min((MAP_WIDTH - padding * 2) / dx, (MAP_HEIGHT - padding * 2) / dy);
-    const scale = Math.max(1.35, Math.min(7, rawScale));
+    const scale = clamp(rawScale, 1.35, MAX_SCALE);
     const tx = MAP_WIDTH / 2 - scale * centerX;
     const ty = MAP_HEIGHT / 2 - scale * centerY;
 
     setSelected(nextSelection);
+    if (nextSelection.code !== "US") {
+      setUSStateQuery("");
+    }
     setViewState({ scale, tx, ty });
   }
 
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-3">
-        <Card>
+        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_22%)]">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Visited Countries</p>
           <p className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">{stats.countries}</p>
         </Card>
-        <Card>
+        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_18%)]">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Saved Cities</p>
           <p className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">{stats.cities}</p>
         </Card>
-        <Card className="bg-[var(--surface-3)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_28%)]">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Memory Entries</p>
           <p className="mt-3 text-3xl font-semibold text-[var(--text-primary)]">{stats.memories}</p>
         </Card>
@@ -204,32 +207,46 @@ export function MapExplorer() {
               </Button>
             </div>
             <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Click a country to select and smoothly zoom. Pink shades reflect first saved memory period.
+              Click a country to auto-zoom. Visited countries use varied pink shades for quick visual distinction.
             </p>
           </div>
 
           <div className="space-y-3 p-4 sm:p-5">
-            <div className="grid gap-2 text-xs text-[var(--text-secondary)] sm:grid-cols-2 lg:grid-cols-3">
-              {yearBuckets.map((bucket) => (
-                <span key={bucket.label} className="inline-flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full" style={{ background: bucket.color }} />
-                  {bucket.label}
-                </span>
+            <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--text-secondary)]">
+              <span className="font-medium text-[var(--text-muted)]">Visited shades</span>
+              {visitedShades.map((shade) => (
+                <span key={shade} className="inline-flex h-3 w-3 rounded-full" style={{ background: shade }} />
               ))}
               <span className="inline-flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full" style={{ background: colors.unvisited }} />
-                Not visited
+                Unvisited
               </span>
               <span className="inline-flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full" style={{ background: colors.selected }} />
                 Selected
               </span>
             </div>
-            <p className="text-xs text-[var(--text-muted)]">
-              If a country has no valid memory year, a deterministic country-code fallback shade is used.
-            </p>
 
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-2 sm:p-4">
+            <div className="relative rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_20%)] p-2 sm:p-4">
+              <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={() => zoomAt(viewState.scale * 1.25)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--surface-3)] text-[var(--text-primary)] shadow-lg transition hover:border-[var(--accent-300)] hover:bg-[var(--accent-100)]"
+                  aria-label="Zoom in"
+                >
+                  <Plus size={15} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => zoomAt(viewState.scale / 1.25)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-[var(--surface-3)] text-[var(--text-primary)] shadow-lg transition hover:border-[var(--accent-300)] hover:bg-[var(--accent-100)]"
+                  aria-label="Zoom out"
+                >
+                  <Minus size={15} />
+                </button>
+              </div>
+
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
                 className="h-auto w-full"
@@ -241,7 +258,7 @@ export function MapExplorer() {
                   style={{
                     transform: `translate(${viewState.tx}px, ${viewState.ty}px) scale(${viewState.scale})`,
                     transformOrigin: "0 0",
-                    transition: "transform 550ms cubic-bezier(0.22, 0.65, 0.2, 1)",
+                    transition: "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
                   }}
                 >
                   {spherePath ? <path d={spherePath} fill={colors.ocean} stroke={colors.stroke} strokeWidth={0.8} /> : null}
@@ -250,7 +267,7 @@ export function MapExplorer() {
                     const geoName = String(country.properties?.name ?? "Unknown country");
                     const code = mapGeoCountryNameToCode(geoName);
                     const isVisited = code ? visitedCodes.has(code) : false;
-                    const shadeIndex = code ? countryShadeIndex.get(code) ?? 0 : 0;
+                    const shadeIndex = shadeIndexForCountry(code, geoName);
                     const visitedColor = visitedShades[shadeIndex];
                     const isSelected = selected?.name === geoName;
                     const isHovered = hoveredCountryName === geoName;
@@ -264,7 +281,7 @@ export function MapExplorer() {
                     if (isSelected) {
                       fillColor = colors.selected;
                     } else if (isHovered) {
-                      fillColor = isVisited ? colors.hoverStroke : "#4a4550";
+                      fillColor = isVisited ? colors.hoverStroke : "#7a7385";
                     }
 
                     return (
@@ -272,8 +289,8 @@ export function MapExplorer() {
                         key={country.id?.toString() ?? geoName}
                         d={countryPath}
                         fill={fillColor}
-                        stroke={isSelected ? "#ffd0e2" : colors.stroke}
-                        strokeWidth={isSelected ? 1.1 : 0.6}
+                        stroke={isSelected ? "#ffd4e4" : colors.stroke}
+                        strokeWidth={isSelected ? 1.2 : 0.6}
                         onClick={(event) => {
                           event.stopPropagation();
                           zoomToCountry(country, { code, name: geoName });
@@ -317,7 +334,7 @@ export function MapExplorer() {
                         <Link
                           key={city.id}
                           href={`/places/${city.id}`}
-                          className="block rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] px-4 py-3 transition hover:border-[var(--accent-300)] hover:bg-[var(--surface-1)]"
+                          className="block rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_15%)] px-4 py-3 transition hover:border-[var(--accent-300)] hover:bg-[var(--surface-1)]"
                         >
                           <p className="font-medium text-[var(--text-primary)]">{city.cityName}</p>
                           <p className="mt-1 text-xs text-[var(--text-secondary)]">
@@ -337,6 +354,53 @@ export function MapExplorer() {
                   description="You have not added any cities in this country yet."
                 />
               )}
+
+              {selected.code === "US" ? (
+                <div className="mt-5 rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_24%)] p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">United States detail</p>
+                    <Badge>
+                      {visitedUSStateCount} / {usStateVisits.length || 50} states visited
+                    </Badge>
+                  </div>
+
+                  <p className="mt-1 text-xs text-[var(--text-secondary)]">
+                    US-only state tracking path. Other countries remain country-level.
+                  </p>
+
+                  <div className="mt-3">
+                    <Input
+                      value={usStateQuery}
+                      onChange={(event) => setUSStateQuery(event.target.value)}
+                      placeholder="Search US states"
+                    />
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    {usStateRows.map((state) => (
+                      <button
+                        key={state.code}
+                        type="button"
+                        onClick={() => {
+                          void toggleUSStateVisited({
+                            code: state.code,
+                            name: state.name,
+                            visited: !state.visited,
+                          });
+                        }}
+                        className={`rounded-xl border px-2.5 py-2 text-left text-xs transition ${
+                          state.visited
+                            ? "border-[var(--accent-300)] bg-[var(--accent-200)]/35 text-[var(--text-primary)]"
+                            : "border-[var(--border-soft)] bg-[var(--surface-3)] text-[var(--text-secondary)] hover:border-[var(--accent-300)]"
+                        }`}
+                      >
+                        <p className="font-semibold">{state.name}</p>
+                        <p className="mt-0.5 text-[11px] text-[var(--text-muted)]">{state.code}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           )}
         </Card>

@@ -1,23 +1,23 @@
 @import "tailwindcss";
-@import "@fontsource/inter/index.css";
-@import "@fontsource/sora/index.css";
+@import "@fontsource/source-sans-3/index.css";
+@import "@fontsource/manrope/index.css";
 
 :root {
-  --app-bg: #17161c;
-  --surface-1: #232129;
-  --surface-2: #2a2731;
-  --surface-3: #35303b;
-  --border-soft: #524b59;
-  --text-primary: #f3eef4;
-  --text-secondary: #c8bec9;
-  --text-muted: #a79ca8;
-  --card-strong: #1d1b22;
-  --accent-100: #3d2e3a;
-  --accent-200: #594154;
-  --accent-300: #8d5270;
+  --app-bg: #2a2530;
+  --surface-1: #37313f;
+  --surface-2: #413947;
+  --surface-3: #4b4253;
+  --border-soft: #6f6078;
+  --text-primary: #f4edf4;
+  --text-secondary: #d4c7d5;
+  --text-muted: #b4a7b6;
+  --card-strong: #302a36;
+  --accent-100: #6c4f69;
+  --accent-200: #815b78;
+  --accent-300: #a56d92;
   --accent-600: #c95c8a;
   --accent-700: #d66a96;
-  --accent-800: #e08ab0;
+  --accent-800: #e58bb1;
 }
 
 * {
@@ -32,12 +32,13 @@ body {
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Source Sans 3", sans-serif;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: "Sora", "Inter", sans-serif;
+  font-family: "Manrope", "Source Sans 3", sans-serif;
+  letter-spacing: -0.012em;
 }

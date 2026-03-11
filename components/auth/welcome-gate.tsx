@@ -14,8 +14,8 @@ export function WelcomeGate({
   const [pending, setPending] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#2f2b36_0%,#1f1d24_45%,#16151b_100%)] px-5 py-10">
-      <div className="w-full max-w-xl rounded-[2.5rem] border border-[var(--border-soft)] bg-[var(--surface-1)] p-8 shadow-[0_40px_90px_-50px_rgba(0,0,0,0.92)] sm:p-10">
+    <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#5a475f_0%,#413749_42%,#2e2835_100%)] px-5 py-10">
+      <div className="w-full max-w-xl rounded-[2.5rem] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_20%)] p-8 shadow-[0_40px_90px_-50px_rgba(0,0,0,0.82)] sm:p-10">
         <p className="text-xs uppercase tracking-[0.28em] text-[var(--text-muted)]">Welcome</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-4xl">
           Been There.
