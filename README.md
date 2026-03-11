@@ -5,7 +5,7 @@ A premium, light, map-first personal travel scrapbook built with Next.js App Rou
 ## Run Locally
 
 ```bash
-npm install --legacy-peer-deps
+npm install
 npm run dev
 ```
 

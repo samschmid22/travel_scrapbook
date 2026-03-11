@@ -1,8 +1,10 @@
 "use client";
 
+import type { Feature, FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ComposableMap, Geographies, Geography, Sphere } from "react-simple-maps";
+import { geoEqualEarth, geoPath } from "d3-geo";
+import { feature } from "topojson-client";
 import worldGeo from "world-atlas/countries-110m.json";
 
 import { mapGeoCountryNameToCode } from "@/data/countries";
@@ -11,6 +13,9 @@ import { toMonthLabel } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+
+const MAP_WIDTH = 980;
+const MAP_HEIGHT = 560;
 
 const colors = {
   ocean: "#f7eaf0",
@@ -21,16 +26,47 @@ const colors = {
   hoverStroke: "#8e7484",
 };
 
-interface MapGeography {
-  rsmKey: string;
-  properties?: {
-    name?: string;
+interface CountryProperties {
+  name?: string;
+}
+
+interface WorldTopology {
+  objects: {
+    countries: unknown;
   };
 }
+
+type CountryFeature = Feature<Polygon | MultiPolygon, CountryProperties>;
 
 export function MapExplorer() {
   const { countryGroups, getEntriesForCity } = useAppStore();
   const [selected, setSelected] = useState<{ code?: string; name: string } | null>(null);
+
+  const worldFeatures = useMemo(() => {
+    const topology = worldGeo as unknown as WorldTopology;
+    const features = feature(
+      topology as never,
+      topology.objects.countries as never,
+    ) as unknown as FeatureCollection<Polygon | MultiPolygon, CountryProperties>;
+
+    return features.features as CountryFeature[];
+  }, []);
+
+  const pathGenerator = useMemo(() => {
+    const projection = geoEqualEarth().fitSize(
+      [MAP_WIDTH, MAP_HEIGHT],
+      {
+        type: "FeatureCollection",
+        features: worldFeatures,
+      } as FeatureCollection<Polygon | MultiPolygon, CountryProperties>,
+    );
+
+    return geoPath(projection);
+  }, [worldFeatures]);
+
+  const spherePath = useMemo(() => {
+    return pathGenerator({ type: "Sphere" });
+  }, [pathGenerator]);
 
   const visitedCodes = useMemo(() => new Set(countryGroups.map((group) => group.countryCode)), [countryGroups]);
 
@@ -100,52 +136,35 @@ export function MapExplorer() {
             </div>
 
             <div className="rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-2 sm:p-4">
-              <ComposableMap
-                projection="geoEqualEarth"
-                projectionConfig={{ scale: 165 }}
-                style={{ width: "100%", height: "auto" }}
-              >
-                <Sphere fill={colors.ocean} stroke={colors.stroke} strokeWidth={0.2} />
-                <Geographies geography={worldGeo as never}>
-                  {({ geographies }: { geographies: MapGeography[] }) =>
-                    geographies.map((geo: MapGeography) => {
-                      const geoName = String(geo.properties?.name ?? "Unknown country");
-                      const code = mapGeoCountryNameToCode(geoName);
-                      const isVisited = code ? visitedCodes.has(code) : false;
-                      const isSelected = selected?.name === geoName;
+              <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} className="h-auto w-full" role="img" aria-label="World map">
+                {spherePath ? <path d={spherePath} fill={colors.ocean} stroke={colors.stroke} strokeWidth={0.8} /> : null}
 
-                      return (
-                        <Geography
-                          key={geo.rsmKey}
-                          geography={geo}
-                          stroke={isSelected ? colors.hoverStroke : colors.stroke}
-                          strokeWidth={0.5}
-                          onClick={() => setSelected({ code, name: geoName })}
-                          style={{
-                            default: {
-                              fill: isSelected
-                                ? colors.selected
-                                : isVisited
-                                  ? colors.visited
-                                  : colors.unvisited,
-                              outline: "none",
-                              transition: "all 0.18s ease",
-                            },
-                            hover: {
-                              fill: isVisited ? "#423347" : "#e7d2dc",
-                              outline: "none",
-                            },
-                            pressed: {
-                              fill: isSelected ? colors.selected : isVisited ? "#4f3f55" : "#e0c9d3",
-                              outline: "none",
-                            },
-                          }}
-                        />
-                      );
-                    })
+                {worldFeatures.map((country) => {
+                  const geoName = String(country.properties?.name ?? "Unknown country");
+                  const code = mapGeoCountryNameToCode(geoName);
+                  const isVisited = code ? visitedCodes.has(code) : false;
+                  const isSelected = selected?.name === geoName;
+                  const countryPath = pathGenerator(country);
+
+                  if (!countryPath) {
+                    return null;
                   }
-                </Geographies>
-              </ComposableMap>
+
+                  return (
+                    <path
+                      key={country.id?.toString() ?? geoName}
+                      d={countryPath}
+                      fill={isSelected ? colors.selected : isVisited ? colors.visited : colors.unvisited}
+                      stroke={isSelected ? colors.hoverStroke : colors.stroke}
+                      strokeWidth={0.6}
+                      onClick={() => setSelected({ code, name: geoName })}
+                      className="cursor-pointer transition-colors duration-150"
+                    >
+                      <title>{geoName}</title>
+                    </path>
+                  );
+                })}
+              </svg>
             </div>
           </div>
         </Card>
