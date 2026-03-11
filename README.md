@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Been There. Done That.
 
-## Getting Started
+A premium, light, map-first personal travel scrapbook built with Next.js App Router.
 
-First, run the development server:
+## Run Locally
 
 ```bash
+npm install --legacy-peer-deps
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What V1 Includes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Light blush editorial UI with desktop-first responsive layout.
+- Navigation: `Map`, `Places`, `Gallery`, `Settings`.
+- First-launch mock sign-in gate that persists locally.
+- Add Place flow with searchable country and city selectors + manual city fallback.
+- Data model: `Country -> City -> Memory Entries`.
+- Multiple dated memory entries per city (`YYYY-MM`).
+- Optional memory descriptions and optional photo uploads.
+- Interactive world map with clear visited vs unvisited states.
+- Seeded starter place:
+  - Country: United States
+  - City: Phoenix
+  - Region: Arizona
+  - One memory entry, no photos
+- Global gallery and city detail timeline views.
+- Settings page with session controls and JSON export/import backup.
 
-## Learn More
+## Storage in V1
 
-To learn more about Next.js, take a look at the following resources:
+V1 uses **IndexedDB (Dexie)** in the browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Cities, memory entries, session state, and uploaded image blobs are stored locally.
+- Data persists across refreshes in the same browser profile/device.
+- No environment variables are required.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Limitations of Local Browser Storage
 
-## Deploy on Vercel
+- Data does not sync between devices.
+- Data can be lost if browser storage is cleared.
+- Private/incognito modes may not persist data reliably.
+- Importing a backup replaces current local scrapbook data.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Use **Export Data** regularly from Settings for safety.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture Notes
+
+Storage is abstracted behind `storage/adapter.ts`.
+The active implementation is `storage/local-adapter.ts` (Dexie).
+
+This keeps the UI layer independent from persistence details and makes migration easier.
+
+## Future Supabase Path
+
+A Supabase integration can be added by implementing another storage adapter and swapping the export in `storage/index.ts`.
+
+Potential migration steps:
+
+1. Add Supabase auth and replace mock session methods.
+2. Move city/memory/photo persistence to Supabase tables + storage buckets.
+3. Keep the same app hooks/components and change only adapter logic.
+4. Add cloud sync and optional multi-device conflict handling.

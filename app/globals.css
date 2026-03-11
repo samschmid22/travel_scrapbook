@@ -1,26 +1,43 @@
 @import "tailwindcss";
+@import "@fontsource/inter/index.css";
+@import "@fontsource/sora/index.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --app-bg: #fbf3f5;
+  --surface-1: #fff9fb;
+  --surface-2: #f7ecef;
+  --surface-3: #f0e3e9;
+  --border-soft: #d8c6cf;
+  --text-primary: #1e1a21;
+  --text-secondary: #574b58;
+  --text-muted: #867988;
+  --card-strong: #2b2531;
+  --accent-100: #f3dbe4;
+  --accent-200: #ebc3d1;
+  --accent-300: #d88da8;
+  --accent-600: #a44c6c;
+  --accent-700: #8f3f5c;
+  --accent-800: #7a3650;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-color: var(--border-soft);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  min-height: 100%;
+  background: var(--app-bg);
+  color: var(--text-primary);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Sora", "Inter", sans-serif;
 }
