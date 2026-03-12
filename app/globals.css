@@ -3,29 +3,30 @@
 @import "@fontsource/red-hat-display/index.css";
 
 :root {
-  --gray-ref: #9ea1a3;
+  --gray-ref: #ffdef0;
   --pink-soft: #ffdef0;
   --pink-bright: #ff47a2;
+  --pink-dark: #c51f73;
   --app-bg: #ffdef0;
-  --surface-1: #cfd1d3;
-  --surface-2: #d8dbdd;
-  --surface-3: #e1e3e5;
-  --surface-4: #bcc0c3;
+  --surface-1: #f7d7e8;
+  --surface-2: #f1cfe1;
+  --surface-3: #e8bfd6;
+  --surface-4: #dca8c5;
   --surface-soft: #ffdef0;
-  --border-soft: #9ea1a3;
-  --border-strong: #7f8284;
+  --border-soft: #d59aba;
+  --border-strong: #b55a8a;
   --text-primary: #1f1822;
   --text-secondary: #463b48;
   --text-muted: #6a5f6a;
   --text-on-light: #170f1c;
-  --card-strong: #c3c6c9;
+  --card-strong: #d998bb;
   --accent-100: #f7d7e8;
   --accent-200: #efbdd8;
   --accent-300: #ff96c8;
   --accent-400: #ff6db5;
   --accent-600: #ff47a2;
   --accent-700: #ff47a2;
-  --accent-800: #de2f84;
+  --accent-800: #c51f73;
 }
 
 * {

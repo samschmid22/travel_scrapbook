@@ -98,7 +98,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "flex items-center gap-3 rounded-2xl px-4 py-2.5 text-base font-semibold transition",
                     active
-                      ? "border border-[color-mix(in_oklab,var(--pink-bright),var(--gray-ref)_30%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_20%)] text-[var(--text-primary)] shadow-[0_10px_24px_-16px_rgba(255,71,162,0.48)]"
+                      ? "border border-[color-mix(in_oklab,var(--pink-dark),var(--pink-bright)_36%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_28%)] text-[var(--text-primary)] shadow-[0_10px_24px_-16px_rgba(255,71,162,0.56)]"
                       : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_20%)]",
                   )}
                 >
@@ -111,20 +111,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           <div className="mt-7 rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_26%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_16%)_100%)] p-5">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--accent-800)]">
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--pink-dark)]">
                 NEXT ESCAPE
               </p>
               <button
                 type="button"
                 onClick={() => setSparkIndex((current) => (current + 1) % worldSparks.length)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:text-[var(--text-primary)]"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_20%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:text-[var(--text-primary)]"
                 aria-label="Refresh inspiration"
               >
                 <RefreshCcw size={14} />
               </button>
             </div>
             <p className="mt-3 text-xl font-semibold tracking-tight text-[var(--text-primary)]">{spark.title}</p>
-            <p className="mt-1 text-sm font-medium uppercase tracking-[0.11em] text-[var(--accent-800)]">{spark.subtitle}</p>
+            <p className="mt-1 text-sm font-medium uppercase tracking-[0.11em] text-[var(--pink-dark)]">{spark.subtitle}</p>
             <p className="mt-3 text-[0.96rem] leading-relaxed text-[var(--text-secondary)]">{spark.line}</p>
           </div>
         </aside>
@@ -161,7 +161,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
                   active
-                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_22%)] text-[var(--text-primary)]"
+                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_30%)] text-[var(--text-primary)]"
                     : "text-[var(--text-secondary)]",
                 )}
               >
@@ -192,7 +192,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
                   active
-                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_22%)] text-[var(--text-primary)]"
+                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_30%)] text-[var(--text-primary)]"
                     : "text-[var(--text-secondary)]",
                 )}
               >

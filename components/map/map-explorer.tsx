@@ -27,14 +27,14 @@ const MIN_SCALE = 1;
 const MAX_SCALE = 8;
 
 const mapColors = {
-  ocean: "#d2d6d8",
-  unvisited: "#9ea1a3",
-  unvisitedHover: "#8f9294",
+  ocean: "#f4bfd9",
+  unvisited: "#ffdef0",
+  unvisitedHover: "#f6c7de",
   visited: "#ff47a2",
   visitedHover: "#ff74bb",
-  selected: "#ff1f92",
-  stroke: "#7f8284",
-  selectedStroke: "#6e1945",
+  selected: "#de2f84",
+  stroke: "#b55a8a",
+  selectedStroke: "#791646",
 };
 
 const usStateCodeSet = new Set(usStates.map((state) => state.code));
