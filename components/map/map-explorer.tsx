@@ -38,8 +38,10 @@ const mapColors = {
   selected: "#ff47a2",
   stroke: "#ffdef0",
   selectedStroke: "#ffdef0",
-  pin: "#ff47a2",
-  pinHalo: "#ffdef0",
+  worldPin: "#c51f73",
+  worldPinHalo: "#ffdef0",
+  usPin: "#ff47a2",
+  usPinHalo: "#ffdef0",
 };
 
 const usStateCodeSet = new Set(usStates.map((state) => state.code));
@@ -562,8 +564,6 @@ export function MapExplorer() {
       startTx: worldViewState.tx,
       startTy: worldViewState.ty,
     };
-
-    event.currentTarget.setPointerCapture(event.pointerId);
   }
 
   function handleWorldPointerMove(event: ReactPointerEvent<SVGSVGElement>) {
@@ -576,6 +576,10 @@ export function MapExplorer() {
     const dy = event.clientY - drag.startY;
 
     if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      if (!worldMovedRef.current) {
+        // Capture only after drag intent is clear so click-to-select still works while zoomed.
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }
       worldMovedRef.current = true;
     }
 
@@ -599,7 +603,9 @@ export function MapExplorer() {
     }
 
     worldDragRef.current = null;
-    event.currentTarget.releasePointerCapture(event.pointerId);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
     if (!worldMovedRef.current) {
       worldMovedRef.current = false;
     }
@@ -618,8 +624,6 @@ export function MapExplorer() {
       startTx: usViewState.tx,
       startTy: usViewState.ty,
     };
-
-    event.currentTarget.setPointerCapture(event.pointerId);
   }
 
   function handleUSPointerMove(event: ReactPointerEvent<SVGSVGElement>) {
@@ -632,6 +636,10 @@ export function MapExplorer() {
     const dy = event.clientY - drag.startY;
 
     if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      if (!usMovedRef.current) {
+        // Capture only after drag intent is clear so click-to-select still works while zoomed.
+        event.currentTarget.setPointerCapture(event.pointerId);
+      }
       usMovedRef.current = true;
     }
 
@@ -655,7 +663,9 @@ export function MapExplorer() {
     }
 
     usDragRef.current = null;
-    event.currentTarget.releasePointerCapture(event.pointerId);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
     if (!usMovedRef.current) {
       usMovedRef.current = false;
     }
@@ -789,9 +799,16 @@ export function MapExplorer() {
 
                   {worldPins.map((pin) => (
                     <g key={pin.id} className="pointer-events-auto">
-                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.pinHalo} opacity={0.28} />
-                      <circle cx={pin.x} cy={pin.y} r={2.95} fill="none" stroke={mapColors.pinHalo} strokeWidth={0.8} />
-                      <circle cx={pin.x} cy={pin.y} r={1.85} fill={mapColors.pin} />
+                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.worldPinHalo} opacity={0.28} />
+                      <circle
+                        cx={pin.x}
+                        cy={pin.y}
+                        r={2.95}
+                        fill="none"
+                        stroke={mapColors.worldPinHalo}
+                        strokeWidth={0.8}
+                      />
+                      <circle cx={pin.x} cy={pin.y} r={1.85} fill={mapColors.worldPin} />
                       <title>
                         {pin.label} · {pin.memoryCount} memor{pin.memoryCount === 1 ? "y" : "ies"}
                       </title>
@@ -985,9 +1002,9 @@ export function MapExplorer() {
 
                   {usPins.map((pin) => (
                     <g key={pin.id} className="pointer-events-auto">
-                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.pinHalo} opacity={0.28} />
-                      <circle cx={pin.x} cy={pin.y} r={2.95} fill="none" stroke={mapColors.pinHalo} strokeWidth={0.8} />
-                      <circle cx={pin.x} cy={pin.y} r={1.85} fill={mapColors.pin} />
+                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.usPinHalo} opacity={0.28} />
+                      <circle cx={pin.x} cy={pin.y} r={2.95} fill="none" stroke={mapColors.usPinHalo} strokeWidth={0.8} />
+                      <circle cx={pin.x} cy={pin.y} r={1.85} fill={mapColors.usPin} />
                       <title>
                         {pin.label} · {pin.memoryCount} memor{pin.memoryCount === 1 ? "y" : "ies"}
                       </title>
