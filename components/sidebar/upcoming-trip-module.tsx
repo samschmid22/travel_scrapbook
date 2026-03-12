@@ -76,7 +76,7 @@ export function UpcomingTripModule() {
   return (
     <div className="rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_36%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-5">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--pink-soft)]">
+        <p className="ds-eyebrow text-[var(--pink-soft)]">
           Next Escape
         </p>
         {!editing ? (

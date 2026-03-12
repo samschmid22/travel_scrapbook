@@ -54,7 +54,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
       <Card className="bg-[linear-gradient(152deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
         <Link
           href="/places"
-          className="inline-flex items-center gap-2 text-base font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
+          className="inline-flex items-center gap-2 text-[0.98rem] font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft size={14} />
           Back to Places
@@ -62,15 +62,15 @@ export function CityDetail({ cityId }: { cityId: string }) {
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">City</p>
-            <h1 className="mt-1 text-[2.15rem] font-semibold tracking-tight text-[var(--text-primary)]">{city.cityName}</h1>
-            <p className="mt-2 text-base text-[var(--text-secondary)]">
+            <p className="ds-eyebrow">City</p>
+            <h1 className="ds-page-title mt-1">{city.cityName}</h1>
+            <p className="ds-body mt-2">
               {city.region ? `${city.region}, ` : ""}
               {city.countryName}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-4 py-3 text-base text-[var(--text-secondary)]">
+          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-4 py-3 text-base text-[var(--text-secondary)]">
             <p>
               {entries.length} memory {entries.length === 1 ? "entry" : "entries"}
             </p>
@@ -82,7 +82,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
       </Card>
 
       <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--card-strong),var(--pink-bright)_16%)_100%)] text-[var(--text-primary)]">
-        <div className="mb-4 flex items-center gap-2 text-base font-semibold text-[var(--text-primary)]">
+        <div className="mb-4 flex items-center gap-2 text-[1.02rem] font-semibold text-[var(--text-primary)]">
           <CalendarPlus size={16} />
           Add another memory entry
         </div>
@@ -103,7 +103,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
         </div>
 
         <div className="mt-3 space-y-2">
-          <label className="flex items-center gap-2 text-sm uppercase tracking-[0.12em] text-[var(--text-secondary)]">
+          <label className="flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.1em] text-[var(--text-secondary)]">
             <ImagePlus size={14} />
             Description (optional)
           </label>

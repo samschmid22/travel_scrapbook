@@ -14,14 +14,14 @@ export function MemoryEntryCard({
   photoUrls: Record<string, string>;
 }) {
   return (
-    <article className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-5">
-      <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">{toMonthLabel(entry.visitedAt)}</p>
+    <article className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-5">
+      <p className="ds-eyebrow">{toMonthLabel(entry.visitedAt)}</p>
 
       <div className="mt-3">
         {entry.description ? (
           <p className="text-base leading-relaxed text-[var(--text-primary)]">{entry.description}</p>
         ) : (
-          <p className="rounded-xl bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] px-3 py-2 text-base text-[var(--text-secondary)]">
+          <p className="rounded-[var(--radius-control)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] px-3 py-2 text-base text-[var(--text-secondary)]">
             No description added for this memory.
           </p>
         )}
@@ -44,7 +44,7 @@ export function MemoryEntryCard({
                   href={url}
                   target="_blank"
                   rel="noreferrer"
-                  className="group relative block overflow-hidden rounded-xl border border-[var(--border-soft)]"
+                  className="group relative block overflow-hidden rounded-[var(--radius-control)] border border-[var(--border-soft)]"
                 >
                   {url ? (
                     <img

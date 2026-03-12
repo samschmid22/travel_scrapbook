@@ -128,7 +128,7 @@ export function GalleryView() {
       <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           <div className="space-y-1.5 xl:col-span-2">
-            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Search</label>
+            <label className="ds-input-label">Search</label>
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
               <Input
@@ -141,9 +141,9 @@ export function GalleryView() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</label>
+            <label className="ds-input-label">Country</label>
             <select
-              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
+              className="h-11 w-full rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
               value={countryFilter}
               onChange={(event) => {
                 setCountryFilter(event.target.value);
@@ -160,9 +160,9 @@ export function GalleryView() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">City</label>
+            <label className="ds-input-label">City</label>
             <select
-              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
+              className="h-11 w-full rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
               value={cityFilter}
               onChange={(event) => setCityFilter(event.target.value)}
             >
@@ -177,9 +177,9 @@ export function GalleryView() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Month</label>
+            <label className="ds-input-label">Month</label>
             <select
-              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
+              className="h-11 w-full rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
               value={monthFilter}
               onChange={(event) => setMonthFilter(event.target.value)}
             >
@@ -193,13 +193,13 @@ export function GalleryView() {
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-[var(--text-secondary)]">{photosWithLocation.length} photo results</p>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-soft)] pt-3">
+          <p className="ds-meta">{photosWithLocation.length} photo results</p>
 
           <div className="flex items-center gap-2">
-            <label className="text-sm uppercase tracking-[0.12em] text-[var(--text-muted)]">Sort</label>
+            <label className="ds-input-label">Sort</label>
             <select
-              className="h-10 rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-sm text-[var(--text-primary)]"
+              className="h-10 rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-sm text-[var(--text-primary)]"
               value={sortOrder}
               onChange={(event) => setSortOrder(event.target.value as SortOrder)}
             >
@@ -225,7 +225,7 @@ export function GalleryView() {
                 key={photo.id}
                 type="button"
                 onClick={() => setSelectedPhotoId(photo.id)}
-                className="group overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_14%)] text-left"
+                className="group overflow-hidden rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_14%)] text-left"
               >
                 {imageUrl ? (
                   <img
@@ -237,7 +237,9 @@ export function GalleryView() {
                   <div className="aspect-square w-full bg-[var(--surface-3)]" />
                 )}
                 <div className="space-y-1 p-2">
-                  <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{city?.cityName ?? "Unknown city"}</p>
+                  <p className="truncate text-sm font-semibold text-[var(--text-primary)]">
+                    {city?.cityName ?? "Unknown city"}
+                  </p>
                   <p className="truncate text-xs text-[var(--text-muted)]">{city?.countryName ?? "Unknown country"}</p>
                   <p className="truncate text-xs font-medium text-[var(--text-secondary)]">{monthLabel}</p>
                 </div>
@@ -249,7 +251,7 @@ export function GalleryView() {
 
       {selectedItem ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(67,61,78,0.78)] p-4">
-          <div className="relative w-full max-w-5xl rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_36%)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] p-4 backdrop-blur-sm">
+          <div className="relative w-full max-w-5xl rounded-[var(--radius-panel)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_36%)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] p-4 backdrop-blur-sm">
             <button
               type="button"
               className="absolute right-3 top-3 rounded-full bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_18%)] p-2 text-[var(--text-primary)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_30%)]"
@@ -259,7 +261,7 @@ export function GalleryView() {
               <X size={16} />
             </button>
 
-            <div className="max-h-[80vh] overflow-hidden rounded-xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_24%)] bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_20%)]">
+            <div className="max-h-[80vh] overflow-hidden rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_24%)] bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_20%)]">
               {selectedItem.imageUrl ? (
                 <img
                   src={selectedItem.imageUrl}

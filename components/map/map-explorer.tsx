@@ -20,12 +20,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
+import { ProgressChip } from "@/components/ui/progress-chip";
 
 const MAP_WIDTH = 980;
 const MAP_HEIGHT = 560;
 const US_MAP_HEIGHT = 430;
 const MIN_SCALE = 1;
-const MAX_SCALE = 8;
+const MAX_SCALE = 10;
+const DRAG_THRESHOLD = 6;
 
 const mapColors = {
   ocean: "#655d72",
@@ -157,9 +159,43 @@ function applyPinOffsets(pins: MapPin[]) {
   });
 }
 
+function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feature: CountryFeature) {
+  if (feature.geometry.type !== "MultiPolygon") {
+    return pathGenerator.bounds(feature);
+  }
+
+  const polygons = feature.geometry.coordinates;
+  if (polygons.length === 0) {
+    return pathGenerator.bounds(feature);
+  }
+
+  let bestArea = -1;
+  let bestBounds = pathGenerator.bounds(feature);
+
+  for (const polygonCoordinates of polygons) {
+    const polygonFeature: Feature<Polygon, CountryProperties> = {
+      type: "Feature",
+      id: feature.id,
+      properties: feature.properties,
+      geometry: {
+        type: "Polygon",
+        coordinates: polygonCoordinates,
+      },
+    };
+
+    const area = Math.abs(pathGenerator.area(polygonFeature));
+    if (area > bestArea) {
+      bestArea = area;
+      bestBounds = pathGenerator.bounds(polygonFeature);
+    }
+  }
+
+  return bestBounds;
+}
+
 function MapLegend() {
   return (
-    <div className="flex flex-wrap items-center gap-5 text-sm font-medium text-[var(--text-secondary)]">
+    <div className="flex flex-wrap items-center gap-4 text-[0.95rem] font-medium text-[var(--text-secondary)]">
       <span className="inline-flex items-center gap-2">
         <span className="h-3.5 w-3.5 rounded-full" style={{ background: mapColors.unvisited }} />
         Not visited
@@ -175,9 +211,6 @@ function MapLegend() {
     </div>
   );
 }
-
-const progressBadgeClassName =
-  "border-[color-mix(in_oklab,var(--pink-dark),var(--pink-soft)_28%)] bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_28%)_100%)] text-[var(--pink-soft)] shadow-[0_14px_24px_-14px_rgba(255,71,162,0.72)]";
 
 export function MapExplorer() {
   const { cities, countryGroups, getEntriesForCity, usStateVisits, toggleUSStateVisited, visitedCountryCodes } = useAppStore();
@@ -233,6 +266,23 @@ export function MapExplorer() {
       return Boolean(stateCode && usStateCodeSet.has(stateCode));
     });
   }, []);
+
+  const usFeatureByCode = useMemo(() => {
+    const map = new Map<string, USStateFeature>();
+    for (const stateFeature of usStateFeatures) {
+      const fips = getFipsFromFeatureId(stateFeature.id);
+      if (!fips) {
+        continue;
+      }
+
+      const stateCode = usFipsToStateCode[fips];
+      if (stateCode) {
+        map.set(stateCode, stateFeature);
+      }
+    }
+
+    return map;
+  }, [usStateFeatures]);
 
   const worldProjection = useMemo(() => {
     return geoEqualEarth().fitSize(
@@ -424,7 +474,7 @@ export function MapExplorer() {
   }
 
   function zoomToCountry(countryFeature: CountryFeature, nextSelection: { code?: string; name: string }) {
-    const bounds = worldPathGenerator.bounds(countryFeature);
+    const bounds = getLargestPolygonBounds(worldPathGenerator, countryFeature);
     const [[x0, y0], [x1, y1]] = bounds;
     const dx = x1 - x0;
     const dy = y1 - y0;
@@ -436,9 +486,10 @@ export function MapExplorer() {
 
     const centerX = (x0 + x1) / 2;
     const centerY = (y0 + y1) / 2;
-    const padding = 68;
+    const minDimension = Math.min(dx, dy);
+    const padding = clamp(minDimension * 0.22, 28, 78);
     const rawScale = Math.min((MAP_WIDTH - padding * 2) / dx, (MAP_HEIGHT - padding * 2) / dy);
-    const scale = clamp(rawScale, 1.35, MAX_SCALE);
+    const scale = clamp(rawScale, 1.7, MAX_SCALE);
 
     setSelectedCountry(nextSelection);
     setWorldViewState(
@@ -467,9 +518,10 @@ export function MapExplorer() {
 
     const centerX = (x0 + x1) / 2;
     const centerY = (y0 + y1) / 2;
-    const padding = 54;
+    const minDimension = Math.min(dx, dy);
+    const padding = clamp(minDimension * 0.24, 22, 66);
     const rawScale = Math.min((MAP_WIDTH - padding * 2) / dx, (US_MAP_HEIGHT - padding * 2) / dy);
-    const scale = clamp(rawScale, 1.35, 6);
+    const scale = clamp(rawScale, 1.7, 7.5);
 
     setSelectedUSStateCode(stateCode);
     setUSViewState(
@@ -523,14 +575,14 @@ export function MapExplorer() {
     const dx = event.clientX - drag.startX;
     const dy = event.clientY - drag.startY;
 
-    if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
       worldMovedRef.current = true;
     }
 
-    setWorldViewState(
+    setWorldViewState((current) =>
       clampViewState(
         {
-          scale: worldViewState.scale,
+          scale: current.scale,
           tx: drag.startTx + dx,
           ty: drag.startTy + dy,
         },
@@ -548,6 +600,9 @@ export function MapExplorer() {
 
     worldDragRef.current = null;
     event.currentTarget.releasePointerCapture(event.pointerId);
+    if (!worldMovedRef.current) {
+      worldMovedRef.current = false;
+    }
   }
 
   function handleUSPointerDown(event: ReactPointerEvent<SVGSVGElement>) {
@@ -576,14 +631,14 @@ export function MapExplorer() {
     const dx = event.clientX - drag.startX;
     const dy = event.clientY - drag.startY;
 
-    if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
       usMovedRef.current = true;
     }
 
-    setUSViewState(
+    setUSViewState((current) =>
       clampViewState(
         {
-          scale: usViewState.scale,
+          scale: current.scale,
           tx: drag.startTx + dx,
           ty: drag.startTy + dy,
         },
@@ -601,22 +656,29 @@ export function MapExplorer() {
 
     usDragRef.current = null;
     event.currentTarget.releasePointerCapture(event.pointerId);
+    if (!usMovedRef.current) {
+      usMovedRef.current = false;
+    }
   }
+
+  const selectedCountryMemoryCount = selectedCountryGroup
+    ? selectedCountryGroup.cities.reduce((count, city) => count + getEntriesForCity(city.id).length, 0)
+    : 0;
 
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)]">
-          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Visited Countries</p>
-          <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.countries}</p>
+          <p className="ds-eyebrow">Visited Countries</p>
+          <p className="ds-stat-value mt-2.5">{stats.countries}</p>
         </Card>
         <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
-          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Visited Cities</p>
-          <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.cities}</p>
+          <p className="ds-eyebrow">Visited Cities</p>
+          <p className="ds-stat-value mt-2.5">{stats.cities}</p>
         </Card>
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)]">
-          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Visited Continents</p>
-          <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.continents}</p>
+          <p className="ds-eyebrow">Visited Continents</p>
+          <p className="ds-stat-value mt-2.5">{stats.continents}</p>
         </Card>
       </div>
 
@@ -624,7 +686,7 @@ export function MapExplorer() {
         <Card className="overflow-hidden p-0">
           <div className="border-b border-[var(--border-soft)] px-6 py-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-[1.4rem] font-semibold text-[var(--text-primary)]">World Map</h3>
+              <h3 className="ds-section-title">World Map</h3>
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="secondary" onClick={() => zoomWorldAt(worldViewState.scale * 1.25)}>
                   <Plus size={16} />
@@ -645,9 +707,12 @@ export function MapExplorer() {
           </div>
 
           <div className="space-y-4 p-5 sm:p-6">
-            <MapLegend />
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <MapLegend />
+              <ProgressChip>{stats.countries} Countries Visited</ProgressChip>
+            </div>
 
-            <div className="relative rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-2 sm:p-4">
+            <div className="relative rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-2 sm:p-4">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
                 className="h-auto w-full touch-none"
@@ -689,7 +754,6 @@ export function MapExplorer() {
                     }
 
                     let fillColor = isVisited ? mapColors.visited : mapColors.unvisited;
-
                     if (isSelected) {
                       fillColor = mapColors.selected;
                     } else if (isHovered) {
@@ -702,7 +766,7 @@ export function MapExplorer() {
                         d={countryPath}
                         fill={fillColor}
                         stroke={isSelected ? mapColors.selectedStroke : mapColors.stroke}
-                        strokeWidth={isSelected ? 1.34 : 0.68}
+                        strokeWidth={isSelected ? 1.36 : 0.68}
                         className="cursor-pointer transition-colors duration-200"
                         onClick={(event) => {
                           event.stopPropagation();
@@ -722,8 +786,9 @@ export function MapExplorer() {
 
                   {worldPins.map((pin) => (
                     <g key={pin.id} className="pointer-events-auto">
-                      <circle cx={pin.x} cy={pin.y} r={5.2} fill={mapColors.pinHalo} opacity={0.8} />
-                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.pin} />
+                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.pinHalo} opacity={0.28} />
+                      <circle cx={pin.x} cy={pin.y} r={2.95} fill="none" stroke={mapColors.pinHalo} strokeWidth={0.8} />
+                      <circle cx={pin.x} cy={pin.y} r={1.85} fill={mapColors.pin} />
                       <title>
                         {pin.label} · {pin.memoryCount} memor{pin.memoryCount === 1 ? "y" : "ies"}
                       </title>
@@ -742,55 +807,57 @@ export function MapExplorer() {
               description="Select a country on the map to inspect saved cities and memory activity there."
             />
           ) : (
-            <div>
-              <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">Country</p>
-              <h3 className="mt-2 text-[1.9rem] font-semibold text-[var(--text-primary)]">{selectedCountry.name}</h3>
+            <div className="space-y-4">
+              <div>
+                <p className="ds-eyebrow">Selected Country</p>
+                <h3 className="ds-section-title mt-1.5">{selectedCountry.name}</h3>
+                <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                  <Badge variant="muted">{selectedCountryGroup?.cities.length ?? 0} Cities</Badge>
+                  <Badge variant="muted">{selectedCountryMemoryCount} Memories</Badge>
+                </div>
+              </div>
 
               {selectedCountryGroup ? (
-                <>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Badge>{selectedCountryGroup.cities.length} cities</Badge>
-                  </div>
+                <div className="space-y-2">
+                  {selectedCountryGroup.cities.map((city) => {
+                    const entries = getEntriesForCity(city.id);
+                    const latestEntry = entries[0];
 
-                  <div className="mt-4 space-y-2.5">
-                    {selectedCountryGroup.cities.map((city) => {
-                      const entries = getEntriesForCity(city.id);
-                      const latestEntry = entries[0];
-
-                      return (
-                        <Link
-                          key={city.id}
-                          href={`/places/${city.id}`}
-                          className="block rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_26%)] px-4 py-3 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_18%)]"
-                        >
-                          <p className="text-lg font-semibold text-[var(--text-primary)]">{city.cityName}</p>
-                          <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
-                            {city.region ? `${city.region} • ` : ""}
-                            {entries.length} memories
-                            {latestEntry ? ` • Last ${toMonthLabel(latestEntry.visitedAt)}` : ""}
-                          </p>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </>
+                    return (
+                      <Link
+                        key={city.id}
+                        href={`/places/${city.id}`}
+                        className="block rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_26%)] px-3.5 py-2.5 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_18%)]"
+                      >
+                        <p className="ds-card-title">{city.cityName}</p>
+                        <p className="ds-meta mt-1">
+                          {city.region ? `${city.region} • ` : ""}
+                          {entries.length} memories
+                          {latestEntry ? ` • Last ${toMonthLabel(latestEntry.visitedAt)}` : ""}
+                        </p>
+                      </Link>
+                    );
+                  })}
+                </div>
               ) : (
                 <EmptyState
-                  className="mt-5"
+                  className="px-4 py-6"
                   title="No Places Saved Yet"
                   description="You have not added any cities in this country yet."
                 />
               )}
 
               {selectedCountry.code === "US" ? (
-                <div className="mt-5 rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)] p-4">
-                  <p className="text-base font-semibold text-[var(--text-primary)]">United States state tracking</p>
+                <div className="rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)] p-3.5">
+                  <p className="ds-eyebrow">United States Progress</p>
                   <div className="mt-2">
-                    <Badge className={progressBadgeClassName}>{visitedUSStateCount} / 50 States Visited</Badge>
+                    <ProgressChip>
+                      {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
+                    </ProgressChip>
                   </div>
                   <a
                     href="#us-states-map"
-                    className="mt-3 inline-flex text-base font-semibold text-[var(--accent-800)] transition hover:text-[var(--text-primary)]"
+                    className="mt-3 inline-flex text-[0.96rem] font-semibold text-[var(--accent-800)] transition hover:text-[var(--text-primary)]"
                   >
                     Open United States Map
                   </a>
@@ -803,9 +870,9 @@ export function MapExplorer() {
 
       <div id="us-states-map" className="grid gap-4 xl:grid-cols-[1fr_380px]">
         <Card className="overflow-hidden p-0">
-          <div className="border-b border-[var(--border-soft)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] px-6 py-5">
+          <div className="border-b border-[var(--border-soft)] px-6 py-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-[1.4rem] font-semibold text-[var(--text-primary)]">United States Map</h3>
+              <h3 className="ds-section-title">United States Map</h3>
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="secondary" onClick={() => zoomUSAt(usViewState.scale * 1.25)}>
                   <Plus size={16} />
@@ -828,12 +895,12 @@ export function MapExplorer() {
           <div className="space-y-4 p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <MapLegend />
-              <Badge className={progressBadgeClassName}>
+              <ProgressChip>
                 {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
-              </Badge>
+              </ProgressChip>
             </div>
 
-            <div className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-2 sm:p-4">
+            <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-2 sm:p-4">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${US_MAP_HEIGHT}`}
                 className="h-auto w-full touch-none"
@@ -894,7 +961,7 @@ export function MapExplorer() {
                         d={statePath}
                         fill={fill}
                         stroke={isSelected ? mapColors.selectedStroke : mapColors.stroke}
-                        strokeWidth={isSelected ? 1.34 : 0.72}
+                        strokeWidth={isSelected ? 1.36 : 0.72}
                         className="cursor-pointer transition-colors duration-200"
                         onClick={(event) => {
                           event.stopPropagation();
@@ -914,8 +981,9 @@ export function MapExplorer() {
 
                   {usPins.map((pin) => (
                     <g key={pin.id} className="pointer-events-auto">
-                      <circle cx={pin.x} cy={pin.y} r={5.2} fill={mapColors.pinHalo} opacity={0.8} />
-                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.pin} />
+                      <circle cx={pin.x} cy={pin.y} r={3.2} fill={mapColors.pinHalo} opacity={0.28} />
+                      <circle cx={pin.x} cy={pin.y} r={2.95} fill="none" stroke={mapColors.pinHalo} strokeWidth={0.8} />
+                      <circle cx={pin.x} cy={pin.y} r={1.85} fill={mapColors.pin} />
                       <title>
                         {pin.label} · {pin.memoryCount} memor{pin.memoryCount === 1 ? "y" : "ies"}
                       </title>
@@ -928,6 +996,7 @@ export function MapExplorer() {
         </Card>
 
         <Card className="h-fit bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
+          <p className="ds-input-label mb-2">Search States</p>
           <Input
             value={usStateQuery}
             onChange={(event) => setUSStateQuery(event.target.value)}
@@ -935,16 +1004,18 @@ export function MapExplorer() {
           />
 
           {selectedUSState ? (
-            <div className="mt-3 rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_34%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)] p-4">
-              <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Selected state</p>
-              <p className="mt-1 text-[1.25rem] font-semibold text-[var(--text-primary)]">{selectedUSState.name}</p>
-              <p className="mt-1 text-base text-[var(--text-secondary)]">{selectedUSState.code}</p>
-              <p className="mt-1 text-sm text-[var(--text-secondary)]">
-                {selectedUSStateCities.length} cit{selectedUSStateCities.length === 1 ? "y" : "ies"} saved
-              </p>
+            <div className="mt-3 rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_34%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)] p-4">
+              <p className="ds-eyebrow">Selected State</p>
+              <p className="ds-section-title mt-1">{selectedUSState.name}</p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <Badge variant="muted">{selectedUSState.code}</Badge>
+                <Badge variant="muted">
+                  {selectedUSStateCities.length} Cit{selectedUSStateCities.length === 1 ? "y" : "ies"}
+                </Badge>
+              </div>
 
               <Button className="mt-3 w-full" variant="primary" onClick={() => void toggleSelectedUSState()}>
-                {selectedUSState.visited ? "Mark as unvisited" : "Mark as visited"}
+                {selectedUSState.visited ? "Mark as Unvisited" : "Mark as Visited"}
               </Button>
             </div>
           ) : (
@@ -955,20 +1026,27 @@ export function MapExplorer() {
             />
           )}
 
-          <div className="mt-3 grid max-h-[300px] grid-cols-2 gap-2 overflow-auto pr-1">
+          <div className="mt-3 grid max-h-[308px] grid-cols-2 gap-2 overflow-auto pr-1">
             {filteredUSStates.map((state) => (
               <button
                 key={state.code}
                 type="button"
-                onClick={() => setSelectedUSStateCode(state.code)}
-                className={`rounded-xl border px-3 py-2.5 text-left text-sm transition ${
+                onClick={() => {
+                  const stateFeature = usFeatureByCode.get(state.code);
+                  if (stateFeature) {
+                    zoomToUSState(stateFeature, state.code);
+                  } else {
+                    setSelectedUSStateCode(state.code);
+                  }
+                }}
+                className={`rounded-[var(--radius-control)] border px-3 py-2.5 text-left text-sm transition ${
                   state.visited
                     ? "border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_45%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)] text-[var(--text-primary)]"
                     : "border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] text-[var(--text-secondary)] hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_9%)]"
                 }`}
               >
-                <p className="font-semibold">{state.name}</p>
-                <p className="mt-0.5 text-xs text-[var(--text-muted)]">{state.code}</p>
+                <p className="font-semibold leading-tight">{state.name}</p>
+                <p className="mt-1 text-xs text-[var(--text-muted)]">{state.code}</p>
               </button>
             ))}
           </div>

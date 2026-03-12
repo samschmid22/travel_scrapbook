@@ -60,7 +60,7 @@ export function SearchableSelect({
 
   return (
     <div ref={rootRef} className="space-y-2">
-      <label className="text-base font-semibold text-[var(--text-primary)]">{label}</label>
+      <label className="ds-input-label">{label}</label>
       <div className="relative">
         <Search
           className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
@@ -77,7 +77,7 @@ export function SearchableSelect({
           }}
           placeholder={selectedLabel && query.length === 0 ? selectedLabel : placeholder}
           className={cn(
-            "h-12 w-full rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_20%)] pl-10 pr-10 text-[0.98rem] text-[var(--text-primary)] outline-none transition",
+            "h-11 w-full rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_20%)] pl-10 pr-10 text-[0.98rem] text-[var(--text-primary)] outline-none transition",
             "placeholder:text-[var(--text-muted)] focus:border-[var(--pink-bright)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_58%)]",
             disabled ? "cursor-not-allowed opacity-60" : "",
           )}
@@ -92,7 +92,7 @@ export function SearchableSelect({
         />
 
         {open ? (
-          <div className="absolute z-30 mt-2 max-h-64 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-[0_22px_44px_-28px_rgba(67,61,78,0.56)]">
+          <div className="absolute z-30 mt-2 max-h-64 w-full overflow-auto rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-[var(--shadow-elevated)]">
             {options.length === 0 ? (
               <p className="px-3 py-3 text-[0.95rem] text-[var(--text-secondary)]">{emptyMessage}</p>
             ) : (
@@ -108,7 +108,7 @@ export function SearchableSelect({
                           setOpen(false);
                         }}
                         className={cn(
-                          "flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-[0.96rem] transition",
+                          "flex w-full items-center justify-between rounded-[var(--radius-control)] px-3 py-2.5 text-left text-[0.96rem] transition",
                           selected
                             ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_18%)] text-[var(--text-primary)]"
                             : "hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_22%)]",
@@ -130,7 +130,7 @@ export function SearchableSelect({
           </div>
         ) : null}
       </div>
-      {helperText ? <p className="text-sm text-[var(--text-secondary)]">{helperText}</p> : null}
+      {helperText ? <p className="ds-meta">{helperText}</p> : null}
     </div>
   );
 }

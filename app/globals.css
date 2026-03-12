@@ -29,6 +29,28 @@
   --accent-600: #ff47a2;
   --accent-700: #e72a8e;
   --accent-800: #c51f73;
+  --radius-panel: 1.65rem;
+  --radius-card: 1.05rem;
+  --radius-control: 0.85rem;
+  --radius-pill: 999px;
+  --shadow-panel: 0 30px 62px -42px rgba(67, 61, 78, 0.56);
+  --shadow-elevated: 0 20px 38px -28px rgba(67, 61, 78, 0.5);
+  --space-1: 0.35rem;
+  --space-2: 0.6rem;
+  --space-3: 0.9rem;
+  --space-4: 1.2rem;
+  --space-5: 1.6rem;
+  --space-6: 2rem;
+  --space-panel: var(--space-5);
+  --font-page-title: clamp(1.8rem, 2vw, 2.35rem);
+  --font-section-title: clamp(1.28rem, 1.25vw, 1.5rem);
+  --font-card-title: 1.08rem;
+  --font-body: 1rem;
+  --font-meta: 0.88rem;
+  --font-eyebrow: 0.72rem;
+  --tracking-tight: -0.014em;
+  --tracking-normal: 0.003em;
+  --tracking-eyebrow: 0.14em;
 }
 
 * {
@@ -55,4 +77,121 @@ h3,
 h4 {
   font-family: "Red Hat Display", "Public Sans", sans-serif;
   letter-spacing: -0.018em;
+}
+
+.ds-page-title {
+  font-size: var(--font-page-title);
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+}
+
+.ds-section-title {
+  font-size: var(--font-section-title);
+  line-height: 1.18;
+  font-weight: 600;
+  letter-spacing: calc(var(--tracking-tight) * 0.8);
+  color: var(--text-primary);
+}
+
+.ds-card-title {
+  font-size: var(--font-card-title);
+  line-height: 1.24;
+  font-weight: 600;
+  letter-spacing: calc(var(--tracking-tight) * 0.4);
+  color: var(--text-primary);
+}
+
+.ds-body {
+  font-size: var(--font-body);
+  line-height: 1.45;
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-secondary);
+}
+
+.ds-meta {
+  font-size: var(--font-meta);
+  line-height: 1.35;
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-secondary);
+}
+
+.ds-eyebrow {
+  font-size: var(--font-eyebrow);
+  line-height: 1.2;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--text-muted);
+}
+
+.ds-panel {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-panel);
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--surface-2), var(--gray-ref) 30%) 0%,
+    color-mix(in oklab, var(--surface-3), var(--pink-bright) 12%) 100%
+  );
+  box-shadow: var(--shadow-panel);
+}
+
+.ds-card-surface {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-card);
+  background: color-mix(in oklab, var(--surface-3), var(--gray-ref) 28%);
+  box-shadow: var(--shadow-elevated);
+}
+
+.ds-divider {
+  border-color: var(--border-soft);
+}
+
+.ds-input-label {
+  font-size: var(--font-eyebrow);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--text-muted);
+}
+
+.ds-stat-value {
+  font-family: "Red Hat Display", "Public Sans", sans-serif;
+  font-size: clamp(2rem, 2.2vw, 2.5rem);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+}
+
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--pink-bright), var(--pink-soft) 48%);
+  background: color-mix(in oklab, var(--pink-soft), var(--pink-bright) 18%);
+  padding: 0.2rem 0.68rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-on-light);
+}
+
+.ds-progress-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in oklab, var(--pink-dark), var(--pink-soft) 28%);
+  background: linear-gradient(
+    120deg,
+    var(--pink-bright) 0%,
+    color-mix(in oklab, var(--pink-bright), var(--pink-dark) 28%) 100%
+  );
+  padding: 0.28rem 0.74rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.012em;
+  color: var(--pink-soft);
+  box-shadow: 0 14px 24px -14px rgba(255, 71, 162, 0.72);
 }

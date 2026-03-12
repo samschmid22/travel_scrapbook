@@ -165,11 +165,11 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-[rgba(67,61,78,0.62)] p-4 backdrop-blur-sm">
-      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] shadow-[0_34px_76px_-44px_rgba(67,61,78,0.62)] lg:mt-16">
+      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] shadow-[var(--shadow-panel)] lg:mt-16">
         <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-6 py-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">Add Place</p>
-            <h2 className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">New scrapbook location</h2>
+            <p className="ds-eyebrow">Add Place</p>
+            <h2 className="ds-section-title mt-1">New scrapbook location</h2>
           </div>
           <button
             type="button"
@@ -251,11 +251,11 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                   }}
                 />
               ) : (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-[var(--text-primary)]">Manual city name</label>
-                  <Input
-                    value={manualCityName}
-                    onChange={(event) => setManualCityName(event.target.value)}
+              <div className="space-y-2">
+                <label className="ds-input-label">Manual city name</label>
+                <Input
+                  value={manualCityName}
+                  onChange={(event) => setManualCityName(event.target.value)}
                     placeholder="Enter city manually"
                   />
                 </div>
@@ -274,7 +274,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
               </button>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-[var(--text-primary)]">Region / State (optional)</label>
+                <label className="ds-input-label">Region / State (optional)</label>
                 <Input
                   value={region}
                   onChange={(event) => setRegion(event.target.value)}
@@ -288,14 +288,14 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
             <>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
+                  <label className="ds-input-label flex items-center gap-2">
                     <Calendar size={14} />
                     Month visited
                   </label>
                   <Input type="month" value={visitedAt} onChange={(event) => setVisitedAt(event.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
+                  <label className="ds-input-label flex items-center gap-2">
                     <MapPin size={14} />
                     Selected place
                   </label>
@@ -307,7 +307,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-[var(--text-primary)]">Memory note (optional)</label>
+                <label className="ds-input-label">Memory note (optional)</label>
                 <Textarea
                   value={description}
                   onChange={(event) => setDescription(event.target.value)}
@@ -317,7 +317,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
               </div>
 
               <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
+                <label className="ds-input-label flex items-center gap-2">
                   <ImagePlus size={14} />
                   Photos (optional)
                 </label>

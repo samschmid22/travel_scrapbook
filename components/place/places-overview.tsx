@@ -59,8 +59,12 @@ export function PlacesOverview() {
   return (
     <div className="space-y-5">
       <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)]">
+        <p className="ds-input-label mb-2">Search Places</p>
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
+            size={16}
+          />
           <Input
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
@@ -72,7 +76,7 @@ export function PlacesOverview() {
 
       {hasOnlyPhoenixSeed ? (
         <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
-          <p className="text-base text-[var(--text-secondary)]">
+          <p className="ds-body">
             You currently have the seeded Phoenix example. Add your next place to expand this list.
           </p>
         </Card>
@@ -87,17 +91,17 @@ export function PlacesOverview() {
 
       {filteredGroups.map((group) => (
         <Card key={group.countryCode}>
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[var(--border-soft)] pb-3">
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-2.5 border-b border-[var(--border-soft)] pb-3">
             <div>
-              <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</p>
-              <h3 className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{group.countryName}</h3>
+              <p className="ds-eyebrow">Country</p>
+              <h3 className="ds-section-title mt-1">{group.countryName}</h3>
             </div>
-            <p className="text-base text-[var(--text-secondary)]">
+            <p className="ds-meta">
               {group.cities.length} cit{group.cities.length === 1 ? "y" : "ies"}
             </p>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="space-y-2.5">
             {group.cities.map((city) => {
               const entries = getEntriesForCity(city.id);
               const latestEntry = entries[0];
@@ -108,22 +112,36 @@ export function PlacesOverview() {
                 <Link
                   key={city.id}
                   href={`/places/${city.id}`}
-                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-4 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_18%)]"
+                  className="group rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] px-3.5 py-3 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)]"
                 >
-                  <h4 className="text-xl font-semibold text-[var(--text-primary)]">{city.cityName}</h4>
-                  <p className="mt-1.5 text-base text-[var(--text-secondary)]">
-                    {city.region ? `${city.region} • ` : ""}
-                    {group.countryName}
-                  </p>
+                  <div className="grid gap-2 md:grid-cols-[minmax(0,1.5fr)_0.9fr_0.9fr_0.95fr] md:items-center">
+                    <div className="min-w-0">
+                      <h4 className="ds-card-title truncate">{city.cityName}</h4>
+                      <p className="ds-meta mt-1 truncate">
+                        {city.region ? `${city.region} • ` : ""}
+                        {group.countryName}
+                      </p>
+                    </div>
 
-                  <div className="mt-3.5 space-y-1.5 text-sm text-[var(--text-secondary)]">
-                    <p>
-                      Most recent: {latestEntry ? toMonthLabel(latestEntry.visitedAt) : "No memory date"}
+                    <p className="ds-meta">
+                      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">First Visit</span>
+                      <span className="mt-0.5 block text-[var(--text-primary)]">
+                        {firstEntry ? toMonthLabel(firstEntry.visitedAt) : "Unknown"}
+                      </span>
                     </p>
-                    <p>First visit: {firstEntry ? toMonthLabel(firstEntry.visitedAt) : "Unknown"}</p>
-                    <p>
-                      {entries.length} memory {entries.length === 1 ? "entry" : "entries"} • {photoCount} photo
-                      {photoCount === 1 ? "" : "s"}
+
+                    <p className="ds-meta">
+                      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">Most Recent</span>
+                      <span className="mt-0.5 block text-[var(--text-primary)]">
+                        {latestEntry ? toMonthLabel(latestEntry.visitedAt) : "No memory date"}
+                      </span>
+                    </p>
+
+                    <p className="ds-meta">
+                      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">Memories / Photos</span>
+                      <span className="mt-0.5 block text-[var(--text-primary)]">
+                        {entries.length} / {photoCount}
+                      </span>
                     </p>
                   </div>
                 </Link>
