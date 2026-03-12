@@ -1,20 +1,39 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/hooks/use-app-store";
 
+type SortOrder = "newest" | "oldest";
+
+function formatMonthYear(isoMonth: string) {
+  const [year, month] = isoMonth.split("-").map(Number);
+  if (!year || !month) {
+    return isoMonth;
+  }
+
+  return new Date(year, month - 1, 1).toLocaleDateString(undefined, {
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export function GalleryView() {
-  const { photos, photoUrls, cities } = useAppStore();
+  const { photos, photoUrls, cities, memoryEntries } = useAppStore();
 
   const [countryFilter, setCountryFilter] = useState("all");
   const [cityFilter, setCityFilter] = useState("all");
+  const [monthFilter, setMonthFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedPhotoId, setSelectedPhotoId] = useState<string | null>(null);
 
   const cityById = useMemo(() => new Map(cities.map((city) => [city.id, city])), [cities]);
+  const entryById = useMemo(() => new Map(memoryEntries.map((entry) => [entry.id, entry])), [memoryEntries]);
 
   const allCountries = useMemo(() => {
     const unique = new Map<string, string>();
@@ -30,14 +49,44 @@ export function GalleryView() {
       .sort((a, b) => a.cityName.localeCompare(b.cityName));
   }, [cities, countryFilter]);
 
+  const monthOptions = useMemo(() => {
+    const unique = new Set<string>();
+    for (const photo of photos) {
+      const entry = entryById.get(photo.entryId);
+      const monthKey = entry?.visitedAt || photo.createdAt.slice(0, 7);
+      if (monthKey) {
+        unique.add(monthKey);
+      }
+    }
+
+    return [...unique].sort((a, b) => b.localeCompare(a));
+  }, [entryById, photos]);
+
   const photosWithLocation = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
     return photos
       .map((photo) => {
         const city = cityById.get(photo.cityId);
+        const entry = entryById.get(photo.entryId);
+        const monthKey = entry?.visitedAt || photo.createdAt.slice(0, 7);
+
         return {
           photo,
           city,
           imageUrl: photoUrls[photo.id],
+          monthKey,
+          monthLabel: formatMonthYear(monthKey),
+          searchIndex: [
+            photo.fileName,
+            city?.cityName,
+            city?.region,
+            city?.countryName,
+            monthKey,
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase(),
         };
       })
       .filter((item) => {
@@ -47,10 +96,18 @@ export function GalleryView() {
 
         const countryMatch = countryFilter === "all" || item.city.countryCode === countryFilter;
         const cityMatch = cityFilter === "all" || item.city.id === cityFilter;
+        const monthMatch = monthFilter === "all" || item.monthKey === monthFilter;
+        const searchMatch = !normalizedQuery || item.searchIndex.includes(normalizedQuery);
 
-        return countryMatch && cityMatch;
+        return countryMatch && cityMatch && monthMatch && searchMatch;
+      })
+      .sort((a, b) => {
+        if (sortOrder === "oldest") {
+          return a.photo.createdAt.localeCompare(b.photo.createdAt);
+        }
+        return b.photo.createdAt.localeCompare(a.photo.createdAt);
       });
-  }, [cityById, cityFilter, countryFilter, photoUrls, photos]);
+  }, [cityById, cityFilter, countryFilter, entryById, monthFilter, photoUrls, photos, searchQuery, sortOrder]);
 
   const selectedIndex = photosWithLocation.findIndex((item) => item.photo.id === selectedPhotoId);
   const selectedItem = selectedIndex >= 0 ? photosWithLocation[selectedIndex] : null;
@@ -69,7 +126,20 @@ export function GalleryView() {
   return (
     <div className="space-y-5">
       <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+          <div className="space-y-1.5 xl:col-span-2">
+            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Search</label>
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
+              <Input
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search city, country, or filename"
+                className="pl-9"
+              />
+            </div>
+          </div>
+
           <div className="space-y-1.5">
             <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</label>
             <select
@@ -88,6 +158,7 @@ export function GalleryView() {
               ))}
             </select>
           </div>
+
           <div className="space-y-1.5">
             <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">City</label>
             <select
@@ -104,6 +175,38 @@ export function GalleryView() {
               ))}
             </select>
           </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Month</label>
+            <select
+              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
+              value={monthFilter}
+              onChange={(event) => setMonthFilter(event.target.value)}
+            >
+              <option value="all">All months</option>
+              {monthOptions.map((month) => (
+                <option key={month} value={month}>
+                  {formatMonthYear(month)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm text-[var(--text-secondary)]">{photosWithLocation.length} photo results</p>
+
+          <div className="flex items-center gap-2">
+            <label className="text-sm uppercase tracking-[0.12em] text-[var(--text-muted)]">Sort</label>
+            <select
+              className="h-10 rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-sm text-[var(--text-primary)]"
+              value={sortOrder}
+              onChange={(event) => setSortOrder(event.target.value as SortOrder)}
+            >
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          </div>
         </div>
       </Card>
 
@@ -111,13 +214,13 @@ export function GalleryView() {
         <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
           <EmptyState
             title="No photos for this filter"
-            description="Try a different country or city filter to see saved images."
+            description="Try adjusting search or filters to browse your archive."
           />
         </Card>
       ) : (
         <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-            {photosWithLocation.map(({ photo, city, imageUrl }) => (
+            {photosWithLocation.map(({ photo, city, imageUrl, monthLabel }) => (
               <button
                 key={photo.id}
                 type="button"
@@ -133,9 +236,10 @@ export function GalleryView() {
                 ) : (
                   <div className="aspect-square w-full bg-[var(--surface-3)]" />
                 )}
-                <div className="p-2">
+                <div className="space-y-1 p-2">
                   <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{city?.cityName ?? "Unknown city"}</p>
                   <p className="truncate text-xs text-[var(--text-muted)]">{city?.countryName ?? "Unknown country"}</p>
+                  <p className="truncate text-xs font-medium text-[var(--text-secondary)]">{monthLabel}</p>
                 </div>
               </button>
             ))}

@@ -30,15 +30,15 @@ function getPageTitle(pathname: string) {
 
 function getPageSubtitle(pathname: string) {
   if (pathname.startsWith("/map")) {
-    return "Your world, mapped by memory.";
+    return "Where your life has taken you.";
   }
 
   if (pathname.startsWith("/places")) {
-    return "Organize memories by country and city.";
+    return "Visited places organized by country and city.";
   }
 
   if (pathname.startsWith("/gallery")) {
-    return "All uploaded photos in one calm, searchable view.";
+    return "All uploaded photos, searchable.";
   }
 
   if (pathname.startsWith("/settings")) {

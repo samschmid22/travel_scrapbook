@@ -9,6 +9,7 @@ import { feature } from "topojson-client";
 import worldGeo from "world-atlas/countries-110m.json";
 import usGeo from "us-atlas/states-10m.json";
 
+import { getContinentForCountryCode } from "@/data/continents";
 import { findCityCoordinates, mapGeoCountryNameToCode } from "@/data/countries";
 import { usFipsToStateCode } from "@/data/us-state-fips";
 import { getUSStateCodeFromRegion, usStates } from "@/data/us-states";
@@ -175,6 +176,9 @@ function MapLegend() {
   );
 }
 
+const progressBadgeClassName =
+  "border-[color-mix(in_oklab,var(--pink-dark),var(--pink-soft)_28%)] bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_28%)_100%)] text-[var(--pink-soft)] shadow-[0_14px_24px_-14px_rgba(255,71,162,0.72)]";
+
 export function MapExplorer() {
   const { cities, countryGroups, getEntriesForCity, usStateVisits, toggleUSStateVisited, visitedCountryCodes } = useAppStore();
   const [selectedCountry, setSelectedCountry] = useState<{ code?: string; name: string } | null>(null);
@@ -304,18 +308,18 @@ export function MapExplorer() {
 
   const stats = useMemo(() => {
     const cityCount = countryGroups.reduce((count, group) => count + group.cities.length, 0);
-    const memoryCount = countryGroups.reduce(
-      (count, group) =>
-        count + group.cities.reduce((innerCount, city) => innerCount + getEntriesForCity(city.id).length, 0),
-      0,
-    );
+    const continents = new Set<ReturnType<typeof getContinentForCountryCode>>();
+    for (const countryCode of visitedCountryCodes) {
+      continents.add(getContinentForCountryCode(countryCode));
+    }
+    continents.delete(undefined);
 
     return {
       countries: visitedCountryCodes.length,
       cities: cityCount,
-      memories: memoryCount,
+      continents: continents.size,
     };
-  }, [countryGroups, getEntriesForCity, visitedCountryCodes]);
+  }, [countryGroups, visitedCountryCodes]);
 
   const worldPins = useMemo(() => {
     if (!selectedCountryGroup) {
@@ -607,12 +611,12 @@ export function MapExplorer() {
           <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.countries}</p>
         </Card>
         <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
-          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Saved Cities</p>
+          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Visited Cities</p>
           <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.cities}</p>
         </Card>
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)]">
-          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Memory Entries</p>
-          <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.memories}</p>
+          <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Visited Continents</p>
+          <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.continents}</p>
         </Card>
       </div>
 
@@ -781,7 +785,9 @@ export function MapExplorer() {
               {selectedCountry.code === "US" ? (
                 <div className="mt-5 rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)] p-4">
                   <p className="text-base font-semibold text-[var(--text-primary)]">United States state tracking</p>
-                  <p className="mt-1.5 text-sm text-[var(--text-secondary)]">{visitedUSStateCount} / 50 states visited</p>
+                  <div className="mt-2">
+                    <Badge className={progressBadgeClassName}>{visitedUSStateCount} / 50 States Visited</Badge>
+                  </div>
                   <a
                     href="#us-states-map"
                     className="mt-3 inline-flex text-base font-semibold text-[var(--accent-800)] transition hover:text-[var(--text-primary)]"
@@ -801,9 +807,6 @@ export function MapExplorer() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="text-[1.4rem] font-semibold text-[var(--text-primary)]">United States Map</h3>
               <div className="flex items-center gap-2">
-                <Badge>
-                  {visitedUSStateCount} / {usStateVisits.length || 50} states visited
-                </Badge>
                 <Button size="sm" variant="secondary" onClick={() => zoomUSAt(usViewState.scale * 1.25)}>
                   <Plus size={16} />
                 </Button>
@@ -823,7 +826,12 @@ export function MapExplorer() {
           </div>
 
           <div className="space-y-4 p-5 sm:p-6">
-            <MapLegend />
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <MapLegend />
+              <Badge className={progressBadgeClassName}>
+                {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
+              </Badge>
+            </div>
 
             <div className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-2 sm:p-4">
               <svg
