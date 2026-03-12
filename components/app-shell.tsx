@@ -72,15 +72,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#ffdef0_0%,#f9dfee_36%,#f3d4e6_100%)]">
-      <div className="mx-auto w-full max-w-[1560px] px-4 pb-36 pt-4 sm:px-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
-        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_20%)_100%)] p-6 shadow-[0_26px_48px_-32px_rgba(109,99,109,0.4)] lg:flex lg:flex-col">
-          <div className="rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_28%)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)_100%)] px-5 pb-6 pt-5">
-            <h1 className="leading-none text-[var(--text-primary)]">
-              <span className="block text-[2.55rem] font-semibold uppercase tracking-[0.03em]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)_46%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_22%)_100%)]">
+      <div className="mx-auto w-full max-w-[1560px] px-4 pb-36 pt-4 sm:px-6 lg:grid lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
+        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_36%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-dark)_14%)_100%)] p-6 shadow-[0_34px_60px_-36px_rgba(67,61,78,0.58)] lg:flex lg:flex-col">
+          <div className="rounded-3xl border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_44%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)_100%)] px-5 pb-6 pt-5 shadow-[0_18px_34px_-28px_rgba(255,71,162,0.7)]">
+            <h1 className="leading-none text-[var(--text-on-light-strong)]">
+              <span className="block text-[2.65rem] font-semibold uppercase tracking-[0.04em]">
                 BEEN THERE<span className="text-[var(--pink-bright)]">.</span>
               </span>
-              <span className="mt-1.5 block text-[0.98rem] font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+              <span className="mt-1.5 block text-[1rem] font-semibold uppercase tracking-[0.22em] text-[var(--text-on-light)]">
                 DONE THAT.
               </span>
             </h1>
@@ -98,8 +98,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "flex items-center gap-3 rounded-2xl px-4 py-2.5 text-base font-semibold transition",
                     active
-                      ? "border border-[color-mix(in_oklab,var(--pink-dark),var(--pink-bright)_36%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_28%)] text-[var(--text-primary)] shadow-[0_10px_24px_-16px_rgba(255,71,162,0.56)]"
-                      : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_20%)]",
+                      ? "border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_28%)] bg-[linear-gradient(118deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_34%)_100%)] text-[var(--pink-soft)] shadow-[0_10px_24px_-14px_rgba(255,71,162,0.66)]"
+                      : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)] hover:text-[var(--text-primary)]",
                   )}
                 >
                   <Icon size={17} />
@@ -109,28 +109,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
-          <div className="mt-7 rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_26%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_16%)_100%)] p-5">
+          <div className="mt-7 rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_36%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-5">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--pink-dark)]">
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--pink-soft)]">
                 NEXT ESCAPE
               </p>
               <button
                 type="button"
                 onClick={() => setSparkIndex((current) => (current + 1) % worldSparks.length)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_20%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:text-[var(--text-primary)]"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_22%)] hover:text-[var(--text-primary)]"
                 aria-label="Refresh inspiration"
               >
                 <RefreshCcw size={14} />
               </button>
             </div>
             <p className="mt-3 text-xl font-semibold tracking-tight text-[var(--text-primary)]">{spark.title}</p>
-            <p className="mt-1 text-sm font-medium uppercase tracking-[0.11em] text-[var(--pink-dark)]">{spark.subtitle}</p>
+            <p className="mt-1 text-sm font-medium uppercase tracking-[0.11em] text-[var(--pink-soft)]">{spark.subtitle}</p>
             <p className="mt-3 text-[0.96rem] leading-relaxed text-[var(--text-secondary)]">{spark.line}</p>
           </div>
         </aside>
 
         <section className="min-w-0">
-          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_20%)_100%)] px-6 py-5 shadow-[0_24px_48px_-34px_rgba(119,109,119,0.48)] sm:px-7 lg:px-8">
+          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-6 py-5 shadow-[0_26px_54px_-34px_rgba(67,61,78,0.58)] sm:px-7 lg:px-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-[2rem] font-semibold tracking-tight text-[var(--text-primary)]">{pageTitle}</h2>
@@ -149,7 +149,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pt-2 lg:hidden">
-        <nav className="mx-auto grid w-full max-w-md grid-cols-5 gap-1 rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)] p-1.5 shadow-[0_20px_34px_-20px_rgba(84,74,84,0.45)] backdrop-blur">
+        <nav className="mx-auto grid w-full max-w-md grid-cols-5 gap-1 rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[0_20px_38px_-20px_rgba(67,61,78,0.58)] backdrop-blur">
           {navItems.slice(0, 2).map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             const Icon = item.icon;
@@ -161,7 +161,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
                   active
-                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_30%)] text-[var(--text-primary)]"
+                    ? "bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_32%)_100%)] text-[var(--pink-soft)]"
                     : "text-[var(--text-secondary)]",
                 )}
               >
@@ -174,7 +174,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <button
             type="button"
             onClick={() => setAddPlaceOpen(true)}
-            className="flex min-h-[58px] flex-col items-center justify-center rounded-xl bg-[var(--pink-bright)] text-[var(--text-on-light)] shadow-[0_14px_24px_-14px_rgba(255,71,162,0.6)]"
+            className="flex min-h-[58px] flex-col items-center justify-center rounded-xl bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_30%)_100%)] text-[var(--pink-soft)] shadow-[0_14px_24px_-14px_rgba(255,71,162,0.72)]"
             aria-label="Add place"
           >
             <Plus size={18} />
@@ -192,7 +192,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
                   active
-                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_30%)] text-[var(--text-primary)]"
+                    ? "bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_32%)_100%)] text-[var(--pink-soft)]"
                     : "text-[var(--text-secondary)]",
                 )}
               >

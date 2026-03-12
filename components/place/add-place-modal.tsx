@@ -141,8 +141,8 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#1f1721]/40 p-4 backdrop-blur-sm">
-      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_18%)_100%)] shadow-[0_32px_70px_-44px_rgba(101,84,99,0.5)] lg:mt-16">
+    <div className="fixed inset-0 z-50 bg-[rgba(67,61,78,0.62)] p-4 backdrop-blur-sm">
+      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] shadow-[0_34px_76px_-44px_rgba(67,61,78,0.62)] lg:mt-16">
         <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-6 py-4">
           <div>
             <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">Add Place</p>
@@ -162,7 +162,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           {[1, 2, 3].map((number) => (
             <div
               key={number}
-              className={`h-2 flex-1 rounded-full ${number <= step ? "bg-[var(--pink-bright)]" : "bg-[color-mix(in_oklab,var(--gray-ref),black_10%)]"}`}
+              className={`h-2 flex-1 rounded-full ${number <= step ? "bg-[var(--pink-bright)]" : "bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_28%)]"}`}
             />
           ))}
         </div>
@@ -308,7 +308,9 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           ) : null}
 
           {errorMessage ? (
-            <p className="rounded-xl border border-[#a66383] bg-[#4b3546] px-3 py-2 text-sm text-[#ffd3e3]">{errorMessage}</p>
+            <p className="rounded-xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_34%)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-bright)_12%)] px-3 py-2 text-sm text-[var(--text-primary)]">
+              {errorMessage}
+            </p>
           ) : null}
         </div>
 

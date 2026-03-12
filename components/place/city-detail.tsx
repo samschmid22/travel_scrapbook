@@ -51,7 +51,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
 
   return (
     <div className="space-y-5">
-      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_24%)]">
+      <Card className="bg-[linear-gradient(152deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
         <Link
           href="/places"
           className="inline-flex items-center gap-2 text-base font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
@@ -81,7 +81,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
         </div>
       </Card>
 
-      <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--card-strong),var(--pink-soft)_18%)_100%)] text-[var(--text-primary)]">
+      <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--card-strong),var(--pink-bright)_16%)_100%)] text-[var(--text-primary)]">
         <div className="mb-4 flex items-center gap-2 text-base font-semibold text-[var(--text-primary)]">
           <CalendarPlus size={16} />
           Add another memory entry
@@ -146,7 +146,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
           </p>
         </div>
 
-        {error ? <p className="mt-3 text-sm text-[#ffd3e2]">{error}</p> : null}
+        {error ? <p className="mt-3 text-sm text-[var(--text-primary)]">{error}</p> : null}
       </Card>
 
       <div className="space-y-3">

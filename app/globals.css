@@ -3,29 +3,31 @@
 @import "@fontsource/red-hat-display/index.css";
 
 :root {
-  --gray-ref: #ffdef0;
+  --gray-ref: #433d4e;
   --pink-soft: #ffdef0;
   --pink-bright: #ff47a2;
   --pink-dark: #c51f73;
   --app-bg: #ffdef0;
-  --surface-1: #f7d7e8;
-  --surface-2: #f1cfe1;
-  --surface-3: #e8bfd6;
-  --surface-4: #dca8c5;
+  --surface-1: #433d4e;
+  --surface-2: #4f475c;
+  --surface-3: #5b5369;
+  --surface-4: #675f76;
   --surface-soft: #ffdef0;
-  --border-soft: #d59aba;
-  --border-strong: #b55a8a;
-  --text-primary: #1f1822;
-  --text-secondary: #463b48;
-  --text-muted: #6a5f6a;
-  --text-on-light: #170f1c;
-  --card-strong: #d998bb;
-  --accent-100: #f7d7e8;
-  --accent-200: #efbdd8;
-  --accent-300: #ff96c8;
-  --accent-400: #ff6db5;
+  --surface-soft-strong: color-mix(in oklab, var(--pink-soft), var(--pink-bright) 14%);
+  --border-soft: #8f829d;
+  --border-strong: #ff47a2;
+  --text-primary: #ffdef0;
+  --text-secondary: #ffc7e3;
+  --text-muted: #ff9ccc;
+  --text-on-light: #ff47a2;
+  --text-on-light-strong: #c51f73;
+  --card-strong: #3c3649;
+  --accent-100: #ffdef0;
+  --accent-200: #ffd0e7;
+  --accent-300: #ff9acc;
+  --accent-400: #ff73b9;
   --accent-600: #ff47a2;
-  --accent-700: #ff47a2;
+  --accent-700: #e72a8e;
   --accent-800: #c51f73;
 }
 

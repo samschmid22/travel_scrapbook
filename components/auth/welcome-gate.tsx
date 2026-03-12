@@ -14,8 +14,8 @@ export function WelcomeGate({
   const [pending, setPending] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,#ffdef0_0%,#f5ecf3_48%,#ebe9ec_100%)] px-5 py-10">
-      <div className="w-full max-w-xl rounded-[2.5rem] border border-[var(--border-soft)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_16%)_100%)] p-8 shadow-[0_32px_70px_-44px_rgba(119,106,116,0.48)] sm:p-10">
+    <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_24%)_52%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_18%)_100%)] px-5 py-10">
+      <div className="w-full max-w-xl rounded-[2.5rem] border border-[var(--border-soft)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-8 shadow-[0_36px_78px_-44px_rgba(67,61,78,0.62)] sm:p-10">
         <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">Welcome</p>
         <h1 className="mt-3 leading-none text-[var(--text-primary)]">
           <span className="block text-4xl font-semibold uppercase tracking-[0.03em] sm:text-[2.9rem]">

@@ -58,7 +58,7 @@ export function PlacesOverview() {
 
   return (
     <div className="space-y-5">
-      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)_100%)]">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)]">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
           <Input
@@ -71,7 +71,7 @@ export function PlacesOverview() {
       </Card>
 
       {hasOnlyPhoenixSeed ? (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
+        <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
           <p className="text-base text-[var(--text-secondary)]">
             You currently have the seeded Phoenix example. Add your next place to expand this list.
           </p>
@@ -108,7 +108,7 @@ export function PlacesOverview() {
                 <Link
                   key={city.id}
                   href={`/places/${city.id}`}
-                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-4 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_24%)]"
+                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-4 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_18%)]"
                 >
                   <h4 className="text-xl font-semibold text-[var(--text-primary)]">{city.cityName}</h4>
                   <p className="mt-1.5 text-base text-[var(--text-secondary)]">

@@ -13,15 +13,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--pink-bright)] text-[var(--text-on-light)] hover:bg-[var(--accent-800)] focus-visible:ring-[var(--accent-300)] shadow-[0_20px_34px_-18px_rgba(255,71,162,0.62)]",
+    "bg-[var(--pink-bright)] text-[var(--pink-soft)] hover:bg-[var(--accent-800)] focus-visible:ring-[var(--accent-300)] shadow-[0_20px_34px_-18px_rgba(255,71,162,0.68)]",
   secondary:
-    "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_24%)] text-[var(--text-primary)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)] focus-visible:ring-[var(--accent-300)]",
+    "bg-[var(--pink-soft)] text-[var(--text-on-light)] border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_44%)] hover:bg-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_24%)] hover:text-[var(--text-on-light-strong)] focus-visible:ring-[var(--accent-300)] shadow-[0_16px_30px_-24px_rgba(255,71,162,0.6)]",
   ghost:
-    "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-300)]",
+    "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-300)]",
   dark:
-    "bg-[var(--pink-dark)] text-white hover:bg-[color-mix(in_oklab,var(--pink-dark),black_10%)] focus-visible:ring-[var(--accent-300)]",
+    "bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_36%)] text-[var(--pink-soft)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_28%)] hover:bg-[color-mix(in_oklab,var(--surface-1),var(--pink-bright)_18%)] focus-visible:ring-[var(--accent-300)]",
   danger:
-    "bg-[var(--accent-800)] text-white hover:bg-[color-mix(in_oklab,var(--accent-800),black_8%)] focus-visible:ring-[var(--accent-300)]",
+    "bg-[var(--accent-800)] text-[var(--pink-soft)] hover:bg-[color-mix(in_oklab,var(--accent-800),var(--pink-bright)_18%)] focus-visible:ring-[var(--accent-300)]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

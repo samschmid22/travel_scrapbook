@@ -77,8 +77,8 @@ export function SearchableSelect({
           }}
           placeholder={selectedLabel && query.length === 0 ? selectedLabel : placeholder}
           className={cn(
-            "h-12 w-full rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_16%)] pl-10 pr-10 text-[0.98rem] text-[var(--text-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] outline-none transition",
-            "placeholder:text-[var(--text-muted)] focus:border-[var(--pink-bright)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--pink-bright),white_72%)]",
+            "h-12 w-full rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_20%)] pl-10 pr-10 text-[0.98rem] text-[var(--text-primary)] outline-none transition",
+            "placeholder:text-[var(--text-muted)] focus:border-[var(--pink-bright)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_58%)]",
             disabled ? "cursor-not-allowed opacity-60" : "",
           )}
           aria-label={label}
@@ -92,7 +92,7 @@ export function SearchableSelect({
         />
 
         {open ? (
-          <div className="absolute z-30 mt-2 max-h-64 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-[0_22px_40px_-26px_rgba(109,98,107,0.42)]">
+          <div className="absolute z-30 mt-2 max-h-64 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-[0_22px_44px_-28px_rgba(67,61,78,0.56)]">
             {options.length === 0 ? (
               <p className="px-3 py-3 text-[0.95rem] text-[var(--text-secondary)]">{emptyMessage}</p>
             ) : (

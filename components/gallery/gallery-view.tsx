@@ -57,7 +57,7 @@ export function GalleryView() {
 
   if (photos.length === 0) {
     return (
-      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
         <EmptyState
           title="No photos yet"
           description="Upload photos when you add a place or memory entry and they will appear here."
@@ -68,7 +68,7 @@ export function GalleryView() {
 
   return (
     <div className="space-y-5">
-      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
             <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</label>
@@ -108,14 +108,14 @@ export function GalleryView() {
       </Card>
 
       {photosWithLocation.length === 0 ? (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
+        <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
           <EmptyState
             title="No photos for this filter"
             description="Try a different country or city filter to see saved images."
           />
         </Card>
       ) : (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_24%)]">
+        <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {photosWithLocation.map(({ photo, city, imageUrl }) => (
               <button
@@ -144,18 +144,18 @@ export function GalleryView() {
       )}
 
       {selectedItem ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="relative w-full max-w-5xl rounded-2xl border border-white/20 bg-black/40 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(67,61,78,0.78)] p-4">
+          <div className="relative w-full max-w-5xl rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_36%)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] p-4 backdrop-blur-sm">
             <button
               type="button"
-              className="absolute right-3 top-3 rounded-full bg-black/45 p-2 text-white/90 hover:bg-black/65"
+              className="absolute right-3 top-3 rounded-full bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_18%)] p-2 text-[var(--text-primary)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_30%)]"
               onClick={() => setSelectedPhotoId(null)}
               aria-label="Close preview"
             >
               <X size={16} />
             </button>
 
-            <div className="max-h-[80vh] overflow-hidden rounded-xl border border-white/20 bg-black/25">
+            <div className="max-h-[80vh] overflow-hidden rounded-xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_24%)] bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_20%)]">
               {selectedItem.imageUrl ? (
                 <img
                   src={selectedItem.imageUrl}
@@ -167,18 +167,18 @@ export function GalleryView() {
               )}
             </div>
 
-            <div className="mt-3 flex items-center justify-between text-sm text-white/90">
+            <div className="mt-3 flex items-center justify-between text-sm text-[var(--text-primary)]">
               <div>
                 <p className="font-medium">
                   {selectedItem.city?.cityName}, {selectedItem.city?.countryName}
                 </p>
-                <p className="text-xs text-white/70">{selectedItem.photo.fileName}</p>
+                <p className="text-xs text-[var(--text-secondary)]">{selectedItem.photo.fileName}</p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  className="rounded-full bg-black/45 p-2 hover:bg-black/65 disabled:opacity-45"
+                  className="rounded-full bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_18%)] p-2 hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_30%)] disabled:opacity-45"
                   disabled={selectedIndex <= 0}
                   onClick={() => {
                     if (selectedIndex > 0) {
@@ -191,7 +191,7 @@ export function GalleryView() {
                 </button>
                 <button
                   type="button"
-                  className="rounded-full bg-black/45 p-2 hover:bg-black/65 disabled:opacity-45"
+                  className="rounded-full bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_18%)] p-2 hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_30%)] disabled:opacity-45"
                   disabled={selectedIndex >= photosWithLocation.length - 1}
                   onClick={() => {
                     if (selectedIndex < photosWithLocation.length - 1) {
