@@ -73,7 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#ffdef0_0%,#f9dfee_36%,#f3d4e6_100%)]">
-      <div className="mx-auto w-full max-w-[1560px] px-4 pb-28 pt-4 sm:px-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
+      <div className="mx-auto w-full max-w-[1560px] px-4 pb-36 pt-4 sm:px-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
         <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_20%)_100%)] p-6 shadow-[0_26px_48px_-32px_rgba(109,99,109,0.4)] lg:flex lg:flex-col">
           <div className="rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_28%)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)_100%)] px-5 pb-6 pt-5">
             <h1 className="leading-none text-[var(--text-primary)]">
@@ -148,9 +148,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_18%)]/96 px-2 py-2 backdrop-blur lg:hidden">
-        <nav className="mx-auto grid max-w-xl grid-cols-4 gap-1">
-          {navItems.map((item) => {
+      <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pt-2 lg:hidden">
+        <nav className="mx-auto grid w-full max-w-md grid-cols-5 gap-1 rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)] p-1.5 shadow-[0_20px_34px_-20px_rgba(84,74,84,0.45)] backdrop-blur">
+          {navItems.slice(0, 2).map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             const Icon = item.icon;
 
@@ -159,27 +159,50 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center rounded-xl px-2 py-2 text-xs font-semibold",
+                  "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
                   active
-                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_20%)] text-[var(--text-primary)]"
+                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_22%)] text-[var(--text-primary)]"
                     : "text-[var(--text-secondary)]",
                 )}
               >
-                <Icon size={16} />
+                <Icon size={17} />
+                <span className="mt-1">{item.label}</span>
+              </Link>
+            );
+          })}
+
+          <button
+            type="button"
+            onClick={() => setAddPlaceOpen(true)}
+            className="flex min-h-[58px] flex-col items-center justify-center rounded-xl bg-[var(--pink-bright)] text-[var(--text-on-light)] shadow-[0_14px_24px_-14px_rgba(255,71,162,0.6)]"
+            aria-label="Add place"
+          >
+            <Plus size={18} />
+            <span className="mt-1 text-[11px] font-semibold">Add</span>
+          </button>
+
+          {navItems.slice(2).map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const Icon = item.icon;
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
+                  active
+                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_22%)] text-[var(--text-primary)]"
+                    : "text-[var(--text-secondary)]",
+                )}
+              >
+                <Icon size={17} />
                 <span className="mt-1">{item.label}</span>
               </Link>
             );
           })}
         </nav>
       </div>
-
-      <Button
-        className="fixed bottom-20 right-4 z-40 h-12 w-12 rounded-full p-0 shadow-xl sm:hidden"
-        onClick={() => setAddPlaceOpen(true)}
-        aria-label="Add place"
-      >
-        <Plus size={18} />
-      </Button>
 
       <AddPlaceModal open={addPlaceOpen} onOpenChange={setAddPlaceOpen} />
 
