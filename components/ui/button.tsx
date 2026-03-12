@@ -13,21 +13,21 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--accent-700)] text-[var(--text-on-light)] hover:bg-[var(--accent-800)] focus-visible:ring-[var(--accent-400)] shadow-[0_18px_30px_-18px_rgba(244,168,199,0.82)]",
+    "bg-[var(--pink-bright)] text-[var(--text-on-light)] hover:bg-[var(--accent-800)] focus-visible:ring-[var(--accent-300)] shadow-[0_20px_34px_-18px_rgba(255,71,162,0.62)]",
   secondary:
-    "bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_12%)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--accent-200)_24%)] focus-visible:ring-[var(--accent-300)]",
+    "bg-[var(--pink-soft)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)] focus-visible:ring-[var(--accent-300)]",
   ghost:
     "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-300)]",
   dark:
-    "bg-[var(--surface-3)] text-[var(--text-primary)] hover:bg-[var(--surface-4)] focus-visible:ring-[var(--accent-300)]",
+    "bg-[color-mix(in_oklab,var(--gray-ref),black_20%)] text-white hover:bg-[color-mix(in_oklab,var(--gray-ref),black_28%)] focus-visible:ring-[var(--accent-300)]",
   danger:
-    "bg-[#d96c9f] text-[var(--text-on-light)] hover:bg-[#e07eab] focus-visible:ring-[#eaa1c2]",
+    "bg-[var(--accent-800)] text-white hover:bg-[color-mix(in_oklab,var(--accent-800),black_8%)] focus-visible:ring-[var(--accent-300)]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-9 rounded-xl px-3 text-sm",
-  md: "h-10 rounded-xl px-4 text-sm",
-  lg: "h-11 rounded-2xl px-5 text-sm",
+  sm: "h-10 rounded-xl px-3.5 text-sm",
+  md: "h-11 rounded-xl px-4.5 text-[0.98rem]",
+  lg: "h-12 rounded-2xl px-6 text-base",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center gap-2 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--app-bg)] disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--app-bg)] disabled:pointer-events-none disabled:opacity-60",
         variantClasses[variant],
         sizeClasses[size],
         className,

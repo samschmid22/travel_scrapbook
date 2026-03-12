@@ -57,8 +57,8 @@ export function PlacesOverview() {
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-1),var(--accent-200)_16%)_0%,color-mix(in_oklab,var(--surface-1),var(--accent-100)_8%)_100%)]">
+    <div className="space-y-5">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_62%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_14%)_100%)]">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
           <Input
@@ -71,8 +71,8 @@ export function PlacesOverview() {
       </Card>
 
       {hasOnlyPhoenixSeed ? (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--accent-200)_24%)]">
-          <p className="text-sm text-[var(--text-secondary)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_62%)]">
+          <p className="text-base text-[var(--text-secondary)]">
             You currently have the seeded Phoenix example. Add your next place to expand this list.
           </p>
         </Card>
@@ -89,10 +89,10 @@ export function PlacesOverview() {
         <Card key={group.countryCode}>
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[var(--border-soft)] pb-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Country</p>
-              <h3 className="mt-1 text-xl font-semibold text-[var(--text-primary)]">{group.countryName}</h3>
+              <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</p>
+              <h3 className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{group.countryName}</h3>
             </div>
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="text-base text-[var(--text-secondary)]">
               {group.cities.length} cit{group.cities.length === 1 ? "y" : "ies"}
             </p>
           </div>
@@ -108,15 +108,15 @@ export function PlacesOverview() {
                 <Link
                   key={city.id}
                   href={`/places/${city.id}`}
-                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_20%)] p-4 transition hover:border-[var(--accent-300)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--accent-200)_22%)]"
+                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_48%)] p-4 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_65%)]"
                 >
-                  <h4 className="text-lg font-semibold text-[var(--text-primary)]">{city.cityName}</h4>
-                  <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  <h4 className="text-xl font-semibold text-[var(--text-primary)]">{city.cityName}</h4>
+                  <p className="mt-1.5 text-base text-[var(--text-secondary)]">
                     {city.region ? `${city.region} • ` : ""}
                     {group.countryName}
                   </p>
 
-                  <div className="mt-3 space-y-1 text-xs text-[var(--text-secondary)]">
+                  <div className="mt-3.5 space-y-1.5 text-sm text-[var(--text-secondary)]">
                     <p>
                       Most recent: {latestEntry ? toMonthLabel(latestEntry.visitedAt) : "No memory date"}
                     </p>

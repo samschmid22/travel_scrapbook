@@ -67,13 +67,13 @@ export function GalleryView() {
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-200)_10%)]">
+    <div className="space-y-5">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_62%)]">
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Country</label>
+            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</label>
             <select
-              className="h-10 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_12%)] px-3 text-sm text-[var(--text-primary)]"
+              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)] px-3 text-base text-[var(--text-primary)]"
               value={countryFilter}
               onChange={(event) => {
                 setCountryFilter(event.target.value);
@@ -89,9 +89,9 @@ export function GalleryView() {
             </select>
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">City</label>
+            <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">City</label>
             <select
-              className="h-10 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_12%)] px-3 text-sm text-[var(--text-primary)]"
+              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)] px-3 text-base text-[var(--text-primary)]"
               value={cityFilter}
               onChange={(event) => setCityFilter(event.target.value)}
             >
@@ -115,14 +115,14 @@ export function GalleryView() {
           />
         </Card>
       ) : (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_6%)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_48%)]">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {photosWithLocation.map(({ photo, city, imageUrl }) => (
               <button
                 key={photo.id}
                 type="button"
                 onClick={() => setSelectedPhotoId(photo.id)}
-                className="group overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_10%)] text-left"
+                className="group overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_14%)] text-left"
               >
                 {imageUrl ? (
                   <img
@@ -134,8 +134,8 @@ export function GalleryView() {
                   <div className="aspect-square w-full bg-[var(--surface-3)]" />
                 )}
                 <div className="p-2">
-                  <p className="truncate text-xs font-medium text-[var(--text-primary)]">{city?.cityName ?? "Unknown city"}</p>
-                  <p className="truncate text-[11px] text-[var(--text-muted)]">{city?.countryName ?? "Unknown country"}</p>
+                  <p className="truncate text-sm font-semibold text-[var(--text-primary)]">{city?.cityName ?? "Unknown city"}</p>
+                  <p className="truncate text-xs text-[var(--text-muted)]">{city?.countryName ?? "Unknown country"}</p>
                 </div>
               </button>
             ))}

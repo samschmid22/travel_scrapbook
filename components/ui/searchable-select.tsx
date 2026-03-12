@@ -60,7 +60,7 @@ export function SearchableSelect({
 
   return (
     <div ref={rootRef} className="space-y-2">
-      <label className="text-sm font-medium text-[var(--text-primary)]">{label}</label>
+      <label className="text-base font-semibold text-[var(--text-primary)]">{label}</label>
       <div className="relative">
         <Search
           className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
@@ -77,8 +77,8 @@ export function SearchableSelect({
           }}
           placeholder={selectedLabel && query.length === 0 ? selectedLabel : placeholder}
           className={cn(
-            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_10%)] pl-9 pr-10 text-sm text-[var(--text-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition",
-            "placeholder:text-[var(--text-muted)] focus:border-[var(--accent-300)] focus:ring-2 focus:ring-[var(--accent-100)]/70",
+            "h-12 w-full rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)] pl-10 pr-10 text-[0.98rem] text-[var(--text-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] outline-none transition",
+            "placeholder:text-[var(--text-muted)] focus:border-[var(--pink-bright)] focus:ring-2 focus:ring-[color-mix(in_oklab,var(--pink-bright),white_72%)]",
             disabled ? "cursor-not-allowed opacity-60" : "",
           )}
           aria-label={label}
@@ -92,9 +92,9 @@ export function SearchableSelect({
         />
 
         {open ? (
-          <div className="absolute z-30 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-[0_18px_40px_-24px_rgba(8,6,11,0.88)]">
+          <div className="absolute z-30 mt-2 max-h-64 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-1)] p-1 shadow-[0_22px_40px_-26px_rgba(126,84,110,0.52)]">
             {options.length === 0 ? (
-              <p className="px-3 py-3 text-sm text-[var(--text-secondary)]">{emptyMessage}</p>
+              <p className="px-3 py-3 text-[0.95rem] text-[var(--text-secondary)]">{emptyMessage}</p>
             ) : (
               <ul role="listbox" aria-label={`${label} options`}>
                 {options.map((option) => {
@@ -107,12 +107,12 @@ export function SearchableSelect({
                           onSelect(option);
                           setOpen(false);
                         }}
-                          className={cn(
-                            "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition",
-                            selected
-                              ? "bg-[color-mix(in_oklab,var(--accent-200),white_8%)] text-[var(--text-primary)]"
-                              : "hover:bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_20%)]",
-                          )}
+                        className={cn(
+                          "flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-[0.96rem] transition",
+                          selected
+                            ? "bg-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)] text-[var(--text-primary)]"
+                            : "hover:bg-[color-mix(in_oklab,var(--pink-soft),white_30%)]",
+                        )}
                       >
                         <span>
                           <span className="font-medium">{option.label}</span>
@@ -130,7 +130,7 @@ export function SearchableSelect({
           </div>
         ) : null}
       </div>
-      {helperText ? <p className="text-xs text-[var(--text-secondary)]">{helperText}</p> : null}
+      {helperText ? <p className="text-sm text-[var(--text-secondary)]">{helperText}</p> : null}
     </div>
   );
 }

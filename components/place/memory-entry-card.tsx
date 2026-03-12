@@ -14,14 +14,14 @@ export function MemoryEntryCard({
   photoUrls: Record<string, string>;
 }) {
   return (
-    <article className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)] p-4">
-      <p className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">{toMonthLabel(entry.visitedAt)}</p>
+    <article className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_40%)] p-5">
+      <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">{toMonthLabel(entry.visitedAt)}</p>
 
       <div className="mt-3">
         {entry.description ? (
-          <p className="text-sm leading-relaxed text-[var(--text-primary)]">{entry.description}</p>
+          <p className="text-base leading-relaxed text-[var(--text-primary)]">{entry.description}</p>
         ) : (
-          <p className="rounded-xl bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_10%)] px-3 py-2 text-sm text-[var(--text-secondary)]">
+          <p className="rounded-xl bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] px-3 py-2 text-base text-[var(--text-secondary)]">
             No description added for this memory.
           </p>
         )}

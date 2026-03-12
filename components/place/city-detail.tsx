@@ -50,11 +50,11 @@ export function CityDetail({ cityId }: { cityId: string }) {
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_8%)]">
+    <div className="space-y-5">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_52%)]">
         <Link
           href="/places"
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
+          className="inline-flex items-center gap-2 text-base font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
         >
           <ArrowLeft size={14} />
           Back to Places
@@ -62,15 +62,15 @@ export function CityDetail({ cityId }: { cityId: string }) {
 
         <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">City</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--text-primary)]">{city.cityName}</h1>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+            <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">City</p>
+            <h1 className="mt-1 text-[2.15rem] font-semibold tracking-tight text-[var(--text-primary)]">{city.cityName}</h1>
+            <p className="mt-2 text-base text-[var(--text-secondary)]">
               {city.region ? `${city.region}, ` : ""}
               {city.countryName}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_16%)] px-4 py-3 text-sm text-[var(--text-secondary)]">
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-4 py-3 text-base text-[var(--text-secondary)]">
             <p>
               {entries.length} memory {entries.length === 1 ? "entry" : "entries"}
             </p>
@@ -81,8 +81,8 @@ export function CityDetail({ cityId }: { cityId: string }) {
         </div>
       </Card>
 
-      <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--accent-200)_22%)_0%,color-mix(in_oklab,var(--card-strong),var(--accent-100)_10%)_100%)] text-[var(--text-primary)]">
-        <div className="mb-4 flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
+      <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--pink-soft)_58%)_0%,color-mix(in_oklab,var(--card-strong),var(--gray-ref)_16%)_100%)] text-[var(--text-primary)]">
+        <div className="mb-4 flex items-center gap-2 text-base font-semibold text-[var(--text-primary)]">
           <CalendarPlus size={16} />
           Add another memory entry
         </div>
@@ -98,12 +98,12 @@ export function CityDetail({ cityId }: { cityId: string }) {
             accept="image/*"
             multiple
             onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
-            className="file:mr-2 file:rounded-md file:border-0 file:bg-[var(--surface-1)] file:px-2 file:py-1 file:text-xs file:font-medium file:text-[var(--text-primary)]"
+            className="file:mr-2 file:rounded-md file:border-0 file:bg-[var(--surface-1)] file:px-2.5 file:py-1.5 file:text-sm file:font-medium file:text-[var(--text-primary)]"
           />
         </div>
 
         <div className="mt-3 space-y-2">
-          <label className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-[var(--text-secondary)]">
+          <label className="flex items-center gap-2 text-sm uppercase tracking-[0.12em] text-[var(--text-secondary)]">
             <ImagePlus size={14} />
             Description (optional)
           </label>
@@ -141,7 +141,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
           >
             {pending ? "Saving..." : "Save Memory"}
           </Button>
-          <p className="text-xs text-[var(--text-secondary)]">
+          <p className="text-sm text-[var(--text-secondary)]">
             {files.length} selected photo{files.length === 1 ? "" : "s"}
           </p>
         </div>

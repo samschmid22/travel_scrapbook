@@ -19,34 +19,34 @@ export function SettingsView() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-1),var(--accent-200)_12%)_0%,var(--surface-1)_100%)]">
-        <p className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">App</p>
-        <h3 className="mt-2 text-xl font-semibold text-[var(--text-primary)]">Been There. Done That.</h3>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--text-secondary)]">
+    <div className="space-y-5">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_62%)_0%,var(--surface-1)_100%)]">
+        <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">App</p>
+        <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Been There. Done That.</h3>
+        <p className="mt-2.5 max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">
           Version 1 keeps all data in IndexedDB on this browser/device. Cloud sync and real auth can be
           added later with a Supabase adapter without rewriting page components.
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_14%)] p-4">
-            <p className="text-xs text-[var(--text-muted)]">Cities</p>
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] p-4">
+            <p className="text-sm text-[var(--text-muted)]">Cities</p>
             <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{cities.length}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_14%)] p-4">
-            <p className="text-xs text-[var(--text-muted)]">Memory Entries</p>
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] p-4">
+            <p className="text-sm text-[var(--text-muted)]">Memory Entries</p>
             <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{memoryEntries.length}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_14%)] p-4">
-            <p className="text-xs text-[var(--text-muted)]">Uploaded Photos</p>
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] p-4">
+            <p className="text-sm text-[var(--text-muted)]">Uploaded Photos</p>
             <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{photos.length}</p>
           </div>
         </div>
       </Card>
 
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)]">
-        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Backup & Restore</h3>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)]">
+        <h3 className="text-xl font-semibold text-[var(--text-primary)]">Backup & Restore</h3>
+        <p className="mt-2 text-base text-[var(--text-secondary)]">
           Export your scrapbook as JSON for safekeeping. Import replaces current local data with the file
           contents.
         </p>
@@ -115,12 +115,12 @@ export function SettingsView() {
           />
         </div>
 
-        {statusMessage ? <p className="mt-3 text-sm text-[var(--text-primary)]">{statusMessage}</p> : null}
+        {statusMessage ? <p className="mt-3 text-base text-[var(--text-primary)]">{statusMessage}</p> : null}
       </Card>
 
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)]">
-        <h3 className="text-lg font-semibold text-[var(--text-primary)]">Session</h3>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)]">
+        <h3 className="text-xl font-semibold text-[var(--text-primary)]">Session</h3>
+        <p className="mt-1.5 text-base text-[var(--text-secondary)]">
           Signed in as <span className="font-medium text-[var(--text-primary)]">{session?.displayName ?? "Guest"}</span>
         </p>
 

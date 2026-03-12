@@ -141,12 +141,12 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#1f1721]/55 p-4 backdrop-blur-sm">
-      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--accent-200)_14%)_0%,color-mix(in_oklab,var(--surface-1),var(--accent-100)_8%)_100%)] shadow-[0_36px_90px_-52px_rgba(0,0,0,0.92)] lg:mt-16">
+    <div className="fixed inset-0 z-50 bg-[#1f1721]/40 p-4 backdrop-blur-sm">
+      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_68%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_14%)_100%)] shadow-[0_32px_70px_-44px_rgba(87,55,78,0.56)] lg:mt-16">
         <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-6 py-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">Add Place</p>
-            <h2 className="mt-1 text-xl font-semibold text-[var(--text-primary)]">New scrapbook location</h2>
+            <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">Add Place</p>
+            <h2 className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">New scrapbook location</h2>
           </div>
           <button
             type="button"
@@ -162,7 +162,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           {[1, 2, 3].map((number) => (
             <div
               key={number}
-              className={`h-1.5 flex-1 rounded-full ${number <= step ? "bg-[var(--accent-700)]" : "bg-[var(--surface-3)]"}`}
+              className={`h-2 flex-1 rounded-full ${number <= step ? "bg-[var(--pink-bright)]" : "bg-[color-mix(in_oklab,var(--gray-ref),white_36%)]"}`}
             />
           ))}
         </div>
@@ -190,7 +190,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                 }}
               />
 
-              <p className="text-sm text-[var(--text-secondary)]">
+              <p className="text-base text-[var(--text-secondary)]">
                 Choose a country first so city lookup and map linking stay accurate.
               </p>
             </>
@@ -236,7 +236,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                   setSelectedCity(null);
                   setCityQuery("");
                 }}
-                className="text-sm font-medium text-[var(--accent-700)] hover:text-[var(--accent-800)]"
+                className="text-base font-semibold text-[var(--accent-800)] hover:text-[var(--text-primary)]"
               >
                 {manualCityMode ? "Back to searchable city list" : "Can’t find your city? Enter it manually"}
               </button>
@@ -267,7 +267,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     <MapPin size={14} />
                     Selected place
                   </label>
-                  <div className="rounded-xl border border-[var(--border-soft)] bg-[var(--surface-3)] px-3 py-2 text-sm text-[var(--text-secondary)]">
+                  <div className="rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2 text-base text-[var(--text-secondary)]">
                     {cityName}, {region ? `${region}, ` : ""}
                     {selectedCountryOption?.name ?? selectedCountryName}
                   </div>
@@ -298,7 +298,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     setFiles(nextFiles);
                   }}
                 />
-                <p className="text-xs text-[var(--text-muted)]">
+                <p className="text-sm text-[var(--text-muted)]">
                   {files.length === 0
                     ? "No photos selected yet."
                     : `${files.length} photo${files.length === 1 ? "" : "s"} selected.`}

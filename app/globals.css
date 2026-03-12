@@ -3,26 +3,29 @@
 @import "@fontsource/red-hat-display/index.css";
 
 :root {
-  --app-bg: #352f3b;
-  --surface-1: #3c3544;
-  --surface-2: #47404f;
-  --surface-3: #544b5b;
-  --surface-4: #60576a;
-  --surface-soft: #f1d5e2;
-  --border-soft: #7a6a7d;
-  --border-strong: #9f7f95;
-  --text-primary: #f7f1f5;
-  --text-secondary: #d9cad4;
-  --text-muted: #bba7b8;
-  --text-on-light: #241c27;
-  --card-strong: #4a3f52;
-  --accent-100: #804d69;
-  --accent-200: #a85f82;
-  --accent-300: #c97299;
-  --accent-400: #df85ad;
-  --accent-600: #eb7aaa;
-  --accent-700: #f07fb0;
-  --accent-800: #f4a8c7;
+  --gray-ref: #acaeaf;
+  --pink-soft: #ffdef0;
+  --pink-bright: #ff47a2;
+  --app-bg: #f5f0f4;
+  --surface-1: #ffffff;
+  --surface-2: #f2edf1;
+  --surface-3: #ffdef0;
+  --surface-4: #ece7ec;
+  --surface-soft: #ffdef0;
+  --border-soft: #acaeaf;
+  --border-strong: #8f9192;
+  --text-primary: #1f1822;
+  --text-secondary: #463b48;
+  --text-muted: #6a5f6a;
+  --text-on-light: #170f1c;
+  --card-strong: #f5d8e9;
+  --accent-100: #ffeff8;
+  --accent-200: #ffd5ea;
+  --accent-300: #ff9ecc;
+  --accent-400: #ff75b8;
+  --accent-600: #ff47a2;
+  --accent-700: #ff47a2;
+  --accent-800: #de2f84;
 }
 
 * {
@@ -39,6 +42,8 @@ body {
 body {
   font-family: "Public Sans", sans-serif;
   letter-spacing: 0.002em;
+  font-size: 17px;
+  line-height: 1.45;
 }
 
 h1,
@@ -46,5 +51,5 @@ h2,
 h3,
 h4 {
   font-family: "Red Hat Display", "Public Sans", sans-serif;
-  letter-spacing: -0.016em;
+  letter-spacing: -0.018em;
 }
