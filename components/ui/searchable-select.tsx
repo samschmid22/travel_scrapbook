@@ -77,8 +77,8 @@ export function SearchableSelect({
           }}
           placeholder={selectedLabel && query.length === 0 ? selectedLabel : placeholder}
           className={cn(
-            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-3)] pl-9 pr-10 text-sm text-[var(--text-primary)] shadow-sm outline-none transition",
-            "placeholder:text-[var(--text-muted)] focus:border-[var(--accent-300)] focus:ring-2 focus:ring-[var(--accent-100)]",
+            "h-11 w-full rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_10%)] pl-9 pr-10 text-sm text-[var(--text-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] outline-none transition",
+            "placeholder:text-[var(--text-muted)] focus:border-[var(--accent-300)] focus:ring-2 focus:ring-[var(--accent-100)]/70",
             disabled ? "cursor-not-allowed opacity-60" : "",
           )}
           aria-label={label}
@@ -92,7 +92,7 @@ export function SearchableSelect({
         />
 
         {open ? (
-          <div className="absolute z-30 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-xl">
+          <div className="absolute z-30 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-2)] p-1 shadow-[0_18px_40px_-24px_rgba(8,6,11,0.88)]">
             {options.length === 0 ? (
               <p className="px-3 py-3 text-sm text-[var(--text-secondary)]">{emptyMessage}</p>
             ) : (
@@ -107,12 +107,12 @@ export function SearchableSelect({
                           onSelect(option);
                           setOpen(false);
                         }}
-                        className={cn(
-                          "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition",
-                          selected
-                            ? "bg-[var(--accent-100)] text-[var(--text-primary)]"
-                            : "hover:bg-[var(--surface-3)]",
-                        )}
+                          className={cn(
+                            "flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition",
+                            selected
+                              ? "bg-[color-mix(in_oklab,var(--accent-200),white_8%)] text-[var(--text-primary)]"
+                              : "hover:bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_20%)]",
+                          )}
                       >
                         <span>
                           <span className="font-medium">{option.label}</span>

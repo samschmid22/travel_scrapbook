@@ -58,7 +58,7 @@ export function PlacesOverview() {
 
   return (
     <div className="space-y-4">
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_20%)]">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-1),var(--accent-200)_16%)_0%,color-mix(in_oklab,var(--surface-1),var(--accent-100)_8%)_100%)]">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
           <Input
@@ -71,7 +71,7 @@ export function PlacesOverview() {
       </Card>
 
       {hasOnlyPhoenixSeed ? (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_24%)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--accent-200)_24%)]">
           <p className="text-sm text-[var(--text-secondary)]">
             You currently have the seeded Phoenix example. Add your next place to expand this list.
           </p>
@@ -108,7 +108,7 @@ export function PlacesOverview() {
                 <Link
                   key={city.id}
                   href={`/places/${city.id}`}
-                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_18%)] p-4 transition hover:border-[var(--accent-300)] hover:bg-[var(--surface-1)]"
+                  className="group rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_20%)] p-4 transition hover:border-[var(--accent-300)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--accent-200)_22%)]"
                 >
                   <h4 className="text-lg font-semibold text-[var(--text-primary)]">{city.cityName}</h4>
                   <p className="mt-1 text-sm text-[var(--text-secondary)]">

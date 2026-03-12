@@ -13,15 +13,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--accent-600)] text-[#211a24] hover:bg-[var(--accent-700)] focus-visible:ring-[var(--accent-300)] shadow-[0_10px_24px_-14px_rgba(214,106,150,0.68)]",
+    "bg-[var(--accent-700)] text-[var(--text-on-light)] hover:bg-[var(--accent-800)] focus-visible:ring-[var(--accent-400)] shadow-[0_18px_30px_-18px_rgba(244,168,199,0.82)]",
   secondary:
-    "bg-[var(--surface-2)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[var(--surface-3)] focus-visible:ring-[var(--accent-200)]",
+    "bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_12%)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--accent-200)_24%)] focus-visible:ring-[var(--accent-300)]",
   ghost:
-    "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-200)]",
+    "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-300)]",
   dark:
-    "bg-[var(--surface-3)] text-[var(--text-primary)] hover:bg-[#413b48] focus-visible:ring-[#6f6778]",
+    "bg-[var(--surface-3)] text-[var(--text-primary)] hover:bg-[var(--surface-4)] focus-visible:ring-[var(--accent-300)]",
   danger:
-    "bg-[#b24d75] text-[#211a24] hover:bg-[#c55c85] focus-visible:ring-[#b67894]",
+    "bg-[#d96c9f] text-[var(--text-on-light)] hover:bg-[#e07eab] focus-visible:ring-[#eaa1c2]",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

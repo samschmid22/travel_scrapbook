@@ -9,8 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@fontsource/manrope": "^5.2.8",
-    "@fontsource/source-sans-3": "^5.2.9",
+    "@fontsource/public-sans": "^5.2.7",
+    "@fontsource/red-hat-display": "^5.2.8",
     "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
     "d3-geo": "^3.1.1",
@@ -21,6 +21,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "topojson-client": "^3.1.0",
+    "us-atlas": "^3.0.1",
     "world-atlas": "^2.0.2"
   },
   "devDependencies": {

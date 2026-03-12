@@ -141,8 +141,8 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/55 p-4 backdrop-blur-sm">
-      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[var(--surface-1)] shadow-[0_36px_90px_-52px_rgba(0,0,0,0.92)] lg:mt-16">
+    <div className="fixed inset-0 z-50 bg-[#1f1721]/55 p-4 backdrop-blur-sm">
+      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--accent-200)_14%)_0%,color-mix(in_oklab,var(--surface-1),var(--accent-100)_8%)_100%)] shadow-[0_36px_90px_-52px_rgba(0,0,0,0.92)] lg:mt-16">
         <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-6 py-4">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-[var(--text-muted)]">Add Place</p>
@@ -150,7 +150,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           </div>
           <button
             type="button"
-            className="rounded-full p-2 text-[var(--text-muted)] transition hover:bg-[var(--surface-3)]"
+            className="rounded-full p-2 text-[var(--text-muted)] transition hover:bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_24%)]"
             onClick={() => onOpenChange(false)}
             aria-label="Close add place"
           >
@@ -162,7 +162,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           {[1, 2, 3].map((number) => (
             <div
               key={number}
-              className={`h-1.5 flex-1 rounded-full ${number <= step ? "bg-[var(--accent-600)]" : "bg-[var(--surface-3)]"}`}
+              className={`h-1.5 flex-1 rounded-full ${number <= step ? "bg-[var(--accent-700)]" : "bg-[var(--surface-3)]"}`}
             />
           ))}
         </div>
@@ -308,7 +308,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           ) : null}
 
           {errorMessage ? (
-            <p className="rounded-xl border border-[#8e4969] bg-[#3a2733] px-3 py-2 text-sm text-[#f0bdd3]">{errorMessage}</p>
+            <p className="rounded-xl border border-[#a66383] bg-[#4b3546] px-3 py-2 text-sm text-[#ffd3e3]">{errorMessage}</p>
           ) : null}
         </div>
 

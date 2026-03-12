@@ -51,7 +51,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
 
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_8%)]">
         <Link
           href="/places"
           className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
@@ -70,7 +70,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
             </p>
           </div>
 
-          <div className="rounded-2xl bg-[var(--surface-2)] px-4 py-3 text-sm text-[var(--text-secondary)]">
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_16%)] px-4 py-3 text-sm text-[var(--text-secondary)]">
             <p>
               {entries.length} memory {entries.length === 1 ? "entry" : "entries"}
             </p>
@@ -81,8 +81,8 @@ export function CityDetail({ cityId }: { cityId: string }) {
         </div>
       </Card>
 
-      <Card className="bg-[var(--card-strong)] text-white">
-        <div className="mb-4 flex items-center gap-2 text-sm font-medium text-white/95">
+      <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--accent-200)_22%)_0%,color-mix(in_oklab,var(--card-strong),var(--accent-100)_10%)_100%)] text-[var(--text-primary)]">
+        <div className="mb-4 flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
           <CalendarPlus size={16} />
           Add another memory entry
         </div>
@@ -92,19 +92,18 @@ export function CityDetail({ cityId }: { cityId: string }) {
             type="month"
             value={visitedAt}
             onChange={(event) => setVisitedAt(event.target.value)}
-            className="border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:border-white/40 focus:ring-white/20"
           />
           <Input
             type="file"
             accept="image/*"
             multiple
             onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
-            className="border-white/20 bg-white/10 text-white file:mr-2 file:rounded-md file:border-0 file:bg-white/20 file:px-2 file:py-1 file:text-xs file:text-white"
+            className="file:mr-2 file:rounded-md file:border-0 file:bg-[var(--surface-1)] file:px-2 file:py-1 file:text-xs file:font-medium file:text-[var(--text-primary)]"
           />
         </div>
 
         <div className="mt-3 space-y-2">
-          <label className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-white/80">
+          <label className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-[var(--text-secondary)]">
             <ImagePlus size={14} />
             Description (optional)
           </label>
@@ -112,7 +111,6 @@ export function CityDetail({ cityId }: { cityId: string }) {
             rows={3}
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-            className="border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:border-white/40 focus:ring-white/20"
             placeholder="Write about this visit"
           />
         </div>
@@ -120,7 +118,6 @@ export function CityDetail({ cityId }: { cityId: string }) {
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Button
             variant="primary"
-            className="bg-[var(--accent-700)] text-[#1f1822] hover:bg-[var(--accent-800)]"
             onClick={async () => {
               setPending(true);
               setError(null);
@@ -144,12 +141,12 @@ export function CityDetail({ cityId }: { cityId: string }) {
           >
             {pending ? "Saving..." : "Save Memory"}
           </Button>
-          <p className="text-xs text-white/80">
+          <p className="text-xs text-[var(--text-secondary)]">
             {files.length} selected photo{files.length === 1 ? "" : "s"}
           </p>
         </div>
 
-        {error ? <p className="mt-3 text-sm text-[#ffd7e4]">{error}</p> : null}
+        {error ? <p className="mt-3 text-sm text-[#ffd3e2]">{error}</p> : null}
       </Card>
 
       <div className="space-y-3">

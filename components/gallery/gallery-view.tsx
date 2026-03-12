@@ -57,7 +57,7 @@ export function GalleryView() {
 
   if (photos.length === 0) {
     return (
-      <Card>
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)]">
         <EmptyState
           title="No photos yet"
           description="Upload photos when you add a place or memory entry and they will appear here."
@@ -68,12 +68,12 @@ export function GalleryView() {
 
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-200)_10%)]">
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
             <label className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Country</label>
             <select
-              className="h-10 w-full rounded-xl border border-[var(--border-soft)] bg-[var(--surface-3)] px-3 text-sm text-[var(--text-primary)]"
+              className="h-10 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_12%)] px-3 text-sm text-[var(--text-primary)]"
               value={countryFilter}
               onChange={(event) => {
                 setCountryFilter(event.target.value);
@@ -91,7 +91,7 @@ export function GalleryView() {
           <div className="space-y-1.5">
             <label className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">City</label>
             <select
-              className="h-10 w-full rounded-xl border border-[var(--border-soft)] bg-[var(--surface-3)] px-3 text-sm text-[var(--text-primary)]"
+              className="h-10 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_12%)] px-3 text-sm text-[var(--text-primary)]"
               value={cityFilter}
               onChange={(event) => setCityFilter(event.target.value)}
             >
@@ -108,21 +108,21 @@ export function GalleryView() {
       </Card>
 
       {photosWithLocation.length === 0 ? (
-        <Card>
+        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)]">
           <EmptyState
             title="No photos for this filter"
             description="Try a different country or city filter to see saved images."
           />
         </Card>
       ) : (
-        <Card>
+        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_6%)]">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {photosWithLocation.map(({ photo, city, imageUrl }) => (
               <button
                 key={photo.id}
                 type="button"
                 onClick={() => setSelectedPhotoId(photo.id)}
-                className="group overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[var(--surface-2)] text-left"
+                className="group overflow-hidden rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--accent-100)_10%)] text-left"
               >
                 {imageUrl ? (
                   <img

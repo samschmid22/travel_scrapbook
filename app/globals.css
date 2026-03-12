@@ -1,23 +1,28 @@
 @import "tailwindcss";
-@import "@fontsource/source-sans-3/index.css";
-@import "@fontsource/manrope/index.css";
+@import "@fontsource/public-sans/index.css";
+@import "@fontsource/red-hat-display/index.css";
 
 :root {
-  --app-bg: #2a2530;
-  --surface-1: #37313f;
-  --surface-2: #413947;
-  --surface-3: #4b4253;
-  --border-soft: #6f6078;
-  --text-primary: #f4edf4;
-  --text-secondary: #d4c7d5;
-  --text-muted: #b4a7b6;
-  --card-strong: #302a36;
-  --accent-100: #6c4f69;
-  --accent-200: #815b78;
-  --accent-300: #a56d92;
-  --accent-600: #c95c8a;
-  --accent-700: #d66a96;
-  --accent-800: #e58bb1;
+  --app-bg: #352f3b;
+  --surface-1: #3c3544;
+  --surface-2: #47404f;
+  --surface-3: #544b5b;
+  --surface-4: #60576a;
+  --surface-soft: #f1d5e2;
+  --border-soft: #7a6a7d;
+  --border-strong: #9f7f95;
+  --text-primary: #f7f1f5;
+  --text-secondary: #d9cad4;
+  --text-muted: #bba7b8;
+  --text-on-light: #241c27;
+  --card-strong: #4a3f52;
+  --accent-100: #804d69;
+  --accent-200: #a85f82;
+  --accent-300: #c97299;
+  --accent-400: #df85ad;
+  --accent-600: #eb7aaa;
+  --accent-700: #f07fb0;
+  --accent-800: #f4a8c7;
 }
 
 * {
@@ -32,13 +37,14 @@ body {
 }
 
 body {
-  font-family: "Source Sans 3", sans-serif;
+  font-family: "Public Sans", sans-serif;
+  letter-spacing: 0.002em;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-family: "Manrope", "Source Sans 3", sans-serif;
-  letter-spacing: -0.012em;
+  font-family: "Red Hat Display", "Public Sans", sans-serif;
+  letter-spacing: -0.016em;
 }
