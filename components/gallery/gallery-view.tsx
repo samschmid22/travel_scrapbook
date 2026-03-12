@@ -116,6 +116,7 @@ export function GalleryView() {
     return (
       <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
         <EmptyState
+          className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
           title="No photos yet"
           description="Upload photos when you add a place or memory entry and they will appear here."
         />
@@ -213,6 +214,7 @@ export function GalleryView() {
       {photosWithLocation.length === 0 ? (
         <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_12%)_100%)]">
           <EmptyState
+            className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
             title="No photos for this filter"
             description="Try adjusting search or filters to browse your archive."
           />

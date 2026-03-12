@@ -806,7 +806,7 @@ export function MapExplorer() {
         <Card className="h-fit bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
           {!selectedCountry ? (
             <EmptyState
-              className="[&>h3]:text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:text-[var(--pink-dark)] [&>p]:font-medium"
+              className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
               title="No Country Selected"
               description="Select a country on the map to inspect saved cities and memory activity there."
             />
@@ -845,7 +845,7 @@ export function MapExplorer() {
                 </div>
               ) : (
                 <EmptyState
-                  className="px-4 py-6"
+                  className="px-4 py-6 [&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
                   title="No Places Saved Yet"
                   description="You have not added any cities in this country yet."
                 />
@@ -1024,7 +1024,7 @@ export function MapExplorer() {
             </div>
           ) : (
             <EmptyState
-              className="mt-3 px-4 py-6 [&>h3]:text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:text-[var(--pink-dark)] [&>p]:font-medium"
+              className="mt-3 px-4 py-6 [&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
               title="No State Selected"
               description="Click any state on the map to inspect or update your US progress."
             />

@@ -30,7 +30,7 @@ export function MemoryEntryCard({
       <div className="mt-4">
         {photos.length === 0 ? (
           <EmptyState
-            className="py-6"
+            className="py-6 [&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
             title="No photos"
             description="This memory was saved without photos."
           />
