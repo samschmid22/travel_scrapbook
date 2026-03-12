@@ -27,7 +27,7 @@ const MIN_SCALE = 1;
 const MAX_SCALE = 8;
 
 const mapColors = {
-  ocean: "#ffe9f5",
+  ocean: "#d9dcde",
   unvisited: "#acaeaf",
   unvisitedHover: "#9a9d9e",
   visited: "#ff47a2",
@@ -283,15 +283,15 @@ export function MapExplorer() {
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_68%)_0%,var(--surface-1)_100%)]">
+        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_24%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_16%)_100%)]">
           <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Visited Countries</p>
           <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.countries}</p>
         </Card>
-        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_20%)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)]">
           <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Saved Cities</p>
           <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.cities}</p>
         </Card>
-        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_48%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_22%)_100%)]">
+        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_26%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_12%)_100%)]">
           <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Memory Entries</p>
           <p className="mt-3 text-4xl font-semibold text-[var(--text-primary)]">{stats.memories}</p>
         </Card>
@@ -324,7 +324,7 @@ export function MapExplorer() {
           <div className="space-y-4 p-5 sm:p-6">
             <MapLegend />
 
-            <div className="relative rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_48%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_20%)_100%)] p-2 sm:p-4">
+            <div className="relative rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_18%)_100%)] p-2 sm:p-4">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
                 className="h-auto w-full"
@@ -388,7 +388,7 @@ export function MapExplorer() {
           </div>
         </Card>
 
-        <Card className="h-fit bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_44%)]">
+        <Card className="h-fit bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_26%)]">
           {!selectedCountry ? (
             <EmptyState
               title="No country selected"
@@ -414,7 +414,7 @@ export function MapExplorer() {
                         <Link
                           key={city.id}
                           href={`/places/${city.id}`}
-                          className="block rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_38%)] px-4 py-3 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_56%)]"
+                          className="block rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-4 py-3 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_24%)]"
                         >
                           <p className="text-lg font-semibold text-[var(--text-primary)]">{city.cityName}</p>
                           <p className="mt-1.5 text-sm text-[var(--text-secondary)]">
@@ -436,7 +436,7 @@ export function MapExplorer() {
               )}
 
               {selectedCountry.code === "US" ? (
-                <div className="mt-5 rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_64%)] p-4">
+                <div className="mt-5 rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_22%)] p-4">
                   <p className="text-base font-semibold text-[var(--text-primary)]">United States state tracking</p>
                   <p className="mt-1.5 text-sm text-[var(--text-secondary)]">{visitedUSStateCount} / 50 states visited</p>
                   <a
@@ -453,7 +453,7 @@ export function MapExplorer() {
       </div>
 
       <Card id="us-states-map" className="overflow-hidden p-0">
-        <div className="border-b border-[var(--border-soft)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_64%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)_100%)] px-6 py-5">
+        <div className="border-b border-[var(--border-soft)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_16%)_100%)] px-6 py-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-[1.4rem] font-semibold text-[var(--text-primary)]">United States states map</h3>
             <Badge>
@@ -467,11 +467,11 @@ export function MapExplorer() {
             <MapLegend />
 
             <div
-              className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_56%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)_100%)] p-2 sm:p-4"
+              className="rounded-2xl border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)_100%)] p-2 sm:p-4"
               onClick={() => setSelectedUSStateCode(null)}
             >
               <svg viewBox={`0 0 ${MAP_WIDTH} ${US_MAP_HEIGHT}`} className="h-auto w-full" role="img" aria-label="United States states map">
-                <rect x={0} y={0} width={MAP_WIDTH} height={US_MAP_HEIGHT} fill="#ffe9f5" rx={14} ry={14} />
+                <rect x={0} y={0} width={MAP_WIDTH} height={US_MAP_HEIGHT} fill="#d8dbdd" rx={14} ry={14} />
 
                 {usStateFeatures.map((stateFeature) => {
                   const fips = getFipsFromFeatureId(stateFeature.id);
@@ -532,7 +532,7 @@ export function MapExplorer() {
             />
 
             {selectedUSState ? (
-              <div className="rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_34%)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_64%)] p-4">
+              <div className="rounded-2xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_34%)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_26%)] p-4">
                 <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Selected state</p>
                 <p className="mt-1 text-[1.25rem] font-semibold text-[var(--text-primary)]">{selectedUSState.name}</p>
                 <p className="mt-1 text-base text-[var(--text-secondary)]">{selectedUSState.code}</p>
@@ -557,8 +557,8 @@ export function MapExplorer() {
                   onClick={() => setSelectedUSStateCode(state.code)}
                   className={`rounded-xl border px-3 py-2.5 text-left text-sm transition ${
                     state.visited
-                      ? "border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_45%)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_70%)] text-[var(--text-primary)]"
-                      : "border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_16%)] text-[var(--text-secondary)] hover:border-[var(--pink-bright)]"
+                      ? "border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_45%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_20%)] text-[var(--text-primary)]"
+                      : "border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] text-[var(--text-secondary)] hover:border-[var(--pink-bright)]"
                   }`}
                 >
                   <p className="font-semibold">{state.name}</p>

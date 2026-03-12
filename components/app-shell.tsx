@@ -72,10 +72,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#ffdff0_0%,#f6edf3_38%,#ecebed_100%)]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#ffdef0_0%,#f9dfee_36%,#f3d4e6_100%)]">
       <div className="mx-auto w-full max-w-[1560px] px-4 pb-28 pt-4 sm:px-6 lg:grid lg:grid-cols-[300px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
-        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_20%)_100%)] p-6 shadow-[0_26px_48px_-32px_rgba(144,121,141,0.52)] lg:flex lg:flex-col">
-          <div className="rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_35%)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--pink-soft),white_40%)_0%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_12%)_100%)] px-5 pb-6 pt-5">
+        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_20%)_100%)] p-6 shadow-[0_26px_48px_-32px_rgba(109,99,109,0.4)] lg:flex lg:flex-col">
+          <div className="rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_28%)] bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)_100%)] px-5 pb-6 pt-5">
             <h1 className="leading-none text-[var(--text-primary)]">
               <span className="block text-[2.55rem] font-semibold uppercase tracking-[0.03em]">
                 BEEN THERE<span className="text-[var(--pink-bright)]">.</span>
@@ -98,8 +98,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "flex items-center gap-3 rounded-2xl px-4 py-2.5 text-base font-semibold transition",
                     active
-                      ? "border border-[color-mix(in_oklab,var(--pink-bright),var(--gray-ref)_30%)] bg-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_18%)] text-[var(--text-primary)] shadow-[0_10px_24px_-16px_rgba(255,71,162,0.62)]"
-                      : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--pink-soft),white_30%)]",
+                      ? "border border-[color-mix(in_oklab,var(--pink-bright),var(--gray-ref)_30%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_20%)] text-[var(--text-primary)] shadow-[0_10px_24px_-16px_rgba(255,71,162,0.48)]"
+                      : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_20%)]",
                   )}
                 >
                   <Icon size={17} />
@@ -109,7 +109,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
-          <div className="mt-7 rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_34%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--pink-soft),white_40%)_0%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_20%)_100%)] p-5">
+          <div className="mt-7 rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_26%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-soft)_16%)_100%)] p-5">
             <div className="flex items-center justify-between gap-2">
               <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--accent-800)]">
                 NEXT ESCAPE
@@ -117,7 +117,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <button
                 type="button"
                 onClick={() => setSparkIndex((current) => (current + 1) % worldSparks.length)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_64%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:text-[var(--text-primary)]"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:text-[var(--text-primary)]"
                 aria-label="Refresh inspiration"
               >
                 <RefreshCcw size={14} />
@@ -130,7 +130,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </aside>
 
         <section className="min-w-0">
-          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_64%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_12%)_100%)] px-6 py-5 shadow-[0_24px_48px_-34px_rgba(148,120,139,0.5)] sm:px-7 lg:px-8">
+          <header className="mb-5 rounded-[1.75rem] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_20%)_100%)] px-6 py-5 shadow-[0_24px_48px_-34px_rgba(119,109,119,0.48)] sm:px-7 lg:px-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="text-[2rem] font-semibold tracking-tight text-[var(--text-primary)]">{pageTitle}</h2>
@@ -148,7 +148,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </section>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_40%)]/96 px-2 py-2 backdrop-blur lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_18%)]/96 px-2 py-2 backdrop-blur lg:hidden">
         <nav className="mx-auto grid max-w-xl grid-cols-4 gap-1">
           {navItems.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -161,7 +161,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex flex-col items-center rounded-xl px-2 py-2 text-xs font-semibold",
                   active
-                    ? "bg-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)] text-[var(--text-primary)]"
+                    ? "bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_20%)] text-[var(--text-primary)]"
                     : "text-[var(--text-secondary)]",
                 )}
               >

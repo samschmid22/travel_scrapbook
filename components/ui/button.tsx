@@ -15,7 +15,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary:
     "bg-[var(--pink-bright)] text-[var(--text-on-light)] hover:bg-[var(--accent-800)] focus-visible:ring-[var(--accent-300)] shadow-[0_20px_34px_-18px_rgba(255,71,162,0.62)]",
   secondary:
-    "bg-[var(--pink-soft)] text-[var(--text-primary)] border border-[var(--border-soft)] hover:bg-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)] focus-visible:ring-[var(--accent-300)]",
+    "bg-[var(--surface-3)] text-[var(--text-primary)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_24%)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_30%)] focus-visible:ring-[var(--accent-300)]",
   ghost:
     "text-[var(--text-secondary)] hover:bg-[var(--surface-2)] hover:text-[var(--text-primary)] focus-visible:ring-[var(--accent-300)]",
   dark:

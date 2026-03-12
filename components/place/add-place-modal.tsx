@@ -142,7 +142,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-[#1f1721]/40 p-4 backdrop-blur-sm">
-      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_68%)_0%,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_14%)_100%)] shadow-[0_32px_70px_-44px_rgba(87,55,78,0.56)] lg:mt-16">
+      <div className="mx-auto mt-6 w-full max-w-2xl rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_34%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_18%)_100%)] shadow-[0_32px_70px_-44px_rgba(101,84,99,0.5)] lg:mt-16">
         <div className="flex items-center justify-between border-b border-[var(--border-soft)] px-6 py-4">
           <div>
             <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">Add Place</p>
@@ -150,7 +150,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           </div>
           <button
             type="button"
-            className="rounded-full p-2 text-[var(--text-muted)] transition hover:bg-[color-mix(in_oklab,var(--surface-3),var(--accent-100)_24%)]"
+            className="rounded-full p-2 text-[var(--text-muted)] transition hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_24%)]"
             onClick={() => onOpenChange(false)}
             aria-label="Close add place"
           >
@@ -162,7 +162,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           {[1, 2, 3].map((number) => (
             <div
               key={number}
-              className={`h-2 flex-1 rounded-full ${number <= step ? "bg-[var(--pink-bright)]" : "bg-[color-mix(in_oklab,var(--gray-ref),white_36%)]"}`}
+              className={`h-2 flex-1 rounded-full ${number <= step ? "bg-[var(--pink-bright)]" : "bg-[color-mix(in_oklab,var(--gray-ref),black_10%)]"}`}
             />
           ))}
         </div>

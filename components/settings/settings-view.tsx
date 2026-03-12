@@ -20,7 +20,7 @@ export function SettingsView() {
 
   return (
     <div className="space-y-5">
-      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-1),var(--pink-soft)_62%)_0%,var(--surface-1)_100%)]">
+      <Card className="bg-[linear-gradient(150deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)_100%)]">
         <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">App</p>
         <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Been There. Done That.</h3>
         <p className="mt-2.5 max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">
@@ -29,22 +29,22 @@ export function SettingsView() {
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] p-4">
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-4">
             <p className="text-sm text-[var(--text-muted)]">Cities</p>
             <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{cities.length}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] p-4">
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-4">
             <p className="text-sm text-[var(--text-muted)]">Memory Entries</p>
             <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{memoryEntries.length}</p>
           </div>
-          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] p-4">
+          <div className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-4">
             <p className="text-sm text-[var(--text-muted)]">Uploaded Photos</p>
             <p className="mt-1 text-2xl font-semibold text-[var(--text-primary)]">{photos.length}</p>
           </div>
         </div>
       </Card>
 
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)]">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)]">
         <h3 className="text-xl font-semibold text-[var(--text-primary)]">Backup & Restore</h3>
         <p className="mt-2 text-base text-[var(--text-secondary)]">
           Export your scrapbook as JSON for safekeeping. Import replaces current local data with the file
@@ -118,7 +118,7 @@ export function SettingsView() {
         {statusMessage ? <p className="mt-3 text-base text-[var(--text-primary)]">{statusMessage}</p> : null}
       </Card>
 
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)]">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)]">
         <h3 className="text-xl font-semibold text-[var(--text-primary)]">Session</h3>
         <p className="mt-1.5 text-base text-[var(--text-secondary)]">
           Signed in as <span className="font-medium text-[var(--text-primary)]">{session?.displayName ?? "Guest"}</span>

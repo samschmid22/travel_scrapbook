@@ -14,7 +14,7 @@ export function MemoryEntryCard({
   photoUrls: Record<string, string>;
 }) {
   return (
-    <article className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_40%)] p-5">
+    <article className="rounded-2xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-5">
       <p className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">{toMonthLabel(entry.visitedAt)}</p>
 
       <div className="mt-3">

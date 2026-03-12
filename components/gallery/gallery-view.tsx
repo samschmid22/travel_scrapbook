@@ -57,7 +57,7 @@ export function GalleryView() {
 
   if (photos.length === 0) {
     return (
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)]">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
         <EmptyState
           title="No photos yet"
           description="Upload photos when you add a place or memory entry and they will appear here."
@@ -68,12 +68,12 @@ export function GalleryView() {
 
   return (
     <div className="space-y-5">
-      <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_62%)]">
+      <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
         <div className="grid gap-3 md:grid-cols-2">
           <div className="space-y-1.5">
             <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">Country</label>
             <select
-              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)] px-3 text-base text-[var(--text-primary)]"
+              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
               value={countryFilter}
               onChange={(event) => {
                 setCountryFilter(event.target.value);
@@ -91,7 +91,7 @@ export function GalleryView() {
           <div className="space-y-1.5">
             <label className="text-sm uppercase tracking-[0.14em] text-[var(--text-muted)]">City</label>
             <select
-              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_58%)] px-3 text-base text-[var(--text-primary)]"
+              className="h-11 w-full rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_24%)] px-3 text-base text-[var(--text-primary)]"
               value={cityFilter}
               onChange={(event) => setCityFilter(event.target.value)}
             >
@@ -108,14 +108,14 @@ export function GalleryView() {
       </Card>
 
       {photosWithLocation.length === 0 ? (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--accent-100)_10%)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)]">
           <EmptyState
             title="No photos for this filter"
             description="Try a different country or city filter to see saved images."
           />
         </Card>
       ) : (
-        <Card className="bg-[color-mix(in_oklab,var(--surface-1),var(--pink-soft)_48%)]">
+        <Card className="bg-[color-mix(in_oklab,var(--surface-2),var(--gray-ref)_24%)]">
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {photosWithLocation.map(({ photo, city, imageUrl }) => (
               <button
