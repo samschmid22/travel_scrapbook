@@ -664,6 +664,7 @@ export function MapExplorer() {
   const selectedCountryMemoryCount = selectedCountryGroup
     ? selectedCountryGroup.cities.reduce((count, city) => count + getEntriesForCity(city.id).length, 0)
     : 0;
+  const totalWorldCountries = worldFeatures.length;
 
   return (
     <div className="space-y-5">
@@ -709,7 +710,9 @@ export function MapExplorer() {
           <div className="space-y-4 p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <MapLegend />
-              <ProgressChip>{stats.countries} Countries Visited</ProgressChip>
+              <ProgressChip>
+                {stats.countries} / {totalWorldCountries} Countries Visited
+              </ProgressChip>
             </div>
 
             <div className="relative rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-2 sm:p-4">
@@ -803,6 +806,7 @@ export function MapExplorer() {
         <Card className="h-fit bg-[linear-gradient(155deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
           {!selectedCountry ? (
             <EmptyState
+              className="[&>h3]:text-[var(--text-primary)] [&>h3]:font-semibold [&>p]:text-[var(--text-secondary)] [&>p]:font-medium"
               title="No Country Selected"
               description="Select a country on the map to inspect saved cities and memory activity there."
             />
@@ -1020,7 +1024,7 @@ export function MapExplorer() {
             </div>
           ) : (
             <EmptyState
-              className="mt-3 px-4 py-6"
+              className="mt-3 px-4 py-6 [&>h3]:text-[var(--text-primary)] [&>h3]:font-semibold [&>p]:text-[var(--text-secondary)] [&>p]:font-medium"
               title="No State Selected"
               description="Click any state on the map to inspect or update your US progress."
             />

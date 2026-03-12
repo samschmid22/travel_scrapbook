@@ -112,7 +112,7 @@ export function PlacesOverview() {
                 <Link
                   key={city.id}
                   href={`/places/${city.id}`}
-                  className="group rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] px-3.5 py-3 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)]"
+                  className="group block rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] px-3.5 py-3 transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)]"
                 >
                   <div className="grid gap-2 md:grid-cols-[minmax(0,1.5fr)_0.9fr_0.9fr_0.95fr] md:items-center">
                     <div className="min-w-0">
