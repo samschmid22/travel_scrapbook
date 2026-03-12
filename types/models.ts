@@ -10,6 +10,8 @@ export interface CityRecord {
   countryName: string;
   cityName: string;
   region?: string;
+  latitude?: number;
+  longitude?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -58,7 +60,17 @@ export interface AddPlaceInput {
   countryName: string;
   cityName: string;
   region?: string;
+  latitude?: number;
+  longitude?: number;
   firstMemory: Omit<AddMemoryEntryInput, "cityId">;
+}
+
+export interface UpcomingTripRecord {
+  key: "primary";
+  destination: string;
+  departureDate?: string; // YYYY-MM-DD
+  note?: string;
+  updatedAt: string;
 }
 
 export interface PhotoBackupRecord {
@@ -72,11 +84,12 @@ export interface PhotoBackupRecord {
 }
 
 export interface BackupPayloadV1 {
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   exportedAt: string;
   session: AppSession | null;
   cities: CityRecord[];
   memoryEntries: MemoryEntryRecord[];
   photos: PhotoBackupRecord[];
   usStateVisits?: USStateVisitRecord[];
+  upcomingTrip?: Omit<UpcomingTripRecord, "key">;
 }

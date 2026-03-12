@@ -20,6 +20,7 @@ import type {
   CityRecord,
   MemoryEntryRecord,
   PhotoRecord,
+  UpcomingTripRecord,
   USStateVisitRecord,
 } from "@/types/models";
 
@@ -36,6 +37,7 @@ interface AppStoreContextValue {
   memoryEntries: MemoryEntryRecord[];
   photos: PhotoRecord[];
   usStateVisits: USStateVisitRecord[];
+  upcomingTrip: UpcomingTripRecord | null;
   photoUrls: Record<string, string>;
   visitedCountryCodes: string[];
   countryGroups: CountryGroup[];
@@ -44,6 +46,8 @@ interface AppStoreContextValue {
   addPlace(input: AddPlaceInput): Promise<void>;
   addMemoryEntry(input: AddMemoryEntryInput): Promise<void>;
   toggleUSStateVisited(input: { code: string; name: string; visited: boolean }): Promise<void>;
+  saveUpcomingTrip(input: { destination: string; departureDate?: string; note?: string }): Promise<void>;
+  clearUpcomingTrip(): Promise<void>;
   getCityById(cityId: string): CityRecord | undefined;
   getEntriesForCity(cityId: string): MemoryEntryRecord[];
   getPhotosForEntry(entryId: string): PhotoRecord[];
@@ -80,6 +84,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [memoryEntries, setMemoryEntries] = useState<MemoryEntryRecord[]>([]);
   const [photos, setPhotos] = useState<PhotoRecord[]>([]);
   const [usStateVisits, setUSStateVisits] = useState<USStateVisitRecord[]>([]);
+  const [upcomingTrip, setUpcomingTrip] = useState<UpcomingTripRecord | null>(null);
 
   const refresh = useCallback(async () => {
     const [sessionData, snapshot] = await Promise.all([
@@ -92,6 +97,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setMemoryEntries(sortMemoryEntries(snapshot.memoryEntries));
     setPhotos(sortPhotos(snapshot.photos));
     setUSStateVisits([...snapshot.usStateVisits].sort((a, b) => a.name.localeCompare(b.name)));
+    setUpcomingTrip(snapshot.upcomingTrip);
   }, []);
 
   useEffect(() => {
@@ -186,6 +192,19 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     [refresh],
   );
 
+  const saveUpcomingTrip = useCallback(
+    async (input: { destination: string; departureDate?: string; note?: string }) => {
+      await storageAdapter.saveUpcomingTrip(input);
+      await refresh();
+    },
+    [refresh],
+  );
+
+  const clearUpcomingTrip = useCallback(async () => {
+    await storageAdapter.clearUpcomingTrip();
+    await refresh();
+  }, [refresh]);
+
   const entriesByCity = useMemo(() => {
     const map = new Map<string, MemoryEntryRecord[]>();
 
@@ -266,6 +285,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       memoryEntries,
       photos,
       usStateVisits,
+      upcomingTrip,
       photoUrls,
       visitedCountryCodes,
       countryGroups,
@@ -274,6 +294,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       addPlace,
       addMemoryEntry,
       toggleUSStateVisited,
+      saveUpcomingTrip,
+      clearUpcomingTrip,
       getCityById: (cityId: string) => cities.find((city) => city.id === cityId),
       getEntriesForCity: (cityId: string) => entriesByCity.get(cityId) ?? [],
       getPhotosForEntry: (entryId: string) => photosByEntry.get(entryId) ?? [],
@@ -288,6 +310,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       memoryEntries,
       photos,
       usStateVisits,
+      upcomingTrip,
       photoUrls,
       visitedCountryCodes,
       countryGroups,
@@ -296,6 +319,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       addPlace,
       addMemoryEntry,
       toggleUSStateVisited,
+      saveUpcomingTrip,
+      clearUpcomingTrip,
       entriesByCity,
       photosByEntry,
       exportBackupJson,

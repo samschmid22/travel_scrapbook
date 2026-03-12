@@ -32,19 +32,40 @@ function toCountryOptions(query: string): SearchableOption[] {
 
 function toCityOptions(countryCode: string, query: string): SearchableOption[] {
   return searchCities(countryCode, query).map((city) => ({
-    value: `${city.name}|${city.region ?? ""}`,
+    value: JSON.stringify({
+      name: city.name,
+      region: city.region,
+      latitude: city.latitude,
+      longitude: city.longitude,
+    }),
     label: city.name,
     secondaryLabel: city.region ? `(${city.region})` : undefined,
   }));
 }
 
 function parseCityValue(optionValue: string): CityOption {
-  const [name, region] = optionValue.split("|");
-  return {
-    name,
-    region: region || undefined,
-    label: region ? `${name}, ${region}` : name,
-  };
+  try {
+    const parsed = JSON.parse(optionValue) as {
+      name: string;
+      region?: string;
+      latitude?: number;
+      longitude?: number;
+    };
+    return {
+      name: parsed.name,
+      region: parsed.region || undefined,
+      label: parsed.region ? `${parsed.name}, ${parsed.region}` : parsed.name,
+      latitude: parsed.latitude,
+      longitude: parsed.longitude,
+    };
+  } catch {
+    const [name, region] = optionValue.split("|");
+    return {
+      name,
+      region: region || undefined,
+      label: region ? `${name}, ${region}` : name,
+    };
+  }
 }
 
 export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
@@ -121,6 +142,8 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
         countryName: selectedCountryName || selectedCountryOption?.name || "Unknown",
         cityName,
         region: region.trim() || selectedCity?.region,
+        latitude: manualCityMode ? undefined : selectedCity?.latitude,
+        longitude: manualCityMode ? undefined : selectedCity?.longitude,
         firstMemory: {
           visitedAt,
           description,
@@ -202,7 +225,16 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                 <SearchableSelect
                   label="City"
                   placeholder={selectedCountryCode ? "Search city" : "Choose a country first"}
-                  selectedValue={selectedCity ? `${selectedCity.name}|${selectedCity.region ?? ""}` : undefined}
+                  selectedValue={
+                    selectedCity
+                      ? JSON.stringify({
+                          name: selectedCity.name,
+                          region: selectedCity.region,
+                          latitude: selectedCity.latitude,
+                          longitude: selectedCity.longitude,
+                        })
+                      : undefined
+                  }
                   query={cityQuery}
                   onQueryChange={setCityQuery}
                   options={citySelectOptions}

@@ -12,12 +12,14 @@ import type {
   CityRecord,
   MemoryEntryRecord,
   PhotoRecord,
+  UpcomingTripRecord,
   USStateVisitRecord,
 } from "@/types/models";
 import type { StorageAdapter, StorageSnapshot } from "@/storage/adapter";
 
 const SESSION_KEY = "current";
 const META_SEEDED_KEY = "seeded-v1";
+const UPCOMING_TRIP_KEY = "primary";
 
 interface SessionRow {
   key: string;
@@ -36,6 +38,7 @@ class BeenThereDatabase extends Dexie {
   memoryEntries!: Table<MemoryEntryRecord, string>;
   photos!: Table<PhotoRecord, string>;
   usStateVisits!: Table<USStateVisitRecord, string>;
+  upcomingTrip!: Table<UpcomingTripRecord, string>;
 
   constructor() {
     super("been-there-v1");
@@ -64,6 +67,16 @@ class BeenThereDatabase extends Dexie {
           await tx.table<USStateVisitRecord, string>("usStateVisits").bulkPut(stateRows);
         }
       });
+
+    this.version(3).stores({
+      session: "&key",
+      meta: "&key",
+      cities: "&id,countryCode,countryName,cityName,updatedAt",
+      memoryEntries: "&id,cityId,visitedAt,createdAt",
+      photos: "&id,cityId,entryId,createdAt",
+      usStateVisits: "&code,visited,updatedAt",
+      upcomingTrip: "&key,updatedAt",
+    });
   }
 }
 
@@ -193,6 +206,8 @@ export class LocalDexieAdapter implements StorageAdapter {
         countryName: "United States",
         cityName: "Phoenix",
         region: "Arizona",
+        latitude: 33.4484,
+        longitude: -112.074,
         createdAt: currentDate,
         updatedAt: currentDate,
       });
@@ -217,6 +232,8 @@ export class LocalDexieAdapter implements StorageAdapter {
             countryName: "United States",
             cityName: "Phoenix",
             region: "Arizona",
+            latitude: 33.4484,
+            longitude: -112.074,
             createdAt: currentDate,
             updatedAt: currentDate,
           },
@@ -244,11 +261,12 @@ export class LocalDexieAdapter implements StorageAdapter {
   }
 
   async getSnapshot(): Promise<StorageSnapshot> {
-    const [cities, memoryEntries, photos, usStateVisits] = await Promise.all([
+    const [cities, memoryEntries, photos, usStateVisits, upcomingTrip] = await Promise.all([
       db.cities.toArray(),
       db.memoryEntries.toArray(),
       db.photos.toArray(),
       db.usStateVisits.toArray(),
+      db.upcomingTrip.get(UPCOMING_TRIP_KEY),
     ]);
 
     return {
@@ -256,6 +274,7 @@ export class LocalDexieAdapter implements StorageAdapter {
       memoryEntries,
       photos,
       usStateVisits,
+      upcomingTrip: upcomingTrip ?? null,
     };
   }
 
@@ -273,6 +292,17 @@ export class LocalDexieAdapter implements StorageAdapter {
     });
 
     if (existingCity) {
+      if (
+        (input.latitude !== undefined || input.longitude !== undefined) &&
+        (existingCity.latitude === undefined || existingCity.longitude === undefined)
+      ) {
+        await db.cities.update(existingCity.id, {
+          latitude: input.latitude ?? existingCity.latitude,
+          longitude: input.longitude ?? existingCity.longitude,
+          updatedAt: currentDate,
+        });
+      }
+
       const entry = await this.addMemoryEntry({
         cityId: existingCity.id,
         visitedAt: input.firstMemory.visitedAt,
@@ -300,6 +330,8 @@ export class LocalDexieAdapter implements StorageAdapter {
         countryName: input.countryName,
         cityName: input.cityName.trim(),
         region: blankToUndefined(input.region),
+        latitude: input.latitude,
+        longitude: input.longitude,
         createdAt: currentDate,
         updatedAt: currentDate,
       });
@@ -338,6 +370,8 @@ export class LocalDexieAdapter implements StorageAdapter {
         countryName: input.countryName,
         cityName: input.cityName.trim(),
         region: blankToUndefined(input.region),
+        latitude: input.latitude,
+        longitude: input.longitude,
         createdAt: currentDate,
         updatedAt: currentDate,
       },
@@ -409,6 +443,25 @@ export class LocalDexieAdapter implements StorageAdapter {
     });
   }
 
+  async saveUpcomingTrip(input: { destination: string; departureDate?: string; note?: string }) {
+    const destination = input.destination.trim();
+    if (!destination) {
+      throw new Error("Destination is required.");
+    }
+
+    await db.upcomingTrip.put({
+      key: UPCOMING_TRIP_KEY,
+      destination,
+      departureDate: blankToUndefined(input.departureDate),
+      note: blankToUndefined(input.note),
+      updatedAt: nowIso(),
+    });
+  }
+
+  async clearUpcomingTrip() {
+    await db.upcomingTrip.delete(UPCOMING_TRIP_KEY);
+  }
+
   async exportBackup(): Promise<BackupPayloadV1> {
     const [session, snapshot] = await Promise.all([this.getSession(), this.getSnapshot()]);
 
@@ -425,24 +478,32 @@ export class LocalDexieAdapter implements StorageAdapter {
     );
 
     return {
-      version: 2,
+      version: 3,
       exportedAt: nowIso(),
       session,
       cities: snapshot.cities,
       memoryEntries: snapshot.memoryEntries,
       photos,
       usStateVisits: snapshot.usStateVisits,
+      upcomingTrip: snapshot.upcomingTrip
+        ? {
+            destination: snapshot.upcomingTrip.destination,
+            departureDate: snapshot.upcomingTrip.departureDate,
+            note: snapshot.upcomingTrip.note,
+            updatedAt: snapshot.upcomingTrip.updatedAt,
+          }
+        : undefined,
     };
   }
 
   async importBackup(payload: BackupPayloadV1) {
-    if (payload.version !== 1 && payload.version !== 2) {
+    if (payload.version !== 1 && payload.version !== 2 && payload.version !== 3) {
       throw new Error("Unsupported backup version.");
     }
 
     await db.transaction(
       "rw",
-      [db.session, db.meta, db.cities, db.memoryEntries, db.photos, db.usStateVisits],
+      [db.session, db.meta, db.cities, db.memoryEntries, db.photos, db.usStateVisits, db.upcomingTrip],
       async () => {
         await Promise.all([
           db.cities.clear(),
@@ -450,6 +511,7 @@ export class LocalDexieAdapter implements StorageAdapter {
           db.photos.clear(),
           db.session.clear(),
           db.usStateVisits.clear(),
+          db.upcomingTrip.clear(),
         ]);
 
         if (payload.cities.length > 0) {
@@ -474,6 +536,16 @@ export class LocalDexieAdapter implements StorageAdapter {
 
         if (payload.session) {
           await db.session.put({ key: SESSION_KEY, value: payload.session });
+        }
+
+        if (payload.upcomingTrip?.destination) {
+          await db.upcomingTrip.put({
+            key: UPCOMING_TRIP_KEY,
+            destination: payload.upcomingTrip.destination,
+            departureDate: blankToUndefined(payload.upcomingTrip.departureDate),
+            note: blankToUndefined(payload.upcomingTrip.note),
+            updatedAt: payload.upcomingTrip.updatedAt || nowIso(),
+          });
         }
 
         const normalizedRows = normalizeUSStateVisits(payload.usStateVisits, payload.cities, nowIso());

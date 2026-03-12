@@ -1,4 +1,4 @@
-import { City, Country } from "country-state-city";
+import { City, Country, State } from "country-state-city";
 
 import { normalizeText } from "@/lib/utils";
 
@@ -10,7 +10,10 @@ export interface CountryOption {
 export interface CityOption {
   name: string;
   region?: string;
+  regionCode?: string;
   label: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 const mapNameOverrides: Record<string, string> = {
@@ -44,6 +47,47 @@ export const countryOptions: CountryOption[] = countries
 const countryByNormalizedName = new Map(countryOptions.map((country) => [normalizeText(country.name), country]));
 
 const cityCache = new Map<string, CityOption[]>();
+const stateNameCache = new Map<string, Map<string, string>>();
+
+function parseCoordinate(value: string | number | null | undefined) {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : undefined;
+  }
+
+  if (typeof value !== "string" || value.trim().length === 0) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function getStateNameMap(countryCode: string) {
+  const cached = stateNameCache.get(countryCode);
+  if (cached) {
+    return cached;
+  }
+
+  const states = State.getStatesOfCountry(countryCode) ?? [];
+  const next = new Map(
+    states.map((state) => {
+      return [state.isoCode.toUpperCase(), state.name];
+    }),
+  );
+
+  stateNameCache.set(countryCode, next);
+  return next;
+}
+
+function toRegionLabel(countryCode: string, stateCode?: string) {
+  if (!stateCode) {
+    return undefined;
+  }
+
+  const normalizedCode = stateCode.toUpperCase();
+  const fromMap = getStateNameMap(countryCode).get(normalizedCode);
+  return fromMap ?? normalizedCode;
+}
 
 export function getCountryByCode(code: string) {
   return countryOptions.find((country) => country.code === code);
@@ -74,7 +118,7 @@ export function getCitiesForCountry(countryCode: string) {
   const cities = City.getCitiesOfCountry(countryCode) ?? [];
 
   for (const city of cities) {
-    const region = city.stateCode ?? undefined;
+    const region = toRegionLabel(countryCode, city.stateCode ?? undefined);
     const key = `${normalizeText(city.name)}-${normalizeText(region ?? "")}`;
     if (dedupe.has(key)) {
       continue;
@@ -84,7 +128,10 @@ export function getCitiesForCountry(countryCode: string) {
     options.push({
       name: city.name,
       region,
+      regionCode: city.stateCode?.toUpperCase(),
       label: region ? `${city.name}, ${region}` : city.name,
+      latitude: parseCoordinate(city.latitude),
+      longitude: parseCoordinate(city.longitude),
     });
   }
 
@@ -94,7 +141,40 @@ export function getCitiesForCountry(countryCode: string) {
   return options;
 }
 
-export function searchCountries(query: string, limit = 40) {
+export function findCityCoordinates(countryCode: string, cityName: string, region?: string) {
+  const normalizedCity = normalizeText(cityName);
+  const normalizedRegion = normalizeText(region ?? "");
+
+  const cityMatches = getCitiesForCountry(countryCode).filter((city) => {
+    return normalizeText(city.name) === normalizedCity;
+  });
+
+  if (cityMatches.length === 0) {
+    return undefined;
+  }
+
+  const exactRegionMatch = cityMatches.find((city) => {
+    if (!normalizedRegion) {
+      return false;
+    }
+
+    const regionMatch = normalizeText(city.region ?? "") === normalizedRegion;
+    const regionCodeMatch = normalizeText(city.regionCode ?? "") === normalizedRegion;
+    return regionMatch || regionCodeMatch;
+  });
+  const bestMatch = exactRegionMatch ?? cityMatches[0];
+
+  if (bestMatch?.latitude === undefined || bestMatch.longitude === undefined) {
+    return undefined;
+  }
+
+  return {
+    latitude: bestMatch.latitude,
+    longitude: bestMatch.longitude,
+  };
+}
+
+export function searchCountries(query: string, limit = 50) {
   if (!query.trim()) {
     return countryOptions.slice(0, limit);
   }
@@ -105,15 +185,24 @@ export function searchCountries(query: string, limit = 40) {
     .slice(0, limit);
 }
 
-export function searchCities(countryCode: string, query: string, limit = 80) {
+export function searchCities(countryCode: string, query: string, limit?: number) {
   const cities = getCitiesForCountry(countryCode);
-  if (!query.trim()) {
-    return cities.slice(0, limit);
-  }
-
   const normalizedQuery = normalizeText(query);
 
-  return cities
-    .filter((city) => normalizeText(city.label).includes(normalizedQuery))
-    .slice(0, limit);
+  const matches = !normalizedQuery
+    ? cities
+    : cities.filter((city) => {
+        return (
+          normalizeText(city.label).includes(normalizedQuery) ||
+          normalizeText(city.name).includes(normalizedQuery) ||
+          normalizeText(city.region ?? "").includes(normalizedQuery) ||
+          normalizeText(city.regionCode ?? "").includes(normalizedQuery)
+        );
+      });
+
+  if (typeof limit === "number" && limit > 0) {
+    return matches.slice(0, limit);
+  }
+
+  return matches;
 }

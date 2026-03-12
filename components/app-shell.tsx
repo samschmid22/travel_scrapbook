@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, GalleryHorizontal, Map, Plus, RefreshCcw, Settings } from "lucide-react";
+import { Compass, GalleryHorizontal, Map, Plus, Settings } from "lucide-react";
 
 import { WelcomeGate } from "@/components/auth/welcome-gate";
 import { AddPlaceModal } from "@/components/place/add-place-modal";
+import { UpcomingTripModule } from "@/components/sidebar/upcoming-trip-module";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/hooks/use-app-store";
-import { worldSparks } from "@/data/world-sparks";
 import { useMemo, useState } from "react";
 
 const navItems = [
@@ -30,7 +30,7 @@ function getPageTitle(pathname: string) {
 
 function getPageSubtitle(pathname: string) {
   if (pathname.startsWith("/map")) {
-    return "Track where you have been and what still calls you.";
+    return "Your world, mapped by memory.";
   }
 
   if (pathname.startsWith("/places")) {
@@ -52,14 +52,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { ready, session, signIn } = useAppStore();
   const [addPlaceOpen, setAddPlaceOpen] = useState(false);
-  const [sparkIndex, setSparkIndex] = useState(() => {
-    const daySeed = Math.floor(Date.now() / 86_400_000);
-    return daySeed % worldSparks.length;
-  });
 
   const pageTitle = useMemo(() => getPageTitle(pathname), [pathname]);
   const pageSubtitle = useMemo(() => getPageSubtitle(pathname), [pathname]);
-  const spark = worldSparks[sparkIndex % worldSparks.length];
 
   if (!ready) {
     return (
@@ -73,8 +68,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)_46%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_22%)_100%)]">
-      <div className="mx-auto w-full max-w-[1560px] px-4 pb-36 pt-4 sm:px-6 lg:grid lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
-        <aside className="hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_36%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-dark)_14%)_100%)] p-6 shadow-[0_34px_60px_-36px_rgba(67,61,78,0.58)] lg:flex lg:flex-col">
+      <div className="mx-auto w-full max-w-[1560px] px-4 pb-36 pt-4 sm:px-6 lg:grid lg:min-h-[calc(100vh-3rem)] lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
+        <aside className="hidden self-stretch rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_36%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-dark)_14%)_100%)] p-6 shadow-[0_34px_60px_-36px_rgba(67,61,78,0.58)] lg:sticky lg:top-6 lg:flex lg:h-[calc(100vh-3rem)] lg:flex-col">
           <div className="rounded-3xl border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_44%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)_100%)] px-5 pb-6 pt-5 shadow-[0_18px_34px_-28px_rgba(255,71,162,0.7)]">
             <h1 className="leading-none text-[var(--text-on-light-strong)]">
               <span className="block text-[2.65rem] font-semibold uppercase tracking-[0.04em]">
@@ -109,23 +104,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
 
-          <div className="mt-7 rounded-3xl border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_36%)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-5">
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[var(--pink-soft)]">
-                NEXT ESCAPE
-              </p>
-              <button
-                type="button"
-                onClick={() => setSparkIndex((current) => (current + 1) % worldSparks.length)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_30%)] bg-[color-mix(in_oklab,var(--surface-2),var(--pink-soft)_14%)] text-[var(--text-secondary)] transition hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-2),var(--pink-bright)_22%)] hover:text-[var(--text-primary)]"
-                aria-label="Refresh inspiration"
-              >
-                <RefreshCcw size={14} />
-              </button>
-            </div>
-            <p className="mt-3 text-xl font-semibold tracking-tight text-[var(--text-primary)]">{spark.title}</p>
-            <p className="mt-1 text-sm font-medium uppercase tracking-[0.11em] text-[var(--pink-soft)]">{spark.subtitle}</p>
-            <p className="mt-3 text-[0.96rem] leading-relaxed text-[var(--text-secondary)]">{spark.line}</p>
+          <div className="mt-auto pt-7">
+            <UpcomingTripModule />
           </div>
         </aside>
 

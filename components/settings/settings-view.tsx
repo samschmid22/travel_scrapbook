@@ -24,8 +24,7 @@ export function SettingsView() {
         <p className="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">App</p>
         <h3 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">Been There. Done That.</h3>
         <p className="mt-2.5 max-w-3xl text-base leading-relaxed text-[var(--text-secondary)]">
-          Version 1 keeps all data in IndexedDB on this browser/device. Cloud sync and real auth can be
-          added later with a Supabase adapter without rewriting page components.
+          Your scrapbook lives in this browser for now, with backup/import controls below.
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -80,11 +79,7 @@ export function SettingsView() {
             {pendingExport ? "Exporting..." : "Export Data"}
           </Button>
 
-          <Button
-            variant="secondary"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={pendingImport}
-          >
+          <Button variant="dark" onClick={() => fileInputRef.current?.click()} disabled={pendingImport}>
             {pendingImport ? "Importing..." : "Import Data"}
           </Button>
 
