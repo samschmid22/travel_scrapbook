@@ -31,13 +31,22 @@ Open `http://localhost:3000`.
 
 ## Storage in V1
 
-V1 uses **IndexedDB (Dexie)** in the browser.
+V1 supports two storage modes:
 
-- Cities, memory entries, session state, and uploaded image blobs are stored locally.
-- Data persists across refreshes in the same browser profile/device.
-- No environment variables are required.
+- **Supabase mode** (active automatically when both env vars are present):
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+  - Uses Supabase Auth (anonymous sign-in), Postgres tables, and `memory-photos` Storage bucket.
+- **Local mode** fallback (when env vars are not set):
+  - Uses IndexedDB (Dexie) in the browser.
 
-## Limitations of Local Browser Storage
+## Supabase Setup Notes
+
+- Enable **Anonymous sign-ins** in Supabase Auth settings.
+- Run the SQL schema/policy script in Supabase SQL Editor before testing.
+- Add both `NEXT_PUBLIC_*` vars in Vercel Project Settings and redeploy.
+
+## Limitations of Local Mode
 
 - Data does not sync between devices.
 - Data can be lost if browser storage is cleared.
@@ -49,17 +58,9 @@ Use **Export Data** regularly from Settings for safety.
 ## Architecture Notes
 
 Storage is abstracted behind `storage/adapter.ts`.
-The active implementation is `storage/local-adapter.ts` (Dexie).
+Active adapter is selected in `storage/index.ts`:
+
+- `storage/supabase-adapter.ts` when Supabase env vars exist
+- `storage/local-adapter.ts` otherwise
 
 This keeps the UI layer independent from persistence details and makes migration easier.
-
-## Future Supabase Path
-
-A Supabase integration can be added by implementing another storage adapter and swapping the export in `storage/index.ts`.
-
-Potential migration steps:
-
-1. Add Supabase auth and replace mock session methods.
-2. Move city/memory/photo persistence to Supabase tables + storage buckets.
-3. Keep the same app hooks/components and change only adapter logic.
-4. Add cloud sync and optional multi-device conflict handling.

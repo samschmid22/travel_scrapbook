@@ -152,13 +152,13 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
     // V1 mock session; replace with Supabase auth session once backend auth is added.
     await storageAdapter.saveSession(nextSession);
-    setSession(nextSession);
-  }, []);
+    await refresh();
+  }, [refresh]);
 
   const signOut = useCallback(async () => {
     await storageAdapter.saveSession(null);
-    setSession(null);
-  }, []);
+    await refresh();
+  }, [refresh]);
 
   const addPlace = useCallback(
     async (input: AddPlaceInput) => {
