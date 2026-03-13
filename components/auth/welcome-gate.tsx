@@ -12,6 +12,7 @@ export function WelcomeGate({
 }) {
   const [displayName, setDisplayName] = useState("");
   const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="fixed inset-0 z-50 flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_24%)_52%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_18%)_100%)] px-5 py-10">
@@ -26,15 +27,19 @@ export function WelcomeGate({
           </span>
         </h1>
         <p className="mt-4 max-w-lg text-base leading-relaxed text-[var(--text-secondary)] sm:text-[1.04rem]">
-          Your personal travel scrapbook for places you have actually visited. This v1 uses a local
-          mock session and keeps your data in this browser.
+          Your personal travel scrapbook for places you have actually visited.
         </p>
 
         <div className="mt-7 space-y-3">
           <label className="ds-input-label">Display name</label>
           <Input
             value={displayName}
-            onChange={(event) => setDisplayName(event.target.value)}
+            onChange={(event) => {
+              setDisplayName(event.target.value);
+              if (error) {
+                setError(null);
+              }
+            }}
             placeholder="Your name"
           />
         </div>
@@ -44,8 +49,14 @@ export function WelcomeGate({
             size="lg"
             onClick={async () => {
               setPending(true);
-              await onSignIn(displayName);
-              setPending(false);
+              setError(null);
+              try {
+                await onSignIn(displayName);
+              } catch (signInError) {
+                setError(signInError instanceof Error ? signInError.message : "Sign in failed.");
+              } finally {
+                setPending(false);
+              }
             }}
             disabled={pending}
           >
@@ -53,6 +64,12 @@ export function WelcomeGate({
           </Button>
           <p className="text-sm text-[var(--text-muted)]">No password required for v1.</p>
         </div>
+
+        {error ? (
+          <p className="mt-3 text-sm font-medium text-[var(--pink-dark)]">
+            {error}
+          </p>
+        ) : null}
       </div>
     </div>
   );
