@@ -189,6 +189,10 @@ export class SupabaseStorageAdapter implements StorageAdapter {
   private async getCurrentUser() {
     const { data, error } = await this.client.auth.getUser();
     if (error) {
+      // Supabase returns this when no user is signed in yet; treat as signed-out state.
+      if (/auth session missing/i.test(error.message)) {
+        return null;
+      }
       throw new Error(error.message);
     }
 
