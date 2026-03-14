@@ -157,7 +157,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={cn(
                   "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
                   active
-                    ? "bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_32%)_100%)] text-[var(--pink-soft)]"
+                    ? "border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_52%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] text-[var(--pink-soft)] shadow-[inset_0_1px_0_rgba(255,222,240,0.44),0_10px_20px_-16px_rgba(255,71,162,0.9)] backdrop-blur-md"
                     : "text-[var(--text-secondary)]",
                 )}
               >

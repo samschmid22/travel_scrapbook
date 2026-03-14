@@ -39,7 +39,6 @@ function toCityOptions(countryCode: string, query: string): SearchableOption[] {
       longitude: city.longitude,
     }),
     label: city.name,
-    secondaryLabel: city.region ? `(${city.region})` : undefined,
   }));
 }
 
@@ -54,7 +53,7 @@ function parseCityValue(optionValue: string): CityOption {
     return {
       name: parsed.name,
       region: parsed.region || undefined,
-      label: parsed.region ? `${parsed.name}, ${parsed.region}` : parsed.name,
+      label: parsed.name,
       latitude: parsed.latitude,
       longitude: parsed.longitude,
     };
@@ -63,7 +62,7 @@ function parseCityValue(optionValue: string): CityOption {
     return {
       name,
       region: region || undefined,
-      label: region ? `${name}, ${region}` : name,
+      label: name,
     };
   }
 }
@@ -245,7 +244,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                   onSelect={(option) => {
                     const parsed = parseCityValue(option.value);
                     setSelectedCity(parsed);
-                    setCityQuery(parsed.label);
+                    setCityQuery(parsed.name);
                     if (parsed.region) {
                       setRegion(parsed.region);
                     }
