@@ -61,8 +61,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [pathname]);
   const mobileIndicatorStyle = useMemo(
     () => ({
-      width: `calc((100% - 0.75rem) / ${navItems.length})`,
-      transform: `translateX(calc(${mobileActiveIndex} * ((100% - 0.75rem) / ${navItems.length})))`,
+      transform: `translateX(${mobileActiveIndex * 100}%)`,
     }),
     [mobileActiveIndex],
   );
@@ -104,7 +103,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "flex items-center gap-3 rounded-[var(--radius-card)] px-4 py-2.5 text-[1rem] font-semibold transition",
                     active
-                      ? "border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_28%)] bg-[linear-gradient(118deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_34%)_100%)] text-[var(--pink-soft)] shadow-[0_10px_24px_-14px_rgba(255,71,162,0.66)]"
+                      ? "border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_52%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] text-[var(--pink-soft)] shadow-[inset_0_1px_0_rgba(255,222,240,0.44),0_12px_22px_-16px_rgba(255,71,162,0.9)] backdrop-blur-md"
                       : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)] hover:text-[var(--text-primary)]",
                   )}
                 >
@@ -157,31 +156,33 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pt-2 lg:hidden">
         <nav className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[var(--shadow-elevated)] backdrop-blur">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-y-1.5 left-1.5 z-0 rounded-[1.4rem] border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_54%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] shadow-[inset_0_1px_0_rgba(255,222,240,0.46),0_12px_22px_-16px_rgba(255,71,162,0.82)] backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.22,0.8,0.22,1)]"
-            style={mobileIndicatorStyle}
-          />
+          <div className="relative">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 left-0 z-0 w-1/4 rounded-[1.35rem] border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_54%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] shadow-[inset_0_1px_0_rgba(255,222,240,0.46),0_12px_22px_-16px_rgba(255,71,162,0.82)] backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.22,0.8,0.22,1)]"
+              style={mobileIndicatorStyle}
+            />
 
-          <div className="relative z-10 grid grid-cols-4">
+            <div className="relative z-10 grid grid-cols-4">
             {navItems.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            const Icon = item.icon;
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex min-h-[58px] flex-col items-center justify-center rounded-[1.2rem] px-1 text-[11px] font-semibold transition-colors duration-300",
-                  active ? "text-[var(--pink-soft)]" : "text-[var(--text-secondary)]",
-                )}
-              >
-                <Icon size={17} />
-                <span className="mt-1">{item.label}</span>
-              </Link>
-            );
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex min-h-[62px] flex-col items-center justify-center rounded-[1.2rem] px-1 text-[12px] font-semibold leading-none transition-colors duration-300",
+                    active ? "text-[var(--pink-soft)]" : "text-[var(--text-secondary)]",
+                  )}
+                >
+                  <Icon size={18} />
+                  <span className="mt-1.5">{item.label}</span>
+                </Link>
+              );
             })}
+            </div>
           </div>
         </nav>
       </div>
