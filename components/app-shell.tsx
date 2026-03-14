@@ -111,13 +111,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <section className="min-w-0">
           <header className="mb-4 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-4 py-4 shadow-[var(--shadow-panel)] sm:mb-5 sm:px-7 sm:py-5 lg:px-8">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
+            <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap sm:gap-4">
+              <div className="min-w-0">
                 <h2 className="ds-page-title !text-[1.62rem] sm:!text-[clamp(1.8rem,2vw,2.35rem)]">{pageTitle}</h2>
-                <p className="ds-body mt-1 text-[0.94rem] sm:mt-1.5 sm:text-[var(--font-body)]">{pageSubtitle}</p>
+                <p className="ds-body mt-1 text-[0.84rem] leading-tight sm:mt-1.5 sm:text-[0.9rem] sm:leading-snug lg:text-[var(--font-body)]">
+                  {pageSubtitle}
+                </p>
               </div>
 
-              <Button size="sm" className="hidden sm:inline-flex" onClick={() => setAddPlaceOpen(true)}>
+              <Button size="sm" className="hidden shrink-0 self-start sm:inline-flex" onClick={() => setAddPlaceOpen(true)}>
                 <Plus size={16} />
                 Add Place
               </Button>

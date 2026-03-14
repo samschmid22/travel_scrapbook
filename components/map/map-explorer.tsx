@@ -680,23 +680,33 @@ export function MapExplorer() {
     <div className="space-y-3.5 sm:space-y-5">
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
-            Visited Continents
+          <p className="min-h-[1.35rem] text-[0.58rem] leading-[1.05] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:min-h-0 sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
+            <span className="sm:hidden">
+              Visited
+              <br />
+              Continents
+            </span>
+            <span className="hidden sm:inline">Visited Continents</span>
           </p>
           <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
             {stats.continents}
           </p>
         </Card>
         <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
-            Visited Countries
+          <p className="min-h-[1.35rem] text-[0.58rem] leading-[1.05] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:min-h-0 sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
+            <span className="sm:hidden">
+              Visited
+              <br />
+              Countries
+            </span>
+            <span className="hidden sm:inline">Visited Countries</span>
           </p>
           <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
             {stats.countries}
           </p>
         </Card>
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
+          <p className="min-h-[1.35rem] text-[0.58rem] leading-[1.05] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:min-h-0 sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
             <span className="sm:hidden">
               Visited
               <br />
@@ -721,18 +731,18 @@ export function MapExplorer() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomWorldAt(worldViewState.scale * 1.25)}
                 >
-                  <Plus size={16} />
+                  <Plus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
                 </Button>
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomWorldAt(worldViewState.scale / 1.25)}
                 >
-                  <Minus size={16} />
+                  <Minus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
                 </Button>
                 <Button
                   variant="secondary"
@@ -931,18 +941,18 @@ export function MapExplorer() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomUSAt(usViewState.scale * 1.25)}
                 >
-                  <Plus size={16} />
+                  <Plus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
                 </Button>
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomUSAt(usViewState.scale / 1.25)}
                 >
-                  <Minus size={16} />
+                  <Minus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
                 </Button>
                 <Button
                   size="sm"
