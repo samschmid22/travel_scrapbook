@@ -681,26 +681,31 @@ export function MapExplorer() {
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-3 sm:p-[var(--space-panel)]">
           <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+            Visited Continents
+          </p>
+          <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
+            {stats.continents}
+          </p>
+        </Card>
+        <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)] p-3 sm:p-[var(--space-panel)]">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
             Visited Countries
           </p>
           <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
             {stats.countries}
           </p>
         </Card>
-        <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)] p-3 sm:p-[var(--space-panel)]">
+        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)] p-3 sm:p-[var(--space-panel)]">
           <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
-            Visited Cities
+            <span className="sm:hidden">
+              Visited
+              <br />
+              Cities
+            </span>
+            <span className="hidden sm:inline">Visited Cities</span>
           </p>
           <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
             {stats.cities}
-          </p>
-        </Card>
-        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
-            Visited Continents
-          </p>
-          <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
-            {stats.continents}
           </p>
         </Card>
       </div>
