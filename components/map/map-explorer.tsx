@@ -680,7 +680,7 @@ export function MapExplorer() {
     <div className="space-y-3.5 sm:space-y-5">
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
             Visited Continents
           </p>
           <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
@@ -688,7 +688,7 @@ export function MapExplorer() {
           </p>
         </Card>
         <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
             Visited Countries
           </p>
           <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
@@ -696,7 +696,7 @@ export function MapExplorer() {
           </p>
         </Card>
         <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)] p-3 sm:p-[var(--space-panel)]">
-          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:text-[0.74rem] sm:tracking-[0.1em] lg:text-[0.84rem]">
             <span className="sm:hidden">
               Visited
               <br />

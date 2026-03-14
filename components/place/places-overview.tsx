@@ -123,23 +123,29 @@ export function PlacesOverview() {
                       </p>
                     </div>
 
-                    <p className="ds-meta">
-                      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">First Visit</span>
-                      <span className="mt-0.5 block text-[var(--text-primary)]">
+                    <p className="ds-meta flex items-center justify-between gap-3 md:block">
+                      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)] md:block">
+                        First Visit
+                      </span>
+                      <span className="text-right text-[var(--text-primary)] md:mt-0.5 md:block md:text-left">
                         {firstEntry ? toMonthLabel(firstEntry.visitedAt) : "Unknown"}
                       </span>
                     </p>
 
-                    <p className="ds-meta">
-                      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">Most Recent</span>
-                      <span className="mt-0.5 block text-[var(--text-primary)]">
+                    <p className="ds-meta flex items-center justify-between gap-3 md:block">
+                      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)] md:block">
+                        Most Recent
+                      </span>
+                      <span className="text-right text-[var(--text-primary)] md:mt-0.5 md:block md:text-left">
                         {latestEntry ? toMonthLabel(latestEntry.visitedAt) : "No memory date"}
                       </span>
                     </p>
 
-                    <p className="ds-meta">
-                      <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)]">Memories / Photos</span>
-                      <span className="mt-0.5 block text-[var(--text-primary)]">
+                    <p className="ds-meta flex items-center justify-between gap-3 md:block">
+                      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.09em] text-[var(--text-muted)] md:block">
+                        Memories / Photos
+                      </span>
+                      <span className="text-right text-[var(--text-primary)] md:mt-0.5 md:block md:text-left">
                         {entries.length} / {photoCount}
                       </span>
                     </p>
