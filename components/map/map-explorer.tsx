@@ -197,17 +197,17 @@ function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feat
 
 function MapLegend() {
   return (
-    <div className="flex flex-wrap items-center gap-4 text-[0.95rem] font-medium text-[var(--text-secondary)]">
-      <span className="inline-flex items-center gap-2">
-        <span className="h-3.5 w-3.5 rounded-full" style={{ background: mapColors.unvisited }} />
+    <div className="flex items-center gap-2.5 text-[0.72rem] font-medium text-[var(--text-secondary)] sm:gap-4 sm:text-[0.95rem]">
+      <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
+        <span className="h-2.5 w-2.5 rounded-full sm:h-3.5 sm:w-3.5" style={{ background: mapColors.unvisited }} />
         Not visited
       </span>
-      <span className="inline-flex items-center gap-2">
-        <span className="h-3.5 w-3.5 rounded-full" style={{ background: mapColors.visited }} />
+      <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
+        <span className="h-2.5 w-2.5 rounded-full sm:h-3.5 sm:w-3.5" style={{ background: mapColors.visited }} />
         Visited
       </span>
-      <span className="inline-flex items-center gap-2">
-        <span className="h-3.5 w-3.5 rounded-full" style={{ background: mapColors.selected }} />
+      <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
+        <span className="h-2.5 w-2.5 rounded-full sm:h-3.5 sm:w-3.5" style={{ background: mapColors.selected }} />
         Selected
       </span>
     </div>
@@ -677,25 +677,37 @@ export function MapExplorer() {
   const totalWorldCountries = worldFeatures.length;
 
   return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)]">
-          <p className="ds-eyebrow">Visited Countries</p>
-          <p className="ds-stat-value mt-2.5">{stats.countries}</p>
+    <div className="space-y-3.5 sm:space-y-5">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-3 sm:p-[var(--space-panel)]">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+            Visited Countries
+          </p>
+          <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
+            {stats.countries}
+          </p>
         </Card>
-        <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)]">
-          <p className="ds-eyebrow">Visited Cities</p>
-          <p className="ds-stat-value mt-2.5">{stats.cities}</p>
+        <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_10%)_100%)] p-3 sm:p-[var(--space-panel)]">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+            Visited Cities
+          </p>
+          <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
+            {stats.cities}
+          </p>
         </Card>
-        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)]">
-          <p className="ds-eyebrow">Visited Continents</p>
-          <p className="ds-stat-value mt-2.5">{stats.continents}</p>
+        <Card className="bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_28%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_15%)_100%)] p-3 sm:p-[var(--space-panel)]">
+          <p className="text-[0.58rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] sm:ds-eyebrow">
+            Visited Continents
+          </p>
+          <p className="mt-1.5 text-[1.24rem] leading-[1.06] font-semibold tracking-[-0.01em] text-[var(--text-primary)] sm:mt-2.5 sm:text-[clamp(2rem,2.2vw,2.5rem)]">
+            {stats.continents}
+          </p>
         </Card>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1fr_380px]">
+      <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-[1fr_380px]">
         <Card className="overflow-hidden p-0">
-          <div className="border-b border-[var(--border-soft)] px-6 py-5">
+          <div className="border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-6 sm:py-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="ds-section-title">World Map</h3>
               <div className="flex items-center gap-2">
@@ -717,7 +729,7 @@ export function MapExplorer() {
             </div>
           </div>
 
-          <div className="space-y-4 p-5 sm:p-6">
+          <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <MapLegend />
               <ProgressChip>
@@ -725,7 +737,7 @@ export function MapExplorer() {
               </ProgressChip>
             </div>
 
-            <div className="relative rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-2 sm:p-4">
+            <div className="relative rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-1.5 sm:p-4">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
                 className="h-auto w-full touch-none"
@@ -891,7 +903,7 @@ export function MapExplorer() {
 
       <div id="us-states-map" className="grid gap-4 xl:grid-cols-[1fr_380px]">
         <Card className="overflow-hidden p-0">
-          <div className="border-b border-[var(--border-soft)] px-6 py-5">
+          <div className="border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-6 sm:py-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h3 className="ds-section-title">United States Map</h3>
               <div className="flex items-center gap-2">
@@ -913,7 +925,7 @@ export function MapExplorer() {
             </div>
           </div>
 
-          <div className="space-y-4 p-5 sm:p-6">
+          <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <MapLegend />
               <ProgressChip>
@@ -921,7 +933,7 @@ export function MapExplorer() {
               </ProgressChip>
             </div>
 
-            <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-2 sm:p-4">
+            <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-1.5 sm:p-4">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${US_MAP_HEIGHT}`}
                 className="h-auto w-full touch-none"

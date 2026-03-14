@@ -10,7 +10,7 @@ export function Card({ children, className, ...props }: CardProps) {
     <div
       {...props}
       className={cn(
-        "rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[var(--surface-2)] p-[var(--space-panel)] shadow-[var(--shadow-panel)]",
+        "rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[var(--surface-2)] p-4 shadow-[var(--shadow-panel)] sm:p-[var(--space-panel)]",
         className,
       )}
     >

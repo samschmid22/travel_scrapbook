@@ -68,7 +68,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)_46%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_22%)_100%)]">
-      <div className="mx-auto w-full max-w-[1560px] px-4 pb-36 pt-4 sm:px-6 lg:grid lg:min-h-[calc(100vh-3rem)] lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
+      <div className="mx-auto w-full max-w-[1560px] px-3 pb-36 pt-3 sm:px-6 sm:pt-4 lg:grid lg:min-h-[calc(100vh-3rem)] lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
         <aside className="hidden self-stretch rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_36%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-dark)_14%)_100%)] p-6 shadow-[var(--shadow-panel)] lg:sticky lg:top-6 lg:flex lg:h-[calc(100vh-3rem)] lg:flex-col">
           <div className="rounded-3xl border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_44%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)_100%)] px-5 pb-6 pt-5 shadow-[0_18px_34px_-28px_rgba(255,71,162,0.7)]">
             <h1 className="leading-none text-[var(--text-on-light-strong)]">
@@ -110,11 +110,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </aside>
 
         <section className="min-w-0">
-          <header className="mb-5 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-6 py-5 shadow-[var(--shadow-panel)] sm:px-7 lg:px-8">
+          <header className="mb-4 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-4 py-4 shadow-[var(--shadow-panel)] sm:mb-5 sm:px-7 sm:py-5 lg:px-8">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h2 className="ds-page-title">{pageTitle}</h2>
-                <p className="ds-body mt-1.5">{pageSubtitle}</p>
+                <h2 className="ds-page-title !text-[1.62rem] sm:!text-[clamp(1.8rem,2vw,2.35rem)]">{pageTitle}</h2>
+                <p className="ds-body mt-1 text-[0.94rem] sm:mt-1.5 sm:text-[var(--font-body)]">{pageSubtitle}</p>
               </div>
 
               <Button className="hidden sm:inline-flex" onClick={() => setAddPlaceOpen(true)}>
@@ -124,44 +124,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </header>
 
-          <div className="space-y-4">{children}</div>
+          <div className="space-y-3.5 sm:space-y-4">{children}</div>
         </section>
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pt-2 lg:hidden">
-        <nav className="mx-auto grid w-full max-w-md grid-cols-5 gap-1 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[var(--shadow-elevated)] backdrop-blur">
-          {navItems.slice(0, 2).map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            const Icon = item.icon;
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
-                  active
-                    ? "bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_32%)_100%)] text-[var(--pink-soft)]"
-                    : "text-[var(--text-secondary)]",
-                )}
-              >
-                <Icon size={17} />
-                <span className="mt-1">{item.label}</span>
-              </Link>
-            );
-          })}
-
-          <button
-            type="button"
-            onClick={() => setAddPlaceOpen(true)}
-            className="flex min-h-[58px] flex-col items-center justify-center rounded-xl bg-[linear-gradient(120deg,var(--pink-bright)_0%,color-mix(in_oklab,var(--pink-bright),var(--pink-dark)_30%)_100%)] text-[var(--pink-soft)] shadow-[0_14px_24px_-14px_rgba(255,71,162,0.72)]"
-            aria-label="Add place"
-          >
-            <Plus size={18} />
-            <span className="mt-1 text-[11px] font-semibold">Add</span>
-          </button>
-
-          {navItems.slice(2).map((item) => {
+        <nav className="mx-auto grid w-full max-w-md grid-cols-4 gap-1 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[var(--shadow-elevated)] backdrop-blur">
+          {navItems.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             const Icon = item.icon;
 

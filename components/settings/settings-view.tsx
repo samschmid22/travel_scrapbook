@@ -28,17 +28,17 @@ export function SettingsView() {
         </p>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-4">
+          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-3 sm:p-4">
             <p className="ds-meta">Cities</p>
-            <p className="mt-1 text-[1.65rem] font-semibold text-[var(--text-primary)]">{cities.length}</p>
+            <p className="mt-1 text-[1.35rem] font-semibold text-[var(--text-primary)] sm:text-[1.65rem]">{cities.length}</p>
           </div>
-          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-4">
+          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-3 sm:p-4">
             <p className="ds-meta">Memory Entries</p>
-            <p className="mt-1 text-[1.65rem] font-semibold text-[var(--text-primary)]">{memoryEntries.length}</p>
+            <p className="mt-1 text-[1.35rem] font-semibold text-[var(--text-primary)] sm:text-[1.65rem]">{memoryEntries.length}</p>
           </div>
-          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-4">
+          <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] p-3 sm:p-4">
             <p className="ds-meta">Uploaded Photos</p>
-            <p className="mt-1 text-[1.65rem] font-semibold text-[var(--text-primary)]">{photos.length}</p>
+            <p className="mt-1 text-[1.35rem] font-semibold text-[var(--text-primary)] sm:text-[1.65rem]">{photos.length}</p>
           </div>
         </div>
       </Card>
