@@ -358,8 +358,8 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
           ) : null}
         </div>
 
-        <div className="flex flex-col-reverse justify-between gap-3 border-t border-[var(--border-soft)] px-6 py-4 sm:flex-row sm:items-center">
-          <div>
+        <div className="flex items-center justify-between gap-3 border-t border-[var(--border-soft)] px-6 py-4">
+          <div className="min-h-10">
             {step > 1 ? (
               <Button type="button" variant="secondary" onClick={() => setStep((current) => Math.max(1, current - 1))}>
                 Back
@@ -367,7 +367,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
             ) : null}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
             <Button type="button" variant="secondary" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
