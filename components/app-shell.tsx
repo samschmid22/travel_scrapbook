@@ -110,20 +110,34 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </aside>
 
         <section className="min-w-0">
-          <header className="mb-4 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-4 py-4 shadow-[var(--shadow-panel)] sm:mb-5 sm:px-7 sm:py-5 lg:px-8">
-            <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap sm:gap-4">
-              <div className="min-w-0">
-                <h2 className="ds-page-title !text-[1.62rem] sm:!text-[clamp(1.8rem,2vw,2.35rem)]">{pageTitle}</h2>
-                <p className="ds-body mt-1 text-[0.84rem] leading-tight sm:mt-1.5 sm:text-[0.9rem] sm:leading-snug lg:text-[var(--font-body)]">
-                  {pageSubtitle}
-                </p>
-              </div>
+          <div className="mb-2.5 rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_20%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_14%)_100%)] px-3.5 py-2 shadow-[0_10px_22px_-18px_rgba(255,71,162,0.65)] lg:hidden">
+            <p className="leading-none text-[var(--text-on-light-strong)]">
+              <span className="block text-[0.98rem] font-semibold uppercase tracking-[0.06em]">
+                BEEN THERE<span className="text-[var(--pink-bright)]">.</span>
+              </span>
+              <span className="mt-1 block text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-on-light)]">
+                DONE THAT.
+              </span>
+            </p>
+          </div>
 
-              <Button size="sm" className="hidden shrink-0 self-start sm:inline-flex" onClick={() => setAddPlaceOpen(true)}>
+          <header className="mb-4 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-4 py-4 shadow-[var(--shadow-panel)] sm:mb-5 sm:px-7 sm:py-5 lg:px-8">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:gap-4">
+              <h2 className="ds-page-title min-w-0 !text-[1.62rem] sm:!text-[clamp(1.8rem,2vw,2.35rem)]">{pageTitle}</h2>
+
+              <Button
+                size="sm"
+                className="shrink-0 self-start px-2.5 text-[0.78rem] sm:px-3.5 sm:text-[0.92rem]"
+                onClick={() => setAddPlaceOpen(true)}
+              >
                 <Plus size={16} />
                 Add Place
               </Button>
             </div>
+
+            <p className="ds-body mt-1 text-[0.8rem] leading-tight sm:mt-1.5 sm:text-[0.9rem] sm:leading-snug lg:text-[var(--font-body)]">
+              {pageSubtitle}
+            </p>
           </header>
 
           <div className="space-y-3.5 sm:space-y-4">{children}</div>
