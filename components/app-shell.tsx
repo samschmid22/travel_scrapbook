@@ -55,6 +55,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const pageTitle = useMemo(() => getPageTitle(pathname), [pathname]);
   const pageSubtitle = useMemo(() => getPageSubtitle(pathname), [pathname]);
+  const mobileActiveIndex = useMemo(() => {
+    const index = navItems.findIndex((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+    return index >= 0 ? index : 0;
+  }, [pathname]);
+  const mobileIndicatorStyle = useMemo(
+    () => ({
+      width: `calc((100% - 0.75rem) / ${navItems.length})`,
+      transform: `translateX(calc(${mobileActiveIndex} * ((100% - 0.75rem) / ${navItems.length})))`,
+    }),
+    [mobileActiveIndex],
+  );
 
   if (!ready) {
     return (
@@ -145,8 +156,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pt-2 lg:hidden">
-        <nav className="mx-auto grid w-full max-w-md grid-cols-4 gap-1 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[var(--shadow-elevated)] backdrop-blur">
-          {navItems.map((item) => {
+        <nav className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[var(--shadow-elevated)] backdrop-blur">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-1.5 left-1.5 z-0 rounded-[1.4rem] border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_54%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] shadow-[inset_0_1px_0_rgba(255,222,240,0.46),0_12px_22px_-16px_rgba(255,71,162,0.82)] backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.22,0.8,0.22,1)]"
+            style={mobileIndicatorStyle}
+          />
+
+          <div className="relative z-10 grid grid-cols-4">
+            {navItems.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             const Icon = item.icon;
 
@@ -155,17 +173,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex min-h-[58px] flex-col items-center justify-center rounded-xl px-1 text-[11px] font-semibold",
-                  active
-                    ? "border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_52%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] text-[var(--pink-soft)] shadow-[inset_0_1px_0_rgba(255,222,240,0.44),0_10px_20px_-16px_rgba(255,71,162,0.9)] backdrop-blur-md"
-                    : "text-[var(--text-secondary)]",
+                  "flex min-h-[58px] flex-col items-center justify-center rounded-[1.2rem] px-1 text-[11px] font-semibold transition-colors duration-300",
+                  active ? "text-[var(--pink-soft)]" : "text-[var(--text-secondary)]",
                 )}
               >
                 <Icon size={17} />
                 <span className="mt-1">{item.label}</span>
               </Link>
             );
-          })}
+            })}
+          </div>
         </nav>
       </div>
 
