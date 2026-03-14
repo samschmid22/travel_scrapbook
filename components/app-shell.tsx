@@ -117,7 +117,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <p className="ds-body mt-1 text-[0.94rem] sm:mt-1.5 sm:text-[var(--font-body)]">{pageSubtitle}</p>
               </div>
 
-              <Button className="hidden sm:inline-flex" onClick={() => setAddPlaceOpen(true)}>
+              <Button size="sm" className="hidden sm:inline-flex" onClick={() => setAddPlaceOpen(true)}>
                 <Plus size={16} />
                 Add Place
               </Button>

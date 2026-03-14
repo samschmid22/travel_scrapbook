@@ -25,9 +25,9 @@ const variantClasses: Record<ButtonVariant, string> = {
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-10 rounded-[var(--radius-control)] px-3.5 text-[0.92rem]",
-  md: "h-11 rounded-[var(--radius-control)] px-4.5 text-[0.98rem]",
-  lg: "h-12 rounded-[calc(var(--radius-control)+0.2rem)] px-6 text-base",
+  sm: "h-9 rounded-[var(--radius-control)] px-3 text-[0.84rem] sm:h-10 sm:px-3.5 sm:text-[0.92rem]",
+  md: "h-10 rounded-[var(--radius-control)] px-3.5 text-[0.9rem] sm:h-11 sm:px-4.5 sm:text-[0.98rem]",
+  lg: "h-11 rounded-[calc(var(--radius-control)+0.2rem)] px-4.5 text-[0.95rem] sm:h-12 sm:px-6 sm:text-base",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(

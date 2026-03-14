@@ -713,22 +713,36 @@ export function MapExplorer() {
       <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-[1fr_380px]">
         <Card className="overflow-hidden p-0">
           <div className="border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-6 sm:py-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="ds-section-title">World Map</h3>
-              <div className="flex items-center gap-2">
-                <Button size="sm" variant="secondary" onClick={() => zoomWorldAt(worldViewState.scale * 1.25)}>
+            <div className="flex items-center justify-between gap-2 sm:gap-3">
+              <h3 className="ds-section-title text-[1.1rem] sm:text-[1.28rem] lg:!text-[1.6rem] xl:!text-[1.75rem]">
+                World Map
+              </h3>
+              <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  onClick={() => zoomWorldAt(worldViewState.scale * 1.25)}
+                >
                   <Plus size={16} />
                 </Button>
-                <Button size="sm" variant="secondary" onClick={() => zoomWorldAt(worldViewState.scale / 1.25)}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  onClick={() => zoomWorldAt(worldViewState.scale / 1.25)}
+                >
                   <Minus size={16} />
                 </Button>
                 <Button
                   variant="secondary"
                   size="sm"
+                  className="h-8 rounded-lg px-2 text-[0.72rem] sm:h-10 sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={resetWorldView}
                   disabled={worldViewState.scale <= 1 && !selectedCountry}
                 >
-                  Reset View
+                  <span className="sm:hidden">Reset</span>
+                  <span className="hidden sm:inline">Reset View</span>
                 </Button>
               </div>
             </div>
@@ -909,22 +923,36 @@ export function MapExplorer() {
       <div id="us-states-map" className="grid gap-4 xl:grid-cols-[1fr_380px]">
         <Card className="overflow-hidden p-0">
           <div className="border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-6 sm:py-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="ds-section-title">United States Map</h3>
-              <div className="flex items-center gap-2">
-                <Button size="sm" variant="secondary" onClick={() => zoomUSAt(usViewState.scale * 1.25)}>
+            <div className="flex items-center justify-between gap-2 sm:gap-3">
+              <h3 className="ds-section-title text-[1.1rem] sm:text-[1.28rem] lg:!text-[1.6rem] xl:!text-[1.75rem]">
+                United States Map
+              </h3>
+              <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  onClick={() => zoomUSAt(usViewState.scale * 1.25)}
+                >
                   <Plus size={16} />
                 </Button>
-                <Button size="sm" variant="secondary" onClick={() => zoomUSAt(usViewState.scale / 1.25)}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="h-8 w-8 rounded-lg px-0 text-[0.72rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  onClick={() => zoomUSAt(usViewState.scale / 1.25)}
+                >
                   <Minus size={16} />
                 </Button>
                 <Button
                   size="sm"
                   variant="secondary"
+                  className="h-8 rounded-lg px-2 text-[0.72rem] sm:h-10 sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={resetUSView}
                   disabled={usViewState.scale <= 1 && !selectedUSStateCode}
                 >
-                  Reset View
+                  <span className="sm:hidden">Reset</span>
+                  <span className="hidden sm:inline">Reset View</span>
                 </Button>
               </div>
             </div>
