@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar, ImagePlus, MapPin, X } from "lucide-react";
 
 import { countryOptions, searchCities, searchCountries, type CityOption } from "@/data/countries";
@@ -70,6 +70,7 @@ function parseCityValue(optionValue: string): CityOption {
 
 export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
   const { addPlace } = useAppStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [step, setStep] = useState(1);
   const [countryQuery, setCountryQuery] = useState("");
@@ -321,20 +322,32 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                   <ImagePlus size={14} />
                   Photos (optional)
                 </label>
-                <Input
+                <input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   multiple
+                  className="hidden"
                   onChange={(event) => {
                     const nextFiles = Array.from(event.target.files ?? []);
                     setFiles(nextFiles);
                   }}
                 />
-                <p className="text-sm text-[var(--text-muted)]">
-                  {files.length === 0
-                    ? "No photos selected yet."
-                    : `${files.length} photo${files.length === 1 ? "" : "s"} selected.`}
-                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <ImagePlus size={14} />
+                    Choose Files
+                  </Button>
+                  <p className="text-sm text-[var(--text-muted)]">
+                    {files.length === 0
+                      ? "No files chosen."
+                      : `${files.length} file${files.length === 1 ? "" : "s"} chosen.`}
+                  </p>
+                </div>
               </div>
             </>
           ) : null}
@@ -349,7 +362,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
         <div className="flex flex-col-reverse justify-between gap-3 border-t border-[var(--border-soft)] px-6 py-4 sm:flex-row sm:items-center">
           <div>
             {step > 1 ? (
-              <Button type="button" variant="ghost" onClick={() => setStep((current) => Math.max(1, current - 1))}>
+              <Button type="button" variant="secondary" onClick={() => setStep((current) => Math.max(1, current - 1))}>
                 Back
               </Button>
             ) : null}

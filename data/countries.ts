@@ -174,7 +174,7 @@ export function findCityCoordinates(countryCode: string, cityName: string, regio
   };
 }
 
-export function searchCountries(query: string, limit = 50) {
+export function searchCountries(query: string, limit = countryOptions.length) {
   if (!query.trim()) {
     return countryOptions.slice(0, limit);
   }
