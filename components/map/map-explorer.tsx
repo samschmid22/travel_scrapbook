@@ -124,6 +124,50 @@ function zoomAroundCenter(current: ViewState, width: number, height: number, nex
   );
 }
 
+function zoomAroundPoint(
+  current: ViewState,
+  width: number,
+  height: number,
+  nextScaleValue: number,
+  anchorX: number,
+  anchorY: number,
+): ViewState {
+  const nextScale = clamp(nextScaleValue, MIN_SCALE, MAX_SCALE);
+  if (nextScale === current.scale) {
+    return current;
+  }
+
+  const worldX = (anchorX - current.tx) / current.scale;
+  const worldY = (anchorY - current.ty) / current.scale;
+
+  return clampViewState(
+    {
+      scale: nextScale,
+      tx: anchorX - nextScale * worldX,
+      ty: anchorY - nextScale * worldY,
+    },
+    width,
+    height,
+  );
+}
+
+function distanceBetweenPoints(first: { x: number; y: number }, second: { x: number; y: number }) {
+  return Math.hypot(second.x - first.x, second.y - first.y);
+}
+
+function toSvgPoint(
+  event: ReactPointerEvent<SVGSVGElement>,
+  width: number,
+  height: number,
+  clientX: number,
+  clientY: number,
+) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const x = ((clientX - rect.left) / rect.width) * width;
+  const y = ((clientY - rect.top) / rect.height) * height;
+  return { x, y };
+}
+
 function getFipsFromFeatureId(featureId: CountryFeature["id"] | USStateFeature["id"]) {
   if (featureId === undefined || featureId === null) {
     return undefined;
@@ -197,17 +241,17 @@ function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feat
 
 function MapLegend() {
   return (
-    <div className="flex items-center gap-2.5 text-[0.72rem] font-medium text-[var(--text-secondary)] sm:gap-4 sm:text-[0.95rem]">
-      <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
-        <span className="h-2.5 w-2.5 rounded-full sm:h-3.5 sm:w-3.5" style={{ background: mapColors.unvisited }} />
+    <div className="flex items-center gap-2 text-[0.64rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
+      <span className="inline-flex items-center gap-1 whitespace-nowrap sm:gap-1.5">
+        <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.unvisited }} />
         Not visited
       </span>
-      <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
-        <span className="h-2.5 w-2.5 rounded-full sm:h-3.5 sm:w-3.5" style={{ background: mapColors.visited }} />
+      <span className="inline-flex items-center gap-1 whitespace-nowrap sm:gap-1.5">
+        <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.visited }} />
         Visited
       </span>
-      <span className="inline-flex items-center gap-1.5 whitespace-nowrap sm:gap-2">
-        <span className="h-2.5 w-2.5 rounded-full sm:h-3.5 sm:w-3.5" style={{ background: mapColors.selected }} />
+      <span className="inline-flex items-center gap-1 whitespace-nowrap sm:gap-1.5">
+        <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.selected }} />
         Selected
       </span>
     </div>
@@ -240,6 +284,10 @@ export function MapExplorer() {
   } | null>(null);
   const worldMovedRef = useRef(false);
   const usMovedRef = useRef(false);
+  const worldTouchPointsRef = useRef<Map<number, { x: number; y: number }>>(new Map());
+  const usTouchPointsRef = useRef<Map<number, { x: number; y: number }>>(new Map());
+  const worldPinchRef = useRef<{ startDistance: number; startViewState: ViewState } | null>(null);
+  const usPinchRef = useRef<{ startDistance: number; startViewState: ViewState } | null>(null);
 
   const worldFeatures = useMemo(() => {
     const topology = worldGeo as unknown as WorldTopology;
@@ -460,11 +508,19 @@ export function MapExplorer() {
   function resetWorldView() {
     setSelectedCountry(null);
     setWorldViewState({ scale: 1, tx: 0, ty: 0 });
+    worldTouchPointsRef.current.clear();
+    worldPinchRef.current = null;
+    worldDragRef.current = null;
+    worldMovedRef.current = false;
   }
 
   function resetUSView() {
     setSelectedUSStateCode(null);
     setUSViewState({ scale: 1, tx: 0, ty: 0 });
+    usTouchPointsRef.current.clear();
+    usPinchRef.current = null;
+    usDragRef.current = null;
+    usMovedRef.current = false;
   }
 
   function zoomWorldAt(nextScaleValue: number) {
@@ -552,6 +608,37 @@ export function MapExplorer() {
   }
 
   function handleWorldPointerDown(event: ReactPointerEvent<SVGSVGElement>) {
+    if (event.pointerType === "touch") {
+      const point = toSvgPoint(event, MAP_WIDTH, MAP_HEIGHT, event.clientX, event.clientY);
+      worldTouchPointsRef.current.set(event.pointerId, point);
+      event.currentTarget.setPointerCapture(event.pointerId);
+
+      if (worldTouchPointsRef.current.size >= 2) {
+        const [firstPoint, secondPoint] = Array.from(worldTouchPointsRef.current.values());
+        worldPinchRef.current = {
+          startDistance: Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1),
+          startViewState: worldViewState,
+        };
+        worldDragRef.current = null;
+        worldMovedRef.current = true;
+        return;
+      }
+
+      if (worldViewState.scale <= 1) {
+        return;
+      }
+
+      worldMovedRef.current = false;
+      worldDragRef.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        startTx: worldViewState.tx,
+        startTy: worldViewState.ty,
+      };
+      return;
+    }
+
     if (worldViewState.scale <= 1) {
       return;
     }
@@ -567,6 +654,77 @@ export function MapExplorer() {
   }
 
   function handleWorldPointerMove(event: ReactPointerEvent<SVGSVGElement>) {
+    if (event.pointerType === "touch") {
+      if (!worldTouchPointsRef.current.has(event.pointerId)) {
+        return;
+      }
+
+      const point = toSvgPoint(event, MAP_WIDTH, MAP_HEIGHT, event.clientX, event.clientY);
+      worldTouchPointsRef.current.set(event.pointerId, point);
+      const points = Array.from(worldTouchPointsRef.current.values());
+
+      if (points.length >= 2) {
+        const [firstPoint, secondPoint] = points;
+        const distance = Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1);
+        if (!worldPinchRef.current) {
+          worldPinchRef.current = {
+            startDistance: distance,
+            startViewState: worldViewState,
+          };
+        }
+
+        const pinchState = worldPinchRef.current;
+        if (!pinchState) {
+          return;
+        }
+
+        const midpointX = (firstPoint.x + secondPoint.x) / 2;
+        const midpointY = (firstPoint.y + secondPoint.y) / 2;
+        const nextScale = pinchState.startViewState.scale * (distance / pinchState.startDistance);
+        setWorldViewState(
+          zoomAroundPoint(pinchState.startViewState, MAP_WIDTH, MAP_HEIGHT, nextScale, midpointX, midpointY),
+        );
+        worldMovedRef.current = true;
+        return;
+      }
+
+      if (worldViewState.scale <= 1) {
+        return;
+      }
+
+      const drag = worldDragRef.current;
+      if (!drag || drag.pointerId !== event.pointerId) {
+        worldDragRef.current = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          startTx: worldViewState.tx,
+          startTy: worldViewState.ty,
+        };
+        return;
+      }
+
+      const dx = event.clientX - drag.startX;
+      const dy = event.clientY - drag.startY;
+
+      if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+        worldMovedRef.current = true;
+      }
+
+      setWorldViewState((current) =>
+        clampViewState(
+          {
+            scale: current.scale,
+            tx: drag.startTx + dx,
+            ty: drag.startTy + dy,
+          },
+          MAP_WIDTH,
+          MAP_HEIGHT,
+        ),
+      );
+      return;
+    }
+
     const drag = worldDragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) {
       return;
@@ -597,6 +755,29 @@ export function MapExplorer() {
   }
 
   function handleWorldPointerUp(event: ReactPointerEvent<SVGSVGElement>) {
+    if (event.pointerType === "touch") {
+      const hadPinch = Boolean(worldPinchRef.current);
+      worldTouchPointsRef.current.delete(event.pointerId);
+
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+
+      if (worldDragRef.current?.pointerId === event.pointerId) {
+        worldDragRef.current = null;
+      }
+
+      if (worldTouchPointsRef.current.size < 2) {
+        worldPinchRef.current = null;
+      }
+
+      if (worldTouchPointsRef.current.size === 0 && hadPinch) {
+        worldMovedRef.current = false;
+      }
+
+      return;
+    }
+
     const drag = worldDragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) {
       return;
@@ -612,6 +793,37 @@ export function MapExplorer() {
   }
 
   function handleUSPointerDown(event: ReactPointerEvent<SVGSVGElement>) {
+    if (event.pointerType === "touch") {
+      const point = toSvgPoint(event, MAP_WIDTH, US_MAP_HEIGHT, event.clientX, event.clientY);
+      usTouchPointsRef.current.set(event.pointerId, point);
+      event.currentTarget.setPointerCapture(event.pointerId);
+
+      if (usTouchPointsRef.current.size >= 2) {
+        const [firstPoint, secondPoint] = Array.from(usTouchPointsRef.current.values());
+        usPinchRef.current = {
+          startDistance: Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1),
+          startViewState: usViewState,
+        };
+        usDragRef.current = null;
+        usMovedRef.current = true;
+        return;
+      }
+
+      if (usViewState.scale <= 1) {
+        return;
+      }
+
+      usMovedRef.current = false;
+      usDragRef.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        startTx: usViewState.tx,
+        startTy: usViewState.ty,
+      };
+      return;
+    }
+
     if (usViewState.scale <= 1) {
       return;
     }
@@ -627,6 +839,75 @@ export function MapExplorer() {
   }
 
   function handleUSPointerMove(event: ReactPointerEvent<SVGSVGElement>) {
+    if (event.pointerType === "touch") {
+      if (!usTouchPointsRef.current.has(event.pointerId)) {
+        return;
+      }
+
+      const point = toSvgPoint(event, MAP_WIDTH, US_MAP_HEIGHT, event.clientX, event.clientY);
+      usTouchPointsRef.current.set(event.pointerId, point);
+      const points = Array.from(usTouchPointsRef.current.values());
+
+      if (points.length >= 2) {
+        const [firstPoint, secondPoint] = points;
+        const distance = Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1);
+        if (!usPinchRef.current) {
+          usPinchRef.current = {
+            startDistance: distance,
+            startViewState: usViewState,
+          };
+        }
+
+        const pinchState = usPinchRef.current;
+        if (!pinchState) {
+          return;
+        }
+
+        const midpointX = (firstPoint.x + secondPoint.x) / 2;
+        const midpointY = (firstPoint.y + secondPoint.y) / 2;
+        const nextScale = pinchState.startViewState.scale * (distance / pinchState.startDistance);
+        setUSViewState(zoomAroundPoint(pinchState.startViewState, MAP_WIDTH, US_MAP_HEIGHT, nextScale, midpointX, midpointY));
+        usMovedRef.current = true;
+        return;
+      }
+
+      if (usViewState.scale <= 1) {
+        return;
+      }
+
+      const drag = usDragRef.current;
+      if (!drag || drag.pointerId !== event.pointerId) {
+        usDragRef.current = {
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          startTx: usViewState.tx,
+          startTy: usViewState.ty,
+        };
+        return;
+      }
+
+      const dx = event.clientX - drag.startX;
+      const dy = event.clientY - drag.startY;
+
+      if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+        usMovedRef.current = true;
+      }
+
+      setUSViewState((current) =>
+        clampViewState(
+          {
+            scale: current.scale,
+            tx: drag.startTx + dx,
+            ty: drag.startTy + dy,
+          },
+          MAP_WIDTH,
+          US_MAP_HEIGHT,
+        ),
+      );
+      return;
+    }
+
     const drag = usDragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) {
       return;
@@ -657,6 +938,29 @@ export function MapExplorer() {
   }
 
   function handleUSPointerUp(event: ReactPointerEvent<SVGSVGElement>) {
+    if (event.pointerType === "touch") {
+      const hadPinch = Boolean(usPinchRef.current);
+      usTouchPointsRef.current.delete(event.pointerId);
+
+      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+        event.currentTarget.releasePointerCapture(event.pointerId);
+      }
+
+      if (usDragRef.current?.pointerId === event.pointerId) {
+        usDragRef.current = null;
+      }
+
+      if (usTouchPointsRef.current.size < 2) {
+        usPinchRef.current = null;
+      }
+
+      if (usTouchPointsRef.current.size === 0 && hadPinch) {
+        usMovedRef.current = false;
+      }
+
+      return;
+    }
+
     const drag = usDragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) {
       return;
@@ -759,10 +1063,15 @@ export function MapExplorer() {
           </div>
 
           <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
               <MapLegend />
-              <ProgressChip>
-                {stats.countries} / {totalWorldCountries} Countries Visited
+              <ProgressChip className="shrink-0 text-[0.66rem] sm:text-[0.8rem]">
+                <span className="sm:hidden">
+                  {stats.countries}/{totalWorldCountries} Countries
+                </span>
+                <span className="hidden sm:inline">
+                  {stats.countries} / {totalWorldCountries} Countries Visited
+                </span>
               </ProgressChip>
             </div>
 
@@ -969,10 +1278,15 @@ export function MapExplorer() {
           </div>
 
           <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
               <MapLegend />
-              <ProgressChip>
-                {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
+              <ProgressChip className="shrink-0 text-[0.66rem] sm:text-[0.8rem]">
+                <span className="sm:hidden">
+                  {visitedUSStateCount}/{usStateVisits.length || 50} States
+                </span>
+                <span className="hidden sm:inline">
+                  {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
+                </span>
               </ProgressChip>
             </div>
 
