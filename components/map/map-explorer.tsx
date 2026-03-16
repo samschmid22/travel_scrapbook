@@ -241,16 +241,16 @@ function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feat
 
 function MapLegend() {
   return (
-    <div className="min-w-0 flex items-center gap-1.5 text-[0.58rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
-      <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
+    <div className="min-w-0 flex items-center gap-1.5 text-[0.58rem] leading-none font-semibold text-[var(--text-secondary)] max-[430px]:gap-1 max-[430px]:text-[0.52rem] sm:gap-3 sm:text-[0.9rem]">
+      <span className="inline-flex items-center gap-0.5 whitespace-nowrap max-[430px]:gap-0 sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.unvisited }} />
         Unvisited
       </span>
-      <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
+      <span className="inline-flex items-center gap-0.5 whitespace-nowrap max-[430px]:gap-0 sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.visited }} />
         Visited
       </span>
-      <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
+      <span className="inline-flex items-center gap-0.5 whitespace-nowrap max-[430px]:gap-0 sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.selected }} />
         Selected
       </span>
@@ -1081,9 +1081,9 @@ export function MapExplorer() {
           </div>
 
           <div className="space-y-2.5 p-3 sm:space-y-3 sm:p-4 lg:p-5">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 sm:gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 overflow-hidden max-[430px]:gap-1 sm:gap-3">
               <MapLegend />
-              <ProgressChip className="shrink-0 whitespace-nowrap px-2 text-[0.58rem] sm:text-[0.8rem]">
+              <ProgressChip className="shrink-0 whitespace-nowrap px-2 text-[0.58rem] max-[430px]:px-1.5 max-[430px]:text-[0.52rem] sm:text-[0.8rem]">
                 <span className="sm:hidden">{stats.countries}/{totalWorldCountries}</span>
                 <span className="hidden sm:inline">
                   {stats.countries} / {totalWorldCountries} Countries Visited
@@ -1294,9 +1294,9 @@ export function MapExplorer() {
           </div>
 
           <div className="space-y-2.5 p-3 sm:space-y-3 sm:p-4 lg:p-5">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 sm:gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 overflow-hidden max-[430px]:gap-1 sm:gap-3">
               <MapLegend />
-              <ProgressChip className="shrink-0 whitespace-nowrap px-2 text-[0.58rem] sm:text-[0.8rem]">
+              <ProgressChip className="shrink-0 whitespace-nowrap px-2 text-[0.58rem] max-[430px]:px-1.5 max-[430px]:text-[0.52rem] sm:text-[0.8rem]">
                 <span className="sm:hidden">{visitedUSStateCount}/{usStateVisits.length || 50}</span>
                 <span className="hidden sm:inline">
                   {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
