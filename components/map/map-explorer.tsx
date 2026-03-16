@@ -3,7 +3,7 @@
 import type { Feature, FeatureCollection, MultiPolygon, Polygon } from "geojson";
 import Link from "next/link";
 import { Minus, Plus } from "lucide-react";
-import { useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { geoAlbersUsa, geoEqualEarth, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
 import worldGeo from "world-atlas/countries-110m.json";
@@ -267,8 +267,15 @@ export function MapExplorer() {
   const [usStateQuery, setUSStateQuery] = useState("");
   const [worldViewState, setWorldViewState] = useState<ViewState>({ scale: 1, tx: 0, ty: 0 });
   const [usViewState, setUSViewState] = useState<ViewState>({ scale: 1, tx: 0, ty: 0 });
-  const [worldIsInteracting, setWorldIsInteracting] = useState(false);
-  const [usIsInteracting, setUSIsInteracting] = useState(false);
+  const [worldTransformAnimated, setWorldTransformAnimated] = useState(true);
+  const [usTransformAnimated, setUSTransformAnimated] = useState(true);
+
+  const worldViewStateRef = useRef<ViewState>({ scale: 1, tx: 0, ty: 0 });
+  const usViewStateRef = useRef<ViewState>({ scale: 1, tx: 0, ty: 0 });
+  const worldPendingViewRef = useRef<ViewState | null>(null);
+  const usPendingViewRef = useRef<ViewState | null>(null);
+  const worldRafRef = useRef<number | null>(null);
+  const usRafRef = useRef<number | null>(null);
 
   const worldDragRef = useRef<{
     pointerId: number;
@@ -507,10 +514,92 @@ export function MapExplorer() {
     return applyPinOffsets(pins);
   }, [getEntriesForCity, selectedUSStateCities, selectedUSStateCode, usProjection]);
 
+  useEffect(() => {
+    return () => {
+      if (worldRafRef.current !== null) {
+        cancelAnimationFrame(worldRafRef.current);
+      }
+      if (usRafRef.current !== null) {
+        cancelAnimationFrame(usRafRef.current);
+      }
+    };
+  }, []);
+
+  function clearWorldFrame() {
+    if (worldRafRef.current !== null) {
+      cancelAnimationFrame(worldRafRef.current);
+      worldRafRef.current = null;
+    }
+    worldPendingViewRef.current = null;
+  }
+
+  function clearUSFrame() {
+    if (usRafRef.current !== null) {
+      cancelAnimationFrame(usRafRef.current);
+      usRafRef.current = null;
+    }
+    usPendingViewRef.current = null;
+  }
+
+  function applyWorldView(next: ViewState, options?: { animate?: boolean; schedule?: boolean }) {
+    const animate = options?.animate ?? false;
+    const schedule = options?.schedule ?? false;
+    setWorldTransformAnimated(animate);
+    worldViewStateRef.current = next;
+
+    if (!schedule) {
+      clearWorldFrame();
+      setWorldViewState(next);
+      return;
+    }
+
+    worldPendingViewRef.current = next;
+    if (worldRafRef.current !== null) {
+      return;
+    }
+
+    worldRafRef.current = requestAnimationFrame(() => {
+      worldRafRef.current = null;
+      const queued = worldPendingViewRef.current;
+      if (!queued) {
+        return;
+      }
+      worldPendingViewRef.current = null;
+      setWorldViewState(queued);
+    });
+  }
+
+  function applyUSView(next: ViewState, options?: { animate?: boolean; schedule?: boolean }) {
+    const animate = options?.animate ?? false;
+    const schedule = options?.schedule ?? false;
+    setUSTransformAnimated(animate);
+    usViewStateRef.current = next;
+
+    if (!schedule) {
+      clearUSFrame();
+      setUSViewState(next);
+      return;
+    }
+
+    usPendingViewRef.current = next;
+    if (usRafRef.current !== null) {
+      return;
+    }
+
+    usRafRef.current = requestAnimationFrame(() => {
+      usRafRef.current = null;
+      const queued = usPendingViewRef.current;
+      if (!queued) {
+        return;
+      }
+      usPendingViewRef.current = null;
+      setUSViewState(queued);
+    });
+  }
+
   function resetWorldView() {
     setSelectedCountry(null);
-    setWorldViewState({ scale: 1, tx: 0, ty: 0 });
-    setWorldIsInteracting(false);
+    applyWorldView({ scale: 1, tx: 0, ty: 0 }, { animate: true });
     worldTouchPointsRef.current.clear();
     worldPinchRef.current = null;
     worldDragRef.current = null;
@@ -519,8 +608,7 @@ export function MapExplorer() {
 
   function resetUSView() {
     setSelectedUSStateCode(null);
-    setUSViewState({ scale: 1, tx: 0, ty: 0 });
-    setUSIsInteracting(false);
+    applyUSView({ scale: 1, tx: 0, ty: 0 }, { animate: true });
     usTouchPointsRef.current.clear();
     usPinchRef.current = null;
     usDragRef.current = null;
@@ -528,11 +616,13 @@ export function MapExplorer() {
   }
 
   function zoomWorldAt(nextScaleValue: number) {
-    setWorldViewState((current) => zoomAroundCenter(current, MAP_WIDTH, MAP_HEIGHT, nextScaleValue));
+    const next = zoomAroundCenter(worldViewStateRef.current, MAP_WIDTH, MAP_HEIGHT, nextScaleValue);
+    applyWorldView(next, { animate: true });
   }
 
   function zoomUSAt(nextScaleValue: number) {
-    setUSViewState((current) => zoomAroundCenter(current, MAP_WIDTH, US_MAP_HEIGHT, nextScaleValue));
+    const next = zoomAroundCenter(usViewStateRef.current, MAP_WIDTH, US_MAP_HEIGHT, nextScaleValue);
+    applyUSView(next, { animate: true });
   }
 
   function zoomToCountry(countryFeature: CountryFeature, nextSelection: { code?: string; name: string }) {
@@ -554,7 +644,7 @@ export function MapExplorer() {
     const scale = clamp(rawScale, 1.7, MAX_SCALE);
 
     setSelectedCountry(nextSelection);
-    setWorldViewState(
+    applyWorldView(
       clampViewState(
         {
           scale,
@@ -564,6 +654,7 @@ export function MapExplorer() {
         MAP_WIDTH,
         MAP_HEIGHT,
       ),
+      { animate: true },
     );
   }
 
@@ -586,7 +677,7 @@ export function MapExplorer() {
     const scale = clamp(rawScale, 1.7, 7.5);
 
     setSelectedUSStateCode(stateCode);
-    setUSViewState(
+    applyUSView(
       clampViewState(
         {
           scale,
@@ -596,6 +687,7 @@ export function MapExplorer() {
         MAP_WIDTH,
         US_MAP_HEIGHT,
       ),
+      { animate: true },
     );
   }
 
@@ -618,45 +710,45 @@ export function MapExplorer() {
       event.currentTarget.setPointerCapture(event.pointerId);
 
       if (worldTouchPointsRef.current.size >= 2) {
-        setWorldIsInteracting(true);
+        setWorldTransformAnimated(false);
         const [firstPoint, secondPoint] = Array.from(worldTouchPointsRef.current.values());
         worldPinchRef.current = {
           startDistance: Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1),
-          startViewState: worldViewState,
+          startViewState: worldViewStateRef.current,
         };
         worldDragRef.current = null;
         worldMovedRef.current = true;
         return;
       }
 
-      if (worldViewState.scale <= 1) {
+      if (worldViewStateRef.current.scale <= 1) {
         return;
       }
 
       worldMovedRef.current = false;
-      setWorldIsInteracting(true);
+      setWorldTransformAnimated(false);
       worldDragRef.current = {
         pointerId: event.pointerId,
         startX: event.clientX,
         startY: event.clientY,
-        startTx: worldViewState.tx,
-        startTy: worldViewState.ty,
+        startTx: worldViewStateRef.current.tx,
+        startTy: worldViewStateRef.current.ty,
       };
       return;
     }
 
-    if (worldViewState.scale <= 1) {
+    if (worldViewStateRef.current.scale <= 1) {
       return;
     }
 
     worldMovedRef.current = false;
-    setWorldIsInteracting(true);
+    setWorldTransformAnimated(false);
     worldDragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      startTx: worldViewState.tx,
-      startTy: worldViewState.ty,
+      startTx: worldViewStateRef.current.tx,
+      startTy: worldViewStateRef.current.ty,
     };
   }
 
@@ -676,7 +768,7 @@ export function MapExplorer() {
         if (!worldPinchRef.current) {
           worldPinchRef.current = {
             startDistance: distance,
-            startViewState: worldViewState,
+            startViewState: worldViewStateRef.current,
           };
         }
 
@@ -688,14 +780,15 @@ export function MapExplorer() {
         const midpointX = (firstPoint.x + secondPoint.x) / 2;
         const midpointY = (firstPoint.y + secondPoint.y) / 2;
         const nextScale = pinchState.startViewState.scale * (distance / pinchState.startDistance);
-        setWorldViewState(
+        applyWorldView(
           zoomAroundPoint(pinchState.startViewState, MAP_WIDTH, MAP_HEIGHT, nextScale, midpointX, midpointY),
+          { schedule: true },
         );
         worldMovedRef.current = true;
         return;
       }
 
-      if (worldViewState.scale <= 1) {
+      if (worldViewStateRef.current.scale <= 1) {
         return;
       }
 
@@ -705,8 +798,8 @@ export function MapExplorer() {
           pointerId: event.pointerId,
           startX: event.clientX,
           startY: event.clientY,
-          startTx: worldViewState.tx,
-          startTy: worldViewState.ty,
+          startTx: worldViewStateRef.current.tx,
+          startTy: worldViewStateRef.current.ty,
         };
         return;
       }
@@ -718,16 +811,17 @@ export function MapExplorer() {
         worldMovedRef.current = true;
       }
 
-      setWorldViewState((current) =>
+      applyWorldView(
         clampViewState(
           {
-            scale: current.scale,
+            scale: worldViewStateRef.current.scale,
             tx: drag.startTx + dx,
             ty: drag.startTy + dy,
           },
           MAP_WIDTH,
           MAP_HEIGHT,
         ),
+        { schedule: true },
       );
       return;
     }
@@ -748,16 +842,17 @@ export function MapExplorer() {
       worldMovedRef.current = true;
     }
 
-    setWorldViewState((current) =>
+    applyWorldView(
       clampViewState(
         {
-          scale: current.scale,
+          scale: worldViewStateRef.current.scale,
           tx: drag.startTx + dx,
           ty: drag.startTy + dy,
         },
         MAP_WIDTH,
         MAP_HEIGHT,
       ),
+      { schedule: true },
     );
   }
 
@@ -781,9 +876,6 @@ export function MapExplorer() {
       if (worldTouchPointsRef.current.size === 0 && hadPinch) {
         worldMovedRef.current = false;
       }
-      if (worldTouchPointsRef.current.size === 0) {
-        setWorldIsInteracting(false);
-      }
 
       return;
     }
@@ -797,7 +889,6 @@ export function MapExplorer() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
-    setWorldIsInteracting(false);
     if (!worldMovedRef.current) {
       worldMovedRef.current = false;
     }
@@ -810,45 +901,45 @@ export function MapExplorer() {
       event.currentTarget.setPointerCapture(event.pointerId);
 
       if (usTouchPointsRef.current.size >= 2) {
-        setUSIsInteracting(true);
+        setUSTransformAnimated(false);
         const [firstPoint, secondPoint] = Array.from(usTouchPointsRef.current.values());
         usPinchRef.current = {
           startDistance: Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1),
-          startViewState: usViewState,
+          startViewState: usViewStateRef.current,
         };
         usDragRef.current = null;
         usMovedRef.current = true;
         return;
       }
 
-      if (usViewState.scale <= 1) {
+      if (usViewStateRef.current.scale <= 1) {
         return;
       }
 
       usMovedRef.current = false;
-      setUSIsInteracting(true);
+      setUSTransformAnimated(false);
       usDragRef.current = {
         pointerId: event.pointerId,
         startX: event.clientX,
         startY: event.clientY,
-        startTx: usViewState.tx,
-        startTy: usViewState.ty,
+        startTx: usViewStateRef.current.tx,
+        startTy: usViewStateRef.current.ty,
       };
       return;
     }
 
-    if (usViewState.scale <= 1) {
+    if (usViewStateRef.current.scale <= 1) {
       return;
     }
 
     usMovedRef.current = false;
-    setUSIsInteracting(true);
+    setUSTransformAnimated(false);
     usDragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      startTx: usViewState.tx,
-      startTy: usViewState.ty,
+      startTx: usViewStateRef.current.tx,
+      startTy: usViewStateRef.current.ty,
     };
   }
 
@@ -868,7 +959,7 @@ export function MapExplorer() {
         if (!usPinchRef.current) {
           usPinchRef.current = {
             startDistance: distance,
-            startViewState: usViewState,
+            startViewState: usViewStateRef.current,
           };
         }
 
@@ -880,12 +971,14 @@ export function MapExplorer() {
         const midpointX = (firstPoint.x + secondPoint.x) / 2;
         const midpointY = (firstPoint.y + secondPoint.y) / 2;
         const nextScale = pinchState.startViewState.scale * (distance / pinchState.startDistance);
-        setUSViewState(zoomAroundPoint(pinchState.startViewState, MAP_WIDTH, US_MAP_HEIGHT, nextScale, midpointX, midpointY));
+        applyUSView(zoomAroundPoint(pinchState.startViewState, MAP_WIDTH, US_MAP_HEIGHT, nextScale, midpointX, midpointY), {
+          schedule: true,
+        });
         usMovedRef.current = true;
         return;
       }
 
-      if (usViewState.scale <= 1) {
+      if (usViewStateRef.current.scale <= 1) {
         return;
       }
 
@@ -895,8 +988,8 @@ export function MapExplorer() {
           pointerId: event.pointerId,
           startX: event.clientX,
           startY: event.clientY,
-          startTx: usViewState.tx,
-          startTy: usViewState.ty,
+          startTx: usViewStateRef.current.tx,
+          startTy: usViewStateRef.current.ty,
         };
         return;
       }
@@ -908,16 +1001,17 @@ export function MapExplorer() {
         usMovedRef.current = true;
       }
 
-      setUSViewState((current) =>
+      applyUSView(
         clampViewState(
           {
-            scale: current.scale,
+            scale: usViewStateRef.current.scale,
             tx: drag.startTx + dx,
             ty: drag.startTy + dy,
           },
           MAP_WIDTH,
           US_MAP_HEIGHT,
         ),
+        { schedule: true },
       );
       return;
     }
@@ -938,16 +1032,17 @@ export function MapExplorer() {
       usMovedRef.current = true;
     }
 
-    setUSViewState((current) =>
+    applyUSView(
       clampViewState(
         {
-          scale: current.scale,
+          scale: usViewStateRef.current.scale,
           tx: drag.startTx + dx,
           ty: drag.startTy + dy,
         },
         MAP_WIDTH,
         US_MAP_HEIGHT,
       ),
+      { schedule: true },
     );
   }
 
@@ -971,9 +1066,6 @@ export function MapExplorer() {
       if (usTouchPointsRef.current.size === 0 && hadPinch) {
         usMovedRef.current = false;
       }
-      if (usTouchPointsRef.current.size === 0) {
-        setUSIsInteracting(false);
-      }
 
       return;
     }
@@ -987,7 +1079,6 @@ export function MapExplorer() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
-    setUSIsInteracting(false);
     if (!usMovedRef.current) {
       usMovedRef.current = false;
     }
@@ -1113,7 +1204,8 @@ export function MapExplorer() {
                   style={{
                     transform: `translate(${worldViewState.tx}px, ${worldViewState.ty}px) scale(${worldViewState.scale})`,
                     transformOrigin: "0 0",
-                    transition: worldIsInteracting ? "none" : "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
+                    transition: worldTransformAnimated ? "transform 240ms ease-out" : "none",
+                    willChange: "transform",
                   }}
                 >
                   {spherePath ? (
@@ -1326,7 +1418,8 @@ export function MapExplorer() {
                   style={{
                     transform: `translate(${usViewState.tx}px, ${usViewState.ty}px) scale(${usViewState.scale})`,
                     transformOrigin: "0 0",
-                    transition: usIsInteracting ? "none" : "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
+                    transition: usTransformAnimated ? "transform 240ms ease-out" : "none",
+                    willChange: "transform",
                   }}
                 >
                   <rect x={0} y={0} width={MAP_WIDTH} height={US_MAP_HEIGHT} fill={mapColors.ocean} rx={14} ry={14} />
