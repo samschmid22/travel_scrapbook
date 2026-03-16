@@ -286,20 +286,25 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
 
           {step === 3 ? (
             <>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
+              <div className="grid min-w-0 gap-4 sm:grid-cols-2">
+                <div className="min-w-0 space-y-2">
                   <label className="ds-input-label flex items-center gap-2">
                     <Calendar size={14} />
                     Month visited
                   </label>
-                  <Input type="month" value={visitedAt} onChange={(event) => setVisitedAt(event.target.value)} />
+                  <Input
+                    type="month"
+                    value={visitedAt}
+                    onChange={(event) => setVisitedAt(event.target.value)}
+                    className="min-w-0 max-w-full max-[430px]:text-[0.9rem]"
+                  />
                 </div>
-                <div className="space-y-2">
+                <div className="min-w-0 space-y-2">
                   <label className="ds-input-label flex items-center gap-2">
                     <MapPin size={14} />
                     Selected place
                   </label>
-                  <div className="rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2 text-base text-[var(--text-secondary)]">
+                  <div className="max-[430px]:break-words rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2 text-base text-[var(--text-secondary)]">
                     {cityName}, {region ? `${region}, ` : ""}
                     {selectedCountryOption?.name ?? selectedCountryName}
                   </div>

@@ -153,16 +153,29 @@ export function findCityCoordinates(countryCode: string, cityName: string, regio
     return undefined;
   }
 
-  const exactRegionMatch = cityMatches.find((city) => {
-    if (!normalizedRegion) {
-      return false;
+  if (normalizedRegion) {
+    // When a region/state is provided (common for manual entries), require it to match.
+    // This avoids pinning to an unrelated city with the same name in another region.
+    const exactRegionMatch = cityMatches.find((city) => {
+      const regionMatch = normalizeText(city.region ?? "") === normalizedRegion;
+      const regionCodeMatch = normalizeText(city.regionCode ?? "") === normalizedRegion;
+      return regionMatch || regionCodeMatch;
+    });
+    if (!exactRegionMatch) {
+      return undefined;
     }
 
-    const regionMatch = normalizeText(city.region ?? "") === normalizedRegion;
-    const regionCodeMatch = normalizeText(city.regionCode ?? "") === normalizedRegion;
-    return regionMatch || regionCodeMatch;
-  });
-  const bestMatch = exactRegionMatch ?? cityMatches[0];
+    if (exactRegionMatch.latitude === undefined || exactRegionMatch.longitude === undefined) {
+      return undefined;
+    }
+
+    return {
+      latitude: exactRegionMatch.latitude,
+      longitude: exactRegionMatch.longitude,
+    };
+  }
+
+  const bestMatch = cityMatches[0];
 
   if (bestMatch?.latitude === undefined || bestMatch.longitude === undefined) {
     return undefined;
