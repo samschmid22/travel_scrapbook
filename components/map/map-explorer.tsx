@@ -168,6 +168,26 @@ function toSvgPoint(
   return { x, y };
 }
 
+function getScaledTouchDelta(
+  event: ReactPointerEvent<SVGSVGElement>,
+  width: number,
+  height: number,
+  startX: number,
+  startY: number,
+) {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const scaleX = rect.width > 0 ? width / rect.width : 1;
+  const scaleY = rect.height > 0 ? height / rect.height : 1;
+  const rawDx = event.clientX - startX;
+  const rawDy = event.clientY - startY;
+  return {
+    rawDx,
+    rawDy,
+    dx: rawDx * scaleX,
+    dy: rawDy * scaleY,
+  };
+}
+
 function getFipsFromFeatureId(featureId: CountryFeature["id"] | USStateFeature["id"]) {
   if (featureId === undefined || featureId === null) {
     return undefined;
@@ -804,10 +824,9 @@ export function MapExplorer() {
         return;
       }
 
-      const dx = event.clientX - drag.startX;
-      const dy = event.clientY - drag.startY;
+      const { rawDx, rawDy, dx, dy } = getScaledTouchDelta(event, MAP_WIDTH, MAP_HEIGHT, drag.startX, drag.startY);
 
-      if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      if (Math.abs(rawDx) > DRAG_THRESHOLD || Math.abs(rawDy) > DRAG_THRESHOLD) {
         worldMovedRef.current = true;
       }
 
@@ -994,10 +1013,15 @@ export function MapExplorer() {
         return;
       }
 
-      const dx = event.clientX - drag.startX;
-      const dy = event.clientY - drag.startY;
+      const { rawDx, rawDy, dx, dy } = getScaledTouchDelta(
+        event,
+        MAP_WIDTH,
+        US_MAP_HEIGHT,
+        drag.startX,
+        drag.startY,
+      );
 
-      if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      if (Math.abs(rawDx) > DRAG_THRESHOLD || Math.abs(rawDy) > DRAG_THRESHOLD) {
         usMovedRef.current = true;
       }
 
