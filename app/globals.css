@@ -201,5 +201,17 @@ h4 {
     .map-legend-ios-plus-one {
       font-size: calc(0.58rem + 1pt);
     }
+
+    .add-place-month-wrap {
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .add-place-month-input {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
   }
 }
