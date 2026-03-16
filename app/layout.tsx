@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { AppShell } from "@/components/app-shell";
 import { Providers } from "@/components/providers";
@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   title: "Been There. Done That.",
   description: "A personal travel scrapbook focused on places, memories, and photos.",
   applicationName: "Been There.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

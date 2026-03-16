@@ -22,9 +22,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Input } from "@/components/ui/input";
 import { ProgressChip } from "@/components/ui/progress-chip";
 
-const MAP_WIDTH = 980;
-const MAP_HEIGHT = 560;
-const US_MAP_HEIGHT = 430;
+const MAP_WIDTH = 900;
+const MAP_HEIGHT = 600;
+const US_MAP_HEIGHT = 480;
 const MIN_SCALE = 1;
 const MAX_SCALE = 10;
 const DRAG_THRESHOLD = 6;
@@ -241,16 +241,16 @@ function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feat
 
 function MapLegend() {
   return (
-    <div className="flex items-center gap-2 text-[0.64rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
-      <span className="inline-flex items-center gap-1 whitespace-nowrap sm:gap-1.5">
+    <div className="min-w-0 flex items-center gap-1.5 text-[0.58rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
+      <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.unvisited }} />
-        Not visited
+        Unvisited
       </span>
-      <span className="inline-flex items-center gap-1 whitespace-nowrap sm:gap-1.5">
+      <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.visited }} />
         Visited
       </span>
-      <span className="inline-flex items-center gap-1 whitespace-nowrap sm:gap-1.5">
+      <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.selected }} />
         Selected
       </span>
@@ -267,6 +267,8 @@ export function MapExplorer() {
   const [usStateQuery, setUSStateQuery] = useState("");
   const [worldViewState, setWorldViewState] = useState<ViewState>({ scale: 1, tx: 0, ty: 0 });
   const [usViewState, setUSViewState] = useState<ViewState>({ scale: 1, tx: 0, ty: 0 });
+  const [worldIsInteracting, setWorldIsInteracting] = useState(false);
+  const [usIsInteracting, setUSIsInteracting] = useState(false);
 
   const worldDragRef = useRef<{
     pointerId: number;
@@ -508,6 +510,7 @@ export function MapExplorer() {
   function resetWorldView() {
     setSelectedCountry(null);
     setWorldViewState({ scale: 1, tx: 0, ty: 0 });
+    setWorldIsInteracting(false);
     worldTouchPointsRef.current.clear();
     worldPinchRef.current = null;
     worldDragRef.current = null;
@@ -517,6 +520,7 @@ export function MapExplorer() {
   function resetUSView() {
     setSelectedUSStateCode(null);
     setUSViewState({ scale: 1, tx: 0, ty: 0 });
+    setUSIsInteracting(false);
     usTouchPointsRef.current.clear();
     usPinchRef.current = null;
     usDragRef.current = null;
@@ -614,6 +618,7 @@ export function MapExplorer() {
       event.currentTarget.setPointerCapture(event.pointerId);
 
       if (worldTouchPointsRef.current.size >= 2) {
+        setWorldIsInteracting(true);
         const [firstPoint, secondPoint] = Array.from(worldTouchPointsRef.current.values());
         worldPinchRef.current = {
           startDistance: Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1),
@@ -629,6 +634,7 @@ export function MapExplorer() {
       }
 
       worldMovedRef.current = false;
+      setWorldIsInteracting(true);
       worldDragRef.current = {
         pointerId: event.pointerId,
         startX: event.clientX,
@@ -644,6 +650,7 @@ export function MapExplorer() {
     }
 
     worldMovedRef.current = false;
+    setWorldIsInteracting(true);
     worldDragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -774,6 +781,9 @@ export function MapExplorer() {
       if (worldTouchPointsRef.current.size === 0 && hadPinch) {
         worldMovedRef.current = false;
       }
+      if (worldTouchPointsRef.current.size === 0) {
+        setWorldIsInteracting(false);
+      }
 
       return;
     }
@@ -787,6 +797,7 @@ export function MapExplorer() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
+    setWorldIsInteracting(false);
     if (!worldMovedRef.current) {
       worldMovedRef.current = false;
     }
@@ -799,6 +810,7 @@ export function MapExplorer() {
       event.currentTarget.setPointerCapture(event.pointerId);
 
       if (usTouchPointsRef.current.size >= 2) {
+        setUSIsInteracting(true);
         const [firstPoint, secondPoint] = Array.from(usTouchPointsRef.current.values());
         usPinchRef.current = {
           startDistance: Math.max(distanceBetweenPoints(firstPoint, secondPoint), 1),
@@ -814,6 +826,7 @@ export function MapExplorer() {
       }
 
       usMovedRef.current = false;
+      setUSIsInteracting(true);
       usDragRef.current = {
         pointerId: event.pointerId,
         startX: event.clientX,
@@ -829,6 +842,7 @@ export function MapExplorer() {
     }
 
     usMovedRef.current = false;
+    setUSIsInteracting(true);
     usDragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -957,6 +971,9 @@ export function MapExplorer() {
       if (usTouchPointsRef.current.size === 0 && hadPinch) {
         usMovedRef.current = false;
       }
+      if (usTouchPointsRef.current.size === 0) {
+        setUSIsInteracting(false);
+      }
 
       return;
     }
@@ -970,6 +987,7 @@ export function MapExplorer() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
+    setUSIsInteracting(false);
     if (!usMovedRef.current) {
       usMovedRef.current = false;
     }
@@ -1024,7 +1042,7 @@ export function MapExplorer() {
         </Card>
       </div>
 
-      <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-[1fr_380px]">
+      <div className="grid gap-3.5 sm:gap-4 xl:grid-cols-[1fr_340px]">
         <Card className="overflow-hidden p-0">
           <div className="border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-6 sm:py-5">
             <div className="flex items-center justify-between gap-2 sm:gap-3">
@@ -1062,20 +1080,18 @@ export function MapExplorer() {
             </div>
           </div>
 
-          <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
+          <div className="space-y-2.5 p-3 sm:space-y-3 sm:p-4 lg:p-5">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 sm:gap-3">
               <MapLegend />
-              <ProgressChip className="shrink-0 text-[0.66rem] sm:text-[0.8rem]">
-                <span className="sm:hidden">
-                  {stats.countries}/{totalWorldCountries} Countries
-                </span>
+              <ProgressChip className="shrink-0 whitespace-nowrap px-2 text-[0.58rem] sm:text-[0.8rem]">
+                <span className="sm:hidden">{stats.countries}/{totalWorldCountries}</span>
                 <span className="hidden sm:inline">
                   {stats.countries} / {totalWorldCountries} Countries Visited
                 </span>
               </ProgressChip>
             </div>
 
-            <div className="relative rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-1.5 sm:p-4">
+            <div className="relative rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)_100%)] p-1 sm:p-2.5">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
                 className="h-auto w-full touch-none"
@@ -1097,7 +1113,7 @@ export function MapExplorer() {
                   style={{
                     transform: `translate(${worldViewState.tx}px, ${worldViewState.ty}px) scale(${worldViewState.scale})`,
                     transformOrigin: "0 0",
-                    transition: worldDragRef.current ? "none" : "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
+                    transition: worldIsInteracting ? "none" : "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
                   }}
                 >
                   {spherePath ? (
@@ -1239,7 +1255,7 @@ export function MapExplorer() {
         </Card>
       </div>
 
-      <div id="us-states-map" className="grid gap-4 xl:grid-cols-[1fr_380px]">
+      <div id="us-states-map" className="grid gap-4 xl:grid-cols-[1fr_340px]">
         <Card className="overflow-hidden p-0">
           <div className="border-b border-[var(--border-soft)] px-4 py-3.5 sm:px-6 sm:py-5">
             <div className="flex items-center justify-between gap-2 sm:gap-3">
@@ -1277,20 +1293,18 @@ export function MapExplorer() {
             </div>
           </div>
 
-          <div className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-3">
+          <div className="space-y-2.5 p-3 sm:space-y-3 sm:p-4 lg:p-5">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 sm:gap-3">
               <MapLegend />
-              <ProgressChip className="shrink-0 text-[0.66rem] sm:text-[0.8rem]">
-                <span className="sm:hidden">
-                  {visitedUSStateCount}/{usStateVisits.length || 50} States
-                </span>
+              <ProgressChip className="shrink-0 whitespace-nowrap px-2 text-[0.58rem] sm:text-[0.8rem]">
+                <span className="sm:hidden">{visitedUSStateCount}/{usStateVisits.length || 50}</span>
                 <span className="hidden sm:inline">
                   {visitedUSStateCount} / {usStateVisits.length || 50} States Visited
                 </span>
               </ProgressChip>
             </div>
 
-            <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-1.5 sm:p-4">
+            <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--surface-3),var(--pink-bright)_14%)_100%)] p-1 sm:p-2.5">
               <svg
                 viewBox={`0 0 ${MAP_WIDTH} ${US_MAP_HEIGHT}`}
                 className="h-auto w-full touch-none"
@@ -1312,7 +1326,7 @@ export function MapExplorer() {
                   style={{
                     transform: `translate(${usViewState.tx}px, ${usViewState.ty}px) scale(${usViewState.scale})`,
                     transformOrigin: "0 0",
-                    transition: usDragRef.current ? "none" : "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
+                    transition: usIsInteracting ? "none" : "transform 520ms cubic-bezier(0.22, 0.65, 0.2, 1)",
                   }}
                 >
                   <rect x={0} y={0} width={MAP_WIDTH} height={US_MAP_HEIGHT} fill={mapColors.ocean} rx={14} ry={14} />

@@ -76,6 +76,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  if (!session) {
+    return <WelcomeGate onSignIn={signIn} />;
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)_46%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_22%)_100%)]">
       <div className="mx-auto w-full max-w-[1560px] px-3 pb-36 pt-3 sm:px-6 sm:pt-4 lg:grid lg:min-h-[calc(100vh-3rem)] lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
@@ -154,7 +158,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </section>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] pt-2 lg:hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-[calc(env(safe-area-inset-bottom)+1.25rem)] bg-[linear-gradient(180deg,rgba(255,222,240,0)_0%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_16%)_100%)] lg:hidden"
+      />
+
+      <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.95rem,calc(env(safe-area-inset-bottom)+0.4rem))] pt-2 lg:hidden">
         <nav className="relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(148deg,color-mix(in_oklab,var(--surface-2),var(--gray-ref)_22%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_14%)_100%)] p-1.5 shadow-[var(--shadow-elevated)] backdrop-blur">
           <div className="relative">
             <span
@@ -188,8 +197,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </div>
 
       <AddPlaceModal open={addPlaceOpen} onOpenChange={setAddPlaceOpen} />
-
-      {!session ? <WelcomeGate onSignIn={signIn} /> : null}
     </div>
   );
 }
