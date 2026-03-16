@@ -62,7 +62,6 @@ body {
   min-height: 100%;
   background: var(--app-bg);
   color: var(--text-primary);
-  -webkit-text-size-adjust: 100%;
 }
 
 body {
