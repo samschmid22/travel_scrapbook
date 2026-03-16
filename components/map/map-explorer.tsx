@@ -261,7 +261,7 @@ function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feat
 
 function MapLegend() {
   return (
-    <div className="min-w-0 flex items-center gap-1.5 text-[0.58rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
+    <div className="map-legend-ios-plus-one min-w-0 flex items-center gap-1.5 text-[0.58rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
       <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
         <span className="h-2 w-2 rounded-full sm:h-3 sm:w-3" style={{ background: mapColors.unvisited }} />
         Unvisited
