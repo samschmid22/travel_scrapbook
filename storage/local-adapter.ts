@@ -441,6 +441,15 @@ export class LocalDexieAdapter implements StorageAdapter {
 
       await db.photos.where("entryId").equals(entryId).delete();
       await db.memoryEntries.delete(entryId);
+
+      const remainingEntryCount = await db.memoryEntries.where("cityId").equals(existingEntry.cityId).count();
+      if (remainingEntryCount === 0) {
+        // Defensive cleanup in case legacy/orphaned photo rows still exist for the city.
+        await db.photos.where("cityId").equals(existingEntry.cityId).delete();
+        await db.cities.delete(existingEntry.cityId);
+        return;
+      }
+
       await db.cities.update(existingEntry.cityId, { updatedAt: currentDate });
     });
   }

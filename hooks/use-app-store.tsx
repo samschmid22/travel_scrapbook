@@ -240,12 +240,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   const visitedCountryCodes = useMemo(() => {
     const codes = new Set(cities.map((city) => city.countryCode));
-    if (usStateVisits.some((state) => state.visited)) {
-      codes.add("US");
-    }
-
     return [...codes].sort();
-  }, [cities, usStateVisits]);
+  }, [cities]);
 
   const countryGroups = useMemo(() => {
     const grouped = new Map<string, CountryGroup>();

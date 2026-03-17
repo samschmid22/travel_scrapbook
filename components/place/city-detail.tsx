@@ -39,6 +39,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
     return (
       <Card>
         <EmptyState
+          className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
           title="City not found"
           description="This city is not in your scrapbook anymore."
           action={
@@ -183,6 +184,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
         {entries.length === 0 ? (
           <Card>
             <EmptyState
+              className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
               title="No memory entries yet"
               description="Add the first memory for this city to start its timeline."
             />

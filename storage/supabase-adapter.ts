@@ -794,6 +794,62 @@ export class SupabaseStorageAdapter implements StorageAdapter {
       throw new Error(deleteEntryError.message);
     }
 
+    const { data: remainingEntries, error: remainingEntriesError } = await this.client
+      .from("memory_entries")
+      .select("id")
+      .eq("place_id", placeId)
+      .eq("user_id", user.id)
+      .limit(1);
+    if (remainingEntriesError) {
+      throw new Error(remainingEntriesError.message);
+    }
+
+    const hasRemainingEntries = (remainingEntries ?? []).length > 0;
+    if (!hasRemainingEntries) {
+      const { data: orphanPhotoRows, error: orphanPhotoRowsError } = await this.client
+        .from("photos")
+        .select("storage_path")
+        .eq("place_id", placeId)
+        .eq("user_id", user.id);
+      if (orphanPhotoRowsError) {
+        throw new Error(orphanPhotoRowsError.message);
+      }
+
+      const orphanPaths = (orphanPhotoRows ?? [])
+        .map((row) => String((row as { storage_path?: string }).storage_path ?? ""))
+        .filter(Boolean);
+
+      if (orphanPaths.length > 0) {
+        const chunkSize = 100;
+        for (let index = 0; index < orphanPaths.length; index += chunkSize) {
+          const chunk = orphanPaths.slice(index, index + chunkSize);
+          const { error: removeError } = await this.client.storage.from(PHOTO_BUCKET).remove(chunk);
+          if (removeError) {
+            throw new Error(removeError.message);
+          }
+        }
+      }
+
+      const { error: deleteOrphanPhotosError } = await this.client
+        .from("photos")
+        .delete()
+        .eq("place_id", placeId)
+        .eq("user_id", user.id);
+      if (deleteOrphanPhotosError) {
+        throw new Error(deleteOrphanPhotosError.message);
+      }
+
+      const { error: deletePlaceError } = await this.client
+        .from("places")
+        .delete()
+        .eq("id", placeId)
+        .eq("user_id", user.id);
+      if (deletePlaceError) {
+        throw new Error(deletePlaceError.message);
+      }
+      return;
+    }
+
     const { error: updatePlaceError } = await this.client
       .from("places")
       .update({ updated_at: nowIso() })

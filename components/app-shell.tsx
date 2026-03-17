@@ -154,7 +154,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </p>
           </header>
 
-          <div className="space-y-3.5 sm:space-y-4">{children}</div>
+          <div key={pathname} className="app-page-flow space-y-3.5 sm:space-y-4">
+            {children}
+          </div>
         </section>
       </div>
 
