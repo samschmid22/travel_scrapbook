@@ -339,20 +339,24 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     setFiles(nextFiles);
                   }}
                 />
-                <div className="flex flex-wrap items-center gap-3">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <ImagePlus size={14} />
-                    Choose Files
-                  </Button>
-                  <p className="text-sm text-[var(--text-muted)]">
-                    {files.length === 0
-                      ? "No files chosen."
-                      : `${files.length} file${files.length === 1 ? "" : "s"} chosen.`}
-                  </p>
+                <div className="rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2.5">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      className="whitespace-nowrap"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <ImagePlus size={14} />
+                      Choose Files
+                    </Button>
+                    <p className="text-sm text-[var(--text-muted)]">
+                      {files.length === 0
+                        ? "No files chosen."
+                        : `${files.length} file${files.length === 1 ? "" : "s"} chosen.`}
+                    </p>
+                  </div>
                 </div>
               </div>
             </>

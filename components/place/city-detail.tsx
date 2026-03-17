@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ArrowLeft, CalendarPlus, ImagePlus } from "lucide-react";
 
 import { MemoryEntryCard } from "@/components/place/memory-entry-card";
@@ -18,7 +18,8 @@ function currentMonthValue() {
 }
 
 export function CityDetail({ cityId }: { cityId: string }) {
-  const { getCityById, getEntriesForCity, getPhotosForEntry, photoUrls, addMemoryEntry } = useAppStore();
+  const { getCityById, getEntriesForCity, getPhotosForEntry, photoUrls, addMemoryEntry, deleteMemoryEntry } = useAppStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const city = getCityById(cityId);
   const entries = getEntriesForCity(cityId);
@@ -27,6 +28,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [pending, setPending] = useState(false);
+  const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const totalPhotos = useMemo(() => {
@@ -88,18 +90,46 @@ export function CityDetail({ cityId }: { cityId: string }) {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <Input
-            type="month"
-            value={visitedAt}
-            onChange={(event) => setVisitedAt(event.target.value)}
-          />
-          <Input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
-            className="file:mr-2 file:rounded-md file:border-0 file:bg-[var(--surface-1)] file:px-2.5 file:py-1.5 file:text-sm file:font-medium file:text-[var(--text-primary)]"
-          />
+          <div className="add-place-month-wrap min-w-0">
+            <div className="add-place-month-shell">
+              <Input
+                type="month"
+                value={visitedAt}
+                onChange={(event) => setVisitedAt(event.target.value)}
+                className="add-place-month-input min-w-0 max-w-full max-[430px]:text-[0.9rem]"
+              />
+            </div>
+          </div>
+
+          <div className="min-w-0">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
+            />
+            <div className="rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2.5">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  className="whitespace-nowrap"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <ImagePlus size={14} />
+                  Choose Files
+                </Button>
+                <p className="text-sm text-[var(--text-secondary)]">
+                  {files.length === 0
+                    ? "No files chosen."
+                    : `${files.length} file${files.length === 1 ? "" : "s"} chosen.`}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-3 space-y-2">
@@ -164,6 +194,23 @@ export function CityDetail({ cityId }: { cityId: string }) {
               entry={entry}
               photos={getPhotosForEntry(entry.id)}
               photoUrls={photoUrls}
+              deleting={deletingEntryId === entry.id}
+              onDelete={async () => {
+                const confirmed = window.confirm("Delete this memory entry and its photos?");
+                if (!confirmed) {
+                  return;
+                }
+
+                setDeletingEntryId(entry.id);
+                setError(null);
+                try {
+                  await deleteMemoryEntry(entry.id);
+                } catch (deleteError) {
+                  setError(deleteError instanceof Error ? deleteError.message : "Could not delete memory entry.");
+                } finally {
+                  setDeletingEntryId(null);
+                }
+              }}
             />
           ))
         )}

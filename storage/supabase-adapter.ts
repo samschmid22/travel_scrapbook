@@ -731,6 +731,79 @@ export class SupabaseStorageAdapter implements StorageAdapter {
     return entry;
   }
 
+  async deleteMemoryEntry(entryId: string) {
+    const user = await this.requireUser();
+
+    const { data: entry, error: entryError } = await this.client
+      .from("memory_entries")
+      .select("id,place_id")
+      .eq("id", entryId)
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (entryError) {
+      throw new Error(entryError.message);
+    }
+    if (!entry) {
+      throw new Error("Memory entry not found.");
+    }
+
+    const placeId = String((entry as { place_id?: string }).place_id ?? "");
+    if (!placeId) {
+      throw new Error("Memory entry is missing a place link.");
+    }
+
+    const { data: photoRows, error: photoRowsError } = await this.client
+      .from("photos")
+      .select("storage_path")
+      .eq("memory_entry_id", entryId)
+      .eq("user_id", user.id);
+    if (photoRowsError) {
+      throw new Error(photoRowsError.message);
+    }
+
+    const storagePaths = (photoRows ?? [])
+      .map((row) => String((row as { storage_path?: string }).storage_path ?? ""))
+      .filter(Boolean);
+
+    if (storagePaths.length > 0) {
+      const chunkSize = 100;
+      for (let index = 0; index < storagePaths.length; index += chunkSize) {
+        const chunk = storagePaths.slice(index, index + chunkSize);
+        const { error: removeError } = await this.client.storage.from(PHOTO_BUCKET).remove(chunk);
+        if (removeError) {
+          throw new Error(removeError.message);
+        }
+      }
+    }
+
+    const { error: deletePhotosError } = await this.client
+      .from("photos")
+      .delete()
+      .eq("memory_entry_id", entryId)
+      .eq("user_id", user.id);
+    if (deletePhotosError) {
+      throw new Error(deletePhotosError.message);
+    }
+
+    const { error: deleteEntryError } = await this.client
+      .from("memory_entries")
+      .delete()
+      .eq("id", entryId)
+      .eq("user_id", user.id);
+    if (deleteEntryError) {
+      throw new Error(deleteEntryError.message);
+    }
+
+    const { error: updatePlaceError } = await this.client
+      .from("places")
+      .update({ updated_at: nowIso() })
+      .eq("id", placeId)
+      .eq("user_id", user.id);
+    if (updatePlaceError) {
+      throw new Error(updatePlaceError.message);
+    }
+  }
+
   async setUSStateVisited(input: { code: string; name: string; visited: boolean }) {
     const user = await this.requireUser();
     const stateCode = input.code.toUpperCase();

@@ -430,6 +430,21 @@ export class LocalDexieAdapter implements StorageAdapter {
     };
   }
 
+  async deleteMemoryEntry(entryId: string) {
+    const currentDate = nowIso();
+
+    await db.transaction("rw", db.memoryEntries, db.photos, db.cities, async () => {
+      const existingEntry = await db.memoryEntries.get(entryId);
+      if (!existingEntry) {
+        throw new Error("Memory entry not found.");
+      }
+
+      await db.photos.where("entryId").equals(entryId).delete();
+      await db.memoryEntries.delete(entryId);
+      await db.cities.update(existingEntry.cityId, { updatedAt: currentDate });
+    });
+  }
+
   async setUSStateVisited(input: { code: string; name: string; visited: boolean }) {
     const code = input.code.toUpperCase();
     const stateName = input.name.trim();

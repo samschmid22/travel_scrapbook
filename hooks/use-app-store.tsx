@@ -45,6 +45,7 @@ interface AppStoreContextValue {
   signOut(): Promise<void>;
   addPlace(input: AddPlaceInput): Promise<void>;
   addMemoryEntry(input: AddMemoryEntryInput): Promise<void>;
+  deleteMemoryEntry(entryId: string): Promise<void>;
   toggleUSStateVisited(input: { code: string; name: string; visited: boolean }): Promise<void>;
   saveUpcomingTrip(input: { destination: string; departureDate?: string; note?: string }): Promise<void>;
   clearUpcomingTrip(): Promise<void>;
@@ -184,6 +185,14 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     [refresh],
   );
 
+  const deleteMemoryEntry = useCallback(
+    async (entryId: string) => {
+      await storageAdapter.deleteMemoryEntry(entryId);
+      await refresh();
+    },
+    [refresh],
+  );
+
   const toggleUSStateVisited = useCallback(
     async (input: { code: string; name: string; visited: boolean }) => {
       await storageAdapter.setUSStateVisited(input);
@@ -293,6 +302,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       signOut,
       addPlace,
       addMemoryEntry,
+      deleteMemoryEntry,
       toggleUSStateVisited,
       saveUpcomingTrip,
       clearUpcomingTrip,
@@ -318,6 +328,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       signOut,
       addPlace,
       addMemoryEntry,
+      deleteMemoryEntry,
       toggleUSStateVisited,
       saveUpcomingTrip,
       clearUpcomingTrip,

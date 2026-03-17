@@ -25,6 +25,7 @@ export interface StorageAdapter {
   getSnapshot(): Promise<StorageSnapshot>;
   addPlace(input: AddPlaceInput): Promise<{ city: CityRecord; entry: MemoryEntryRecord }>;
   addMemoryEntry(input: AddMemoryEntryInput): Promise<MemoryEntryRecord>;
+  deleteMemoryEntry(entryId: string): Promise<void>;
   setUSStateVisited(input: { code: string; name: string; visited: boolean }): Promise<void>;
   saveUpcomingTrip(input: { destination: string; departureDate?: string; note?: string }): Promise<void>;
   clearUpcomingTrip(): Promise<void>;
