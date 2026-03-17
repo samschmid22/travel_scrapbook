@@ -71,22 +71,22 @@ export function CityDetail({ cityId }: { cityId: string }) {
             <p className="ds-body mt-2">{city.countryName}</p>
           </div>
 
-          <div className="flex flex-col items-end gap-3">
-            <Button
-              size="sm"
-              className="shrink-0 self-start px-2.5 text-[0.78rem] sm:px-3.5 sm:text-[0.92rem]"
-              onClick={() => setComposerOpen(true)}
-            >
-              <Plus size={16} />
-              Add Memory
-            </Button>
-
+          <div className="flex items-center gap-3">
             <div className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-4 py-3 text-base text-[var(--text-secondary)]">
               <p>{entries.length} memor{entries.length === 1 ? "y" : "ies"}</p>
               <p>
                 {totalPhotos} photo{totalPhotos === 1 ? "" : "s"}
               </p>
             </div>
+
+            <Button
+              size="sm"
+              className="shrink-0 px-2.5 text-[0.78rem] sm:px-3.5 sm:text-[0.92rem]"
+              onClick={() => setComposerOpen(true)}
+            >
+              <Plus size={16} />
+              Add Memory
+            </Button>
           </div>
         </div>
       </Card>

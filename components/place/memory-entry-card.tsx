@@ -23,7 +23,9 @@ export function MemoryEntryCard({
   return (
     <article className="rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_30%)] p-5">
       <div className="flex items-center justify-between gap-3">
-        <p className="ds-eyebrow">{toMonthLabel(entry.visitedAt)}</p>
+        <p className="text-[1.12rem] font-semibold tracking-[0.05em] text-[var(--text-primary)] sm:text-[1.3rem]">
+          {toMonthLabel(entry.visitedAt)}
+        </p>
         {onDelete ? (
           <Button
             type="button"
