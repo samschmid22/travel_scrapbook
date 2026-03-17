@@ -80,7 +80,6 @@ export function GalleryView() {
           searchIndex: [
             photo.fileName,
             city?.cityName,
-            city?.region,
             city?.countryName,
             monthKey,
           ]
@@ -118,7 +117,7 @@ export function GalleryView() {
         <EmptyState
           className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
           title="No photos yet"
-          description="Upload photos when you add a place or memory entry and they will appear here."
+          description="Upload photos when you add a place or memory and they will appear here."
         />
       </Card>
     );
@@ -171,7 +170,6 @@ export function GalleryView() {
               {allCitiesForCountry.map((city) => (
                 <option key={city.id} value={city.id}>
                   {city.cityName}
-                  {city.region ? `, ${city.region}` : ""}
                 </option>
               ))}
             </select>

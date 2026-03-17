@@ -81,7 +81,6 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
   const [manualCityName, setManualCityName] = useState("");
   const [manualCityMode, setManualCityMode] = useState(false);
 
-  const [region, setRegion] = useState("");
   const [visitedAt, setVisitedAt] = useState(currentMonthValue());
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -102,7 +101,6 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
     setSelectedCity(null);
     setManualCityMode(false);
     setManualCityName("");
-    setRegion("");
     setVisitedAt(currentMonthValue());
     setDescription("");
     setFiles([]);
@@ -141,7 +139,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
         countryCode: selectedCountryCode,
         countryName: selectedCountryName || selectedCountryOption?.name || "Unknown",
         cityName,
-        region: region.trim() || selectedCity?.region,
+        region: manualCityMode ? undefined : selectedCity?.region,
         latitude: manualCityMode ? undefined : selectedCity?.latitude,
         longitude: manualCityMode ? undefined : selectedCity?.longitude,
         firstMemory: {
@@ -209,7 +207,6 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                   setCityQuery("");
                   setManualCityMode(false);
                   setManualCityName("");
-                  setRegion("");
                 }}
               />
 
@@ -245,17 +242,14 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     const parsed = parseCityValue(option.value);
                     setSelectedCity(parsed);
                     setCityQuery(parsed.name);
-                    if (parsed.region) {
-                      setRegion(parsed.region);
-                    }
                   }}
                 />
               ) : (
-              <div className="space-y-2">
-                <label className="ds-input-label">Manual city name</label>
-                <Input
-                  value={manualCityName}
-                  onChange={(event) => setManualCityName(event.target.value)}
+                <div className="space-y-2">
+                  <label className="ds-input-label">Manual city name</label>
+                  <Input
+                    value={manualCityName}
+                    onChange={(event) => setManualCityName(event.target.value)}
                     placeholder="Enter city manually"
                   />
                 </div>
@@ -272,15 +266,6 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
               >
                 {manualCityMode ? "Back to searchable city list" : "Can’t find your city? Enter it manually"}
               </button>
-
-              <div className="space-y-2">
-                <label className="ds-input-label">Region / State (optional)</label>
-                <Input
-                  value={region}
-                  onChange={(event) => setRegion(event.target.value)}
-                  placeholder="Example: Arizona"
-                />
-              </div>
             </>
           ) : null}
 
@@ -307,8 +292,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     Selected place
                   </label>
                   <div className="max-[430px]:break-words rounded-xl border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2 text-base text-[var(--text-secondary)]">
-                    {cityName}, {region ? `${region}, ` : ""}
-                    {selectedCountryOption?.name ?? selectedCountryName}
+                    {cityName}, {selectedCountryOption?.name ?? selectedCountryName}
                   </div>
                 </div>
               </div>

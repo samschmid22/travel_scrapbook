@@ -34,7 +34,7 @@ export function MemoryEntryCard({
             disabled={deleting}
           >
             <Trash2 size={14} />
-            {deleting ? "Deleting..." : "Delete Entry"}
+            {deleting ? "Deleting..." : "Delete Memory"}
           </Button>
         ) : null}
       </div>

@@ -117,10 +117,7 @@ export function PlacesOverview() {
                   <div className="grid gap-2 md:grid-cols-[minmax(0,1.5fr)_0.9fr_0.9fr_0.95fr] md:items-center">
                     <div className="min-w-0">
                       <h4 className="ds-card-title truncate">{city.cityName}</h4>
-                      <p className="ds-meta mt-1 truncate">
-                        {city.region ? `${city.region} • ` : ""}
-                        {group.countryName}
-                      </p>
+                      <p className="ds-meta mt-1 truncate">{group.countryName}</p>
                     </div>
 
                     <p className="ds-meta flex items-center justify-between gap-3 md:block">

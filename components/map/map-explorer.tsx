@@ -475,7 +475,7 @@ export function MapExplorer() {
       const memoryCount = getEntriesForCity(city.id).length;
       pins.push({
         id: city.id,
-        label: city.region ? `${city.cityName}, ${city.region}` : city.cityName,
+        label: city.cityName,
         x,
         y,
         memoryCount,
@@ -524,7 +524,7 @@ export function MapExplorer() {
       const memoryCount = getEntriesForCity(city.id).length;
       pins.push({
         id: city.id,
-        label: city.region ? `${city.cityName}, ${city.region}` : city.cityName,
+        label: city.cityName,
         x,
         y,
         memoryCount,
@@ -1334,7 +1334,6 @@ export function MapExplorer() {
                       >
                         <p className="ds-card-title">{city.cityName}</p>
                         <p className="ds-meta mt-1">
-                          {city.region ? `${city.region} • ` : ""}
                           {entries.length} memories
                           {latestEntry ? ` • Last ${toMonthLabel(latestEntry.visitedAt)}` : ""}
                         </p>
