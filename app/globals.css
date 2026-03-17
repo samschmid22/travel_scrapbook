@@ -207,7 +207,16 @@ h4 {
       min-width: 0;
     }
 
+    .add-place-month-shell {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      border-radius: var(--radius-control);
+      overflow: hidden;
+    }
+
     .add-place-month-input {
+      display: block;
       width: 100%;
       min-width: 0;
       max-width: 100%;

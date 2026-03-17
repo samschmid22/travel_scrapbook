@@ -292,12 +292,14 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                     <Calendar size={14} />
                     Month visited
                   </label>
-                  <Input
-                    type="month"
-                    value={visitedAt}
-                    onChange={(event) => setVisitedAt(event.target.value)}
-                    className="add-place-month-input min-w-0 max-w-full max-[430px]:text-[0.9rem]"
-                  />
+                  <div className="add-place-month-shell">
+                    <Input
+                      type="month"
+                      value={visitedAt}
+                      onChange={(event) => setVisitedAt(event.target.value)}
+                      className="add-place-month-input min-w-0 max-w-full max-[430px]:text-[0.9rem]"
+                    />
+                  </div>
                 </div>
                 <div className="min-w-0 space-y-2">
                   <label className="ds-input-label flex items-center gap-2">
