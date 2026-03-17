@@ -29,6 +29,7 @@ export function CityDetail({ cityId }: { cityId: string }) {
   const [files, setFiles] = useState<File[]>([]);
   const [pending, setPending] = useState(false);
   const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
+  const [composerOpen, setComposerOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const totalPhotos = useMemo(() => {
@@ -85,108 +86,137 @@ export function CityDetail({ cityId }: { cityId: string }) {
       </Card>
 
       <Card className="bg-[linear-gradient(145deg,color-mix(in_oklab,var(--card-strong),var(--gray-ref)_30%)_0%,color-mix(in_oklab,var(--card-strong),var(--pink-bright)_16%)_100%)] text-[var(--text-primary)]">
-        <div className="mb-4 flex items-center gap-2 text-[1.02rem] font-semibold text-[var(--text-primary)]">
-          <CalendarPlus size={16} />
-          Add another memory entry
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-[1.02rem] font-semibold text-[var(--text-primary)]">
+            <CalendarPlus size={16} />
+            Add memory to this city
+          </div>
+          <Button
+            type="button"
+            variant={composerOpen ? "secondary" : "primary"}
+            size="sm"
+            onClick={() => setComposerOpen((current) => !current)}
+          >
+            {composerOpen ? "Hide Form" : entries.length === 0 ? "Add First Memory" : "Add Memory"}
+          </Button>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div className="add-place-month-wrap min-w-0">
-            <div className="add-place-month-shell">
-              <Input
-                type="month"
-                value={visitedAt}
-                onChange={(event) => setVisitedAt(event.target.value)}
-                className="add-place-month-input min-w-0 max-w-full max-[430px]:text-[0.9rem]"
-              />
-            </div>
-          </div>
+        {composerOpen ? (
+          <>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="add-place-month-wrap min-w-0">
+                <div className="add-place-month-shell">
+                  <Input
+                    type="month"
+                    value={visitedAt}
+                    onChange={(event) => setVisitedAt(event.target.value)}
+                    className="add-place-month-input min-w-0 max-w-full max-[430px]:text-[0.9rem]"
+                  />
+                </div>
+              </div>
 
-          <div className="min-w-0">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              multiple
-              className="hidden"
-              onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
-            />
-            <div className="rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2.5">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  className="whitespace-nowrap"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <ImagePlus size={14} />
-                  Choose Files
-                </Button>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  {files.length === 0
-                    ? "No files chosen."
-                    : `${files.length} file${files.length === 1 ? "" : "s"} chosen.`}
-                </p>
+              <div className="min-w-0">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
+                />
+                <div className="rounded-[var(--radius-control)] border border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-1),var(--gray-ref)_18%)] px-3 py-2.5">
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      className="whitespace-nowrap"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <ImagePlus size={14} />
+                      Choose Files
+                    </Button>
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      {files.length === 0
+                        ? "No files chosen."
+                        : `${files.length} file${files.length === 1 ? "" : "s"} chosen.`}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="mt-3 space-y-2">
-          <label className="flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.1em] text-[var(--text-secondary)]">
-            <ImagePlus size={14} />
-            Description (optional)
-          </label>
-          <Textarea
-            rows={3}
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="Write about this visit"
-          />
-        </div>
+            <div className="mt-3 space-y-2">
+              <label className="flex items-center gap-2 text-[0.75rem] uppercase tracking-[0.1em] text-[var(--text-secondary)]">
+                <ImagePlus size={14} />
+                Description (optional)
+              </label>
+              <Textarea
+                rows={3}
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                placeholder="Write about this visit"
+              />
+            </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <Button
-            variant="primary"
-            onClick={async () => {
-              setPending(true);
-              setError(null);
-              try {
-                await addMemoryEntry({
-                  cityId,
-                  visitedAt,
-                  description,
-                  files,
-                });
-                setDescription("");
-                setFiles([]);
-                setVisitedAt(currentMonthValue());
-              } catch (submitError) {
-                setError(submitError instanceof Error ? submitError.message : "Could not save memory.");
-              } finally {
-                setPending(false);
-              }
-            }}
-            disabled={pending || !visitedAt}
-          >
-            {pending ? "Saving..." : "Save Memory"}
-          </Button>
-          <p className="text-sm text-[var(--text-secondary)]">
-            {files.length} selected photo{files.length === 1 ? "" : "s"}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Button
+                variant="primary"
+                onClick={async () => {
+                  setPending(true);
+                  setError(null);
+                  try {
+                    await addMemoryEntry({
+                      cityId,
+                      visitedAt,
+                      description,
+                      files,
+                    });
+                    setDescription("");
+                    setFiles([]);
+                    setVisitedAt(currentMonthValue());
+                    setComposerOpen(false);
+                  } catch (submitError) {
+                    setError(submitError instanceof Error ? submitError.message : "Could not save memory.");
+                  } finally {
+                    setPending(false);
+                  }
+                }}
+                disabled={pending || !visitedAt}
+              >
+                {pending ? "Saving..." : "Save Memory"}
+              </Button>
+              <p className="text-sm text-[var(--text-secondary)]">
+                {files.length} selected photo{files.length === 1 ? "" : "s"}
+              </p>
+            </div>
+          </>
+        ) : (
+          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            Keep this page focused on your timeline. Open the form only when you want to log a new memory.
           </p>
-        </div>
+        )}
 
         {error ? <p className="mt-3 text-sm text-[var(--text-primary)]">{error}</p> : null}
       </Card>
 
       <div className="space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="ds-section-title">Memory Timeline</h3>
+          <p className="ds-meta">Newest first</p>
+        </div>
+
         {entries.length === 0 ? (
           <Card>
             <EmptyState
               className="[&>h3]:!text-[var(--pink-dark)] [&>h3]:font-semibold [&>p]:!text-[var(--pink-dark)] [&>p]:font-medium"
               title="No memory entries yet"
               description="Add the first memory for this city to start its timeline."
+              action={
+                <Button type="button" variant="secondary" onClick={() => setComposerOpen(true)}>
+                  Add First Memory
+                </Button>
+              }
             />
           </Card>
         ) : (
