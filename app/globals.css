@@ -211,8 +211,15 @@ h4 {
       width: 100%;
       max-width: 100%;
       min-width: 0;
+      border: 1px solid var(--border-soft);
       border-radius: var(--radius-control);
+      background: color-mix(in oklab, var(--surface-3), var(--gray-ref) 20%);
       overflow: hidden;
+    }
+
+    .add-place-month-shell:focus-within {
+      border-color: var(--pink-bright);
+      box-shadow: 0 0 0 2px color-mix(in oklab, var(--pink-bright), var(--pink-soft) 58%);
     }
 
     .add-place-month-input {
@@ -220,7 +227,20 @@ h4 {
       width: 100%;
       min-width: 0;
       max-width: 100%;
+      height: 2.75rem;
+      line-height: 2.75rem;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      -webkit-appearance: none;
+      appearance: none;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
       box-sizing: border-box;
+    }
+
+    .add-place-month-input:focus {
+      box-shadow: none !important;
     }
   }
 }
