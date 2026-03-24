@@ -269,6 +269,36 @@ h4 {
 .cant-find-city-link { color: var(--pink-bright); }
 [data-theme="blue"] .cant-find-city-link { color: #89c4ff; }
 
+.ds-mobile-fade-bar {
+  background: linear-gradient(
+    180deg,
+    rgba(255,222,240,0) 0%,
+    color-mix(in oklab, var(--pink-soft), var(--gray-ref) 16%) 100%
+  );
+}
+[data-theme="blue"] .ds-mobile-fade-bar {
+  background: linear-gradient(
+    180deg,
+    rgba(221,240,255,0) 0%,
+    color-mix(in oklab, var(--pink-soft), var(--gray-ref) 16%) 100%
+  );
+}
+
+[data-theme="blue"] .ds-sidebar-logo-card {
+  box-shadow: 0 18px 34px -28px rgba(71,148,255,0.7);
+}
+
+[data-theme="blue"] .ds-progress-chip {
+  box-shadow: 0 14px 24px -14px rgba(71,148,255,0.72);
+}
+
+[data-theme="blue"] .ds-btn-primary {
+  box-shadow: 0 20px 34px -18px rgba(71,148,255,0.68);
+}
+[data-theme="blue"] .ds-btn-secondary {
+  box-shadow: 0 16px 30px -24px rgba(71,148,255,0.6);
+}
+
 .ds-mobile-nav-active {
   border: 1px solid color-mix(in oklab, var(--pink-soft), var(--pink-bright) 54%);
   background: linear-gradient(135deg, rgba(255,71,162,0.34) 0%, rgba(255,222,240,0.24) 100%);

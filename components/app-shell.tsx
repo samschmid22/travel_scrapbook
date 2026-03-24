@@ -85,7 +85,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_20%)_46%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_22%)_100%)]">
       <div className="mx-auto w-full max-w-[1560px] px-3 pb-36 pt-3 sm:px-6 sm:pt-4 lg:grid lg:min-h-[calc(100vh-3rem)] lg:grid-cols-[320px_1fr] lg:gap-7 lg:pb-6 lg:pt-6">
         <aside className="hidden self-stretch rounded-[2rem] border border-[var(--border-soft)] bg-[linear-gradient(165deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_36%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-dark)_14%)_100%)] p-6 shadow-[var(--shadow-panel)] lg:sticky lg:top-6 lg:flex lg:h-[calc(100vh-3rem)] lg:flex-col">
-          <div className="rounded-3xl border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_44%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)_100%)] px-5 pb-6 pt-5 shadow-[0_18px_34px_-28px_rgba(255,71,162,0.7)]">
+          <div className="ds-sidebar-logo-card rounded-3xl border border-[color-mix(in_oklab,var(--pink-bright),var(--pink-soft)_44%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_16%)_100%)] px-5 pb-6 pt-5 shadow-[0_18px_34px_-28px_rgba(255,71,162,0.7)]">
             <h1 className="leading-none text-[var(--text-on-light-strong)]">
               <span className="block text-[2.65rem] font-semibold uppercase tracking-[0.03em]">
                 BEEN THERE<span className="text-[var(--pink-bright)]">.</span>
@@ -168,7 +168,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-[calc(env(safe-area-inset-bottom)+1.25rem)] bg-[linear-gradient(180deg,rgba(255,222,240,0)_0%,color-mix(in_oklab,var(--pink-soft),var(--gray-ref)_16%)_100%)] lg:hidden"
+        className="ds-mobile-fade-bar pointer-events-none fixed inset-x-0 bottom-0 z-20 h-[calc(env(safe-area-inset-bottom)+1.25rem)] lg:hidden"
       />
 
       <div className="fixed inset-x-0 bottom-0 z-30 px-2 pb-[max(0.95rem,calc(env(safe-area-inset-bottom)+0.4rem))] pt-2 lg:hidden">
