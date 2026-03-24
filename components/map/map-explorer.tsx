@@ -1577,7 +1577,7 @@ export function MapExplorer() {
                   }
                 }}
                 className={`rounded-[var(--radius-control)] border px-3 py-2.5 text-left text-sm transition ${
-                  state.visited
+                  state.code === selectedUSStateCode
                     ? "border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_45%)] bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_16%)] text-[var(--text-primary)]"
                     : "border-[var(--border-soft)] bg-[color-mix(in_oklab,var(--surface-3),var(--gray-ref)_32%)] text-[var(--text-secondary)] hover:border-[var(--pink-bright)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-bright)_9%)]"
                 }`}
