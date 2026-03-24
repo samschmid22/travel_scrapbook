@@ -108,7 +108,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "flex items-center gap-3 rounded-[var(--radius-card)] px-4 py-2.5 text-[1rem] font-semibold transition",
                     active
-                      ? "border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_52%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] text-[var(--pink-soft)] shadow-[inset_0_1px_0_rgba(255,222,240,0.44),0_12px_22px_-16px_rgba(255,71,162,0.9)] backdrop-blur-md"
+                      ? "ds-nav-active border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_52%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] text-[var(--pink-soft)] shadow-[inset_0_1px_0_rgba(255,222,240,0.44),0_12px_22px_-16px_rgba(255,71,162,0.9)] backdrop-blur-md"
                       : "text-[var(--text-secondary)] hover:bg-[color-mix(in_oklab,var(--surface-3),var(--pink-soft)_14%)] hover:text-[var(--text-primary)]",
                   )}
                 >
@@ -129,7 +129,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </aside>
 
         <section className="min-w-0">
-          <div className="mb-2.5 rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_20%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_14%)_100%)] px-3.5 py-2 shadow-[0_10px_22px_-18px_rgba(255,71,162,0.65)] lg:hidden">
+          <div className="mb-2.5 flex items-center justify-between rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_20%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_14%)_100%)] px-3.5 py-2 shadow-[0_10px_22px_-18px_rgba(255,71,162,0.65)] lg:hidden">
             <p className="leading-none text-[var(--text-on-light-strong)]">
               <span className="block text-[0.98rem] font-semibold uppercase tracking-[0.06em]">
                 BEEN THERE<span className="text-[var(--pink-bright)]">.</span>
@@ -138,6 +138,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 DONE THAT.
               </span>
             </p>
+            <ThemeToggle />
           </div>
 
           <header className="mb-4 rounded-[var(--radius-panel)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-4 py-4 shadow-[var(--shadow-panel)] sm:mb-5 sm:px-7 sm:py-5 lg:px-8">

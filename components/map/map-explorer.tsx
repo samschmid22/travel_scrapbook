@@ -29,20 +29,29 @@ const MIN_SCALE = 1;
 const MAX_SCALE = 10;
 const DRAG_THRESHOLD = 6;
 
-const mapColors = {
-  ocean: "#655d72",
-  unvisited: "#6f677f",
-  unvisitedHover: "#837a93",
-  visited: "#d63b8d",
-  visitedHover: "#ea5ca8",
-  selected: "#ff47a2",
-  stroke: "#ffdef0",
-  selectedStroke: "#ffdef0",
-  worldPin: "#c51f73",
-  worldPinHalo: "#ffdef0",
-  usPin: "#ff47a2",
-  usPinHalo: "#ffdef0",
-};
+function getThemeColor(pink: string, blue: string): string {
+  if (typeof document !== "undefined" && document.documentElement.getAttribute("data-theme") === "blue") {
+    return blue;
+  }
+  return pink;
+}
+
+function getMapColors() {
+  return {
+    ocean: "#655d72",
+    unvisited: "#6f677f",
+    unvisitedHover: "#837a93",
+    visited: getThemeColor("#d63b8d", "#4794ff"),
+    visitedHover: getThemeColor("#ea5ca8", "#60adff"),
+    selected: getThemeColor("#ff47a2", "#1f5ec5"),
+    stroke: getThemeColor("#ffdef0", "#ddf0ff"),
+    selectedStroke: getThemeColor("#ffdef0", "#ddf0ff"),
+    worldPin: getThemeColor("#c51f73", "#1f5ec5"),
+    worldPinHalo: getThemeColor("#ffdef0", "#ddf0ff"),
+    usPin: getThemeColor("#ff47a2", "#4794ff"),
+    usPinHalo: getThemeColor("#ffdef0", "#ddf0ff"),
+  };
+}
 
 const usStateCodeSet = new Set(usStates.map((state) => state.code));
 
@@ -260,6 +269,7 @@ function getLargestPolygonBounds(pathGenerator: ReturnType<typeof geoPath>, feat
 }
 
 function MapLegend() {
+  const mapColors = getMapColors();
   return (
     <div className="map-legend-ios-plus-one min-w-0 flex items-center gap-1.5 text-[0.58rem] leading-none font-semibold text-[var(--text-secondary)] sm:gap-3 sm:text-[0.9rem]">
       <span className="inline-flex items-center gap-0.5 whitespace-nowrap sm:gap-1.5">
@@ -280,6 +290,13 @@ function MapLegend() {
 
 export function MapExplorer() {
   const { cities, countryGroups, getEntriesForCity, usStateVisits, toggleUSStateVisited, visitedCountryCodes } = useAppStore();
+  const [, setThemeTick] = useState(0);
+  useEffect(() => {
+    const observer = new MutationObserver(() => setThemeTick((n) => n + 1));
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
+  const mapColors = getMapColors();
   const [selectedCountry, setSelectedCountry] = useState<{ code?: string; name: string } | null>(null);
   const [hoveredCountryName, setHoveredCountryName] = useState<string | null>(null);
   const [hoveredUSStateCode, setHoveredUSStateCode] = useState<string | null>(null);

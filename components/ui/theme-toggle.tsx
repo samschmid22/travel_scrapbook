@@ -17,30 +17,75 @@ export function ThemeToggle() {
     localStorage.setItem(STORAGE_KEY, t);
   }
 
-  const isPink = theme === "pink";
+  const isBlue = theme === "blue";
 
   return (
-    <button
-      onClick={() => apply(isPink ? "blue" : "pink")}
-      title={`Switch to ${isPink ? "blue" : "pink"} mode`}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "0.45rem",
-        borderRadius: "999px",
-        border: "1px solid var(--border-soft)",
-        background: "color-mix(in oklab, var(--surface-2), var(--pink-bright) 10%)",
-        padding: "0.32rem 0.75rem 0.32rem 0.55rem",
-        fontSize: "0.78rem",
-        fontWeight: 600,
-        letterSpacing: "0.04em",
-        color: "var(--text-primary)",
-        cursor: "pointer",
-        transition: "all 220ms ease",
-      }}
-    >
-      <span style={{ fontSize: "1rem", lineHeight: 1 }}>{isPink ? "🩷" : "🩵"}</span>
-      {isPink ? "Pink" : "Blue"}
-    </button>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+      <span
+        style={{
+          fontSize: "0.72rem",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+          color: "var(--text-muted)",
+          userSelect: "none",
+        }}
+      >
+        Pink
+      </span>
+
+      <button
+        onClick={() => apply(isBlue ? "pink" : "blue")}
+        title={`Switch to ${isBlue ? "pink" : "blue"} mode`}
+        style={{
+          position: "relative",
+          display: "inline-flex",
+          alignItems: "center",
+          width: "3.25rem",
+          height: "1.75rem",
+          borderRadius: "999px",
+          border: "1px solid var(--border-soft)",
+          background: "color-mix(in oklab, var(--surface-2), var(--pink-bright) 12%)",
+          cursor: "pointer",
+          padding: 0,
+          flexShrink: 0,
+          transition: "background 300ms ease",
+        }}
+      >
+        <span
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: isBlue ? "calc(100% - 1.45rem)" : "0.18rem",
+            transform: "translateY(-50%)",
+            width: "1.35rem",
+            height: "1.35rem",
+            borderRadius: "50%",
+            background: "var(--pink-bright)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "0.72rem",
+            lineHeight: 1,
+            transition: "left 300ms ease",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.22)",
+          }}
+        >
+          ✈️
+        </span>
+      </button>
+
+      <span
+        style={{
+          fontSize: "0.72rem",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+          color: "var(--text-muted)",
+          userSelect: "none",
+        }}
+      >
+        Blue
+      </span>
+    </div>
   );
 }
