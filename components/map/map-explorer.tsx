@@ -1185,7 +1185,7 @@ export function MapExplorer() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="ds-map-zoom-btn h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomWorldAt(worldViewState.scale * 1.25)}
                 >
                   <Plus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
@@ -1193,7 +1193,7 @@ export function MapExplorer() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="ds-map-zoom-btn h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomWorldAt(worldViewState.scale / 1.25)}
                 >
                   <Minus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
@@ -1398,7 +1398,7 @@ export function MapExplorer() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="ds-map-zoom-btn h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomUSAt(usViewState.scale * 1.25)}
                 >
                   <Plus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />
@@ -1406,7 +1406,7 @@ export function MapExplorer() {
                 <Button
                   size="sm"
                   variant="secondary"
-                  className="h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
+                  className="ds-map-zoom-btn h-9 w-9 rounded-lg px-0 text-[0.82rem] sm:h-10 sm:w-auto sm:rounded-[var(--radius-control)] sm:px-3.5 sm:text-sm"
                   onClick={() => zoomUSAt(usViewState.scale / 1.25)}
                 >
                   <Minus className="h-[18px] w-[18px] sm:h-4 sm:w-4" />

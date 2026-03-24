@@ -20,13 +20,12 @@ export function ThemeToggle() {
   const isBlue = theme === "blue";
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
       <span
         style={{
-          fontSize: "0.72rem",
-          fontWeight: 600,
-          letterSpacing: "0.06em",
-          color: "var(--text-muted)",
+          fontSize: "0.92rem",
+          fontWeight: 700,
+          color: "var(--text-primary)",
           userSelect: "none",
         }}
       >
@@ -40,8 +39,8 @@ export function ThemeToggle() {
           position: "relative",
           display: "inline-flex",
           alignItems: "center",
-          width: "3.25rem",
-          height: "1.75rem",
+          width: "3.6rem",
+          height: "2.2rem",
           borderRadius: "999px",
           border: "1px solid var(--border-soft)",
           background: "color-mix(in oklab, var(--surface-2), var(--pink-bright) 12%)",
@@ -56,31 +55,29 @@ export function ThemeToggle() {
           style={{
             position: "absolute",
             top: "50%",
-            left: isBlue ? "calc(100% - 1.45rem)" : "0.18rem",
+            left: isBlue ? "calc(100% - 1.95rem)" : "0.22rem",
             transform: "translateY(-50%)",
-            width: "1.35rem",
-            height: "1.35rem",
+            width: "1.7rem",
+            height: "1.7rem",
             borderRadius: "50%",
-            background: "var(--pink-bright)",
+            background: isBlue ? "#4794ff" : "var(--pink-bright)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "0.72rem",
             lineHeight: 1,
-            transition: "left 300ms ease",
+            transition: "left 300ms ease, background 300ms ease",
             boxShadow: "0 2px 6px rgba(0,0,0,0.22)",
           }}
         >
-          ✈️
+          <span style={{ filter: "brightness(0) invert(1)", fontSize: "0.95rem" }}>✈️</span>
         </span>
       </button>
 
       <span
         style={{
-          fontSize: "0.72rem",
-          fontWeight: 600,
-          letterSpacing: "0.06em",
-          color: "var(--text-muted)",
+          fontSize: "0.92rem",
+          fontWeight: 700,
+          color: "var(--text-primary)",
           userSelect: "none",
         }}
       >

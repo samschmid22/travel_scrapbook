@@ -176,7 +176,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="relative">
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-y-0 left-0 z-0 w-1/4 rounded-[1.35rem] border border-[color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_54%)] bg-[linear-gradient(135deg,rgba(255,71,162,0.34)_0%,rgba(255,222,240,0.24)_100%)] shadow-[inset_0_1px_0_rgba(255,222,240,0.46),0_12px_22px_-16px_rgba(255,71,162,0.82)] backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.22,0.8,0.22,1)]"
+              className="ds-mobile-nav-active pointer-events-none absolute inset-y-0 left-0 z-0 w-1/4 rounded-[1.35rem] backdrop-blur-md transition-transform duration-500 ease-[cubic-bezier(0.22,0.8,0.22,1)]"
               style={mobileIndicatorStyle}
             />
 

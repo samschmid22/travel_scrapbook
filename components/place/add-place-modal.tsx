@@ -262,7 +262,7 @@ export function AddPlaceModal({ open, onOpenChange }: AddPlaceModalProps) {
                   setSelectedCity(null);
                   setCityQuery("");
                 }}
-                className="text-base font-semibold text-[var(--accent-800)] hover:text-[var(--text-primary)]"
+                className="cant-find-city-link text-base font-semibold hover:text-[var(--text-primary)]"
               >
                 {manualCityMode ? "Back to searchable city list" : "Can’t find your city? Enter it manually"}
               </button>
