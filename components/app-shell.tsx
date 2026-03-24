@@ -8,6 +8,7 @@ import { WelcomeGate } from "@/components/auth/welcome-gate";
 import { AddPlaceModal } from "@/components/place/add-place-modal";
 import { UpcomingTripModule } from "@/components/sidebar/upcoming-trip-module";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useAppStore } from "@/hooks/use-app-store";
 import { useMemo, useState } from "react";
@@ -117,6 +118,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
+
+          <div className="mt-4 px-1">
+            <ThemeToggle />
+          </div>
 
           <div className="mt-auto pt-7">
             <UpcomingTripModule />

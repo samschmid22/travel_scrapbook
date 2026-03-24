@@ -265,3 +265,24 @@ h4 {
     }
   }
 }
+
+[data-theme="blue"] {
+  --pink-soft:              #ddf0ff;
+  --pink-bright:            #4794ff;
+  --pink-dark:              #1f5ec5;
+  --app-bg:                 #ddf0ff;
+  --surface-soft:           #ddf0ff;
+  --surface-soft-strong:    color-mix(in oklab, var(--pink-soft), var(--pink-bright) 14%);
+  --border-strong:          #4794ff;
+  --text-secondary:         #c7dfff;
+  --text-muted:             #9cc3ff;
+  --text-on-light:          #4794ff;
+  --text-on-light-strong:   #1f5ec5;
+  --accent-100:             #ddf0ff;
+  --accent-200:             #cce4ff;
+  --accent-300:             #8ec4ff;
+  --accent-400:             #60adff;
+  --accent-600:             #4794ff;
+  --accent-700:             #2a74e7;
+  --accent-800:             #1f5ec5;
+}
