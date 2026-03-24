@@ -129,12 +129,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </aside>
 
         <section className="min-w-0">
-          <div className="mb-2.5 flex items-center justify-between rounded-[var(--radius-card)] border border-[color-mix(in_oklab,var(--border-soft),var(--pink-bright)_20%)] bg-[linear-gradient(145deg,var(--pink-soft)_0%,color-mix(in_oklab,var(--pink-soft),var(--pink-bright)_14%)_100%)] px-3.5 py-2 shadow-[0_10px_22px_-18px_rgba(255,71,162,0.65)] lg:hidden">
-            <p className="leading-none text-[var(--text-on-light-strong)]">
+          <div className="mb-2.5 flex items-center justify-between rounded-[var(--radius-card)] border border-[var(--border-soft)] bg-[linear-gradient(140deg,color-mix(in_oklab,var(--surface-1),var(--gray-ref)_40%)_0%,color-mix(in_oklab,var(--surface-2),var(--pink-bright)_16%)_100%)] px-3.5 py-2 shadow-[var(--shadow-panel)] lg:hidden">
+            <p className="leading-none text-[var(--text-primary)]">
               <span className="block text-[0.98rem] font-semibold uppercase tracking-[0.06em]">
                 BEEN THERE<span className="text-[var(--pink-bright)]">.</span>
               </span>
-              <span className="mt-1 block text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-on-light)]">
+              <span className="mt-1 block text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[var(--text-secondary)]">
                 DONE THAT.
               </span>
             </p>
