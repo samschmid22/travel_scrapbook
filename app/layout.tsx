@@ -24,6 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('btdt-theme');if(t==='blue'){document.documentElement.setAttribute('data-theme','blue');}}catch(e){}})();` }} />
+      </head>
       <body className="antialiased">
         <Providers>
           <AppShell>{children}</AppShell>

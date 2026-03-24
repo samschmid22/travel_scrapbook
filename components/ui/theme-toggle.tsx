@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY = "btdt-theme";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"pink" | "blue">("pink");
+  const [theme, setTheme] = useState<"pink" | "blue">(() => {
+    if (typeof window === "undefined") return "pink";
+    return document.documentElement.getAttribute("data-theme") === "blue" ? "blue" : "pink";
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY) as "pink" | "blue" | null;
-    if (saved) apply(saved);
+    if (saved) setTheme(saved);
   }, []);
 
   function apply(t: "pink" | "blue") {

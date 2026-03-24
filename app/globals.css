@@ -342,6 +342,11 @@ h4 {
   --accent-800:             #1f5ec5;
 }
 
+[data-theme="blue"] html,
+[data-theme="blue"] body {
+  background: #ddf0ff;
+}
+
 [data-theme="blue"] .ds-nav-active {
   border-color: color-mix(in oklab, var(--pink-soft), var(--pink-bright) 52%);
   background: linear-gradient(135deg, rgba(71, 148, 255, 0.34) 0%, rgba(221, 240, 255, 0.24) 100%);
